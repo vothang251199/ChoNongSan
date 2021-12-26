@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="BingMapsRESTToolkit" Version="1.1.4" />
+	<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+	<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChoNongSan.Data\ChoNongSan.Data.csproj" />
+    <ProjectReference Include="..\ChoNongSan.Utilities\ChoNongSan.Utilities.csproj" />
+    <ProjectReference Include="..\ChoNongSan.ViewModels\ChoNongSan.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
