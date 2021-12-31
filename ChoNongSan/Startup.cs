@@ -36,8 +36,14 @@ namespace ChoNongSan
 
             services.AddControllersWithViews();
             //services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddSession(opt =>
+            {
+                opt.IdleTimeout = TimeSpan.FromHours(3);
+            });
 
             services.AddTransient<IUserApi, UserApi>();
+            services.AddTransient<ICategoryApi, CategoryApi>();
+            services.AddTransient<ICtvApi, CtvApi>();
 
             IMvcBuilder builder = services.AddRazorPages();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -71,6 +77,7 @@ namespace ChoNongSan
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,4 +1,5 @@
 ﻿using ChoNongSan.Data.Models;
+using ChoNongSan.ViewModels.Common;
 using ChoNongSan.ViewModels.Requests.Admin.ManagementCategory;
 using ChoNongSan.ViewModels.Responses.Admin;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +58,35 @@ namespace ChoNongSan.Application.Admin.ManagementCategories
             return result;
         }
 
+        public async Task<PageResult<CategoryVm>> GetCatsPaging(GetCatsPagingRequest request)
+        {
+            var lsCat = await _context.Categories.AsNoTracking().Where(x => x.IsDelete == false).ToListAsync();
+
+            if (!String.IsNullOrEmpty(request.Keyword))
+            {
+                lsCat = lsCat.Where(x => x.CateName.ToLower().Contains(request.Keyword.ToLower())).ToList();
+            }
+
+            var totalRow = lsCat.Count();
+
+            var data = lsCat.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new CategoryVm()
+                {
+                    CategoryID = x.CategoryId,
+                    CateName = x.CateName,
+                }).ToList();
+
+            var pageResult = new PageResult<CategoryVm>()
+            {
+                TotalRecords = totalRow,
+                Items = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
+            };
+            return pageResult;
+        }
+
         public async Task<List<CategoryVm>> GetListCat()
         {
             var data = await _context.Categories.AsNoTracking().Where(x => x.IsDelete == false).ToListAsync();
@@ -71,7 +101,7 @@ namespace ChoNongSan.Application.Admin.ManagementCategories
         public async Task<int> UpdateCat(UpdateCatRequest request)
         {
             var cat = await _context.Categories.FindAsync(request.CatID);
-            cat.CateName = request.CatName.ToLower();
+            cat.CateName = request.CatName.Trim();
             _context.Categories.Update(cat);
             return await _context.SaveChangesAsync();
         }

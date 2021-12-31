@@ -51,7 +51,9 @@ namespace ChoNongSan.Api
             services.AddTransient<ICtvService, CtvService>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<IBannerService, BannerService>();
+            services.AddTransient<IMailService, MailService>();
             //services.AddTransient<UserManager<Account>, UserManager<Account>>();
+
             //services.AddTransient<SignInManager<Account>, SignInManager<Account>>();
 
             services.AddControllers();

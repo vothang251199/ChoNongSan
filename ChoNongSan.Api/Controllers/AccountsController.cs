@@ -1,4 +1,5 @@
-﻿using ChoNongSan.Application.Common.Accounts;
+﻿using ChoNongSan.Application.Common;
+using ChoNongSan.Application.Common.Accounts;
 using ChoNongSan.Data.Models;
 using ChoNongSan.Utilities.Extenstions;
 using ChoNongSan.ViewModels.Requests.Common.Accounts;
@@ -116,6 +117,43 @@ namespace ChoNongSan.Api.Controllers
             if (result == 0) return BadRequest(new { message = "Đổi mật khẩu không thành công", status = "FAILED" });
 
             return Ok(new { message = "Đổi mật khẩu thành công", status = "OK" });
+        }
+
+        [HttpPost("quen-mat-khau")]
+        public async Task<IActionResult> ForgotPass([FromBody] ForgetPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.Email == request.Email);
+            if (user == null) return Ok(new { message = "Email không tồn tại trên hệ thống", status = "FAILED" });
+            var result = await _accountService.ForgotPassword(request);
+            return Ok(new { message = result, status = "OK" });
+        }
+
+        [HttpPut("khoi-phuc-mat-khau")]
+        public async Task<IActionResult> ResetPass([FromBody] ResetPassRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.Email == request.Email);
+            if (user == null) return Ok(new { message = "Email không tồn tại trên hệ thống", status = "FAILED" });
+            var result = await _accountService.ResetPassword(request);
+            return Ok(new { message = result, status = "OK" });
+        }
+
+        [HttpGet("{accountID}")]
+        public async Task<IActionResult> GetAccountById(int accountID)
+        {
+            var cat = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.AccountId == accountID && x.IsDelete == false);
+            if (cat == null) return BadRequest(new { message = "Không tìm thấy tài khoản", status = "FAILED" });
+
+            var result = await _accountService.GetAccountById(accountID);
+            return Ok(new { data = result, status = "OK" });
         }
     }
 }

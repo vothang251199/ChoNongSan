@@ -9,6 +9,7 @@ namespace ChoNongSan.ViewModels.Requests.Admin.ManagementCategory
 {
     public class UpdateCatRequest
     {
+        [Display(Name = "Mã danh mục")]
         public int CatID { get; set; }
 
         [Display(Name = "Tên danh mục")]

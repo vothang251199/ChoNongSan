@@ -9,6 +9,7 @@ namespace ChoNongSan.ViewModels.Requests.Admin.ManagementCTV
 {
     public class UpdatePassCTVRequest
     {
+        [Display(Name = "Mã tài khoản")]
         public int AccountID { get; set; }
 
         [Display(Name = "Tên tài khoản")]

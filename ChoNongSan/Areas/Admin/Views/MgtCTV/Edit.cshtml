@@ -1,0 +1,46 @@
+﻿@model ChoNongSan.ViewModels.Requests.Admin.ManagementCTV.UpdatePassCTVRequest
+
+@{
+    ViewData["Title"] = "Đổi mật khẩu CTV";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Đổi mật khẩu CTV</h1>
+
+<div class="row" style=" margin-top:30px">
+    <div class="col-md-6" style="margin-left:60px">
+        @if (@TempData["ALertMessage"] != null)
+        {
+            <div class="alert alert-success" style="text-align:center">
+                <h3>@TempData["ALertMessage"]</h3>
+            </div>
+        }
+        <form asp-area="Admin" asp-controller="MgtCtv" asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+                <label asp-for="AccountID" class="control-label"></label>
+                <input asp-for="AccountID" class="form-control" />
+                <span asp-validation-for="AccountID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input readonly asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <a asp-action="Index" class="btn btn-default" style="margin-right: 20px">Quay lại</a> <h2>|</h2>
+                <input type="submit" value="Lưu" class="btn btn-success" style="margin-left:20px; width:75px" />
+            </div>
+        </form>
+    </div>
+</div>

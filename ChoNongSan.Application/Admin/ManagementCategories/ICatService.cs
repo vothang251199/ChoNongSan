@@ -1,4 +1,5 @@
 ﻿using ChoNongSan.Data.Models;
+using ChoNongSan.ViewModels.Common;
 using ChoNongSan.ViewModels.Requests.Admin.ManagementCategory;
 using ChoNongSan.ViewModels.Responses.Admin;
 using System;
@@ -20,5 +21,7 @@ namespace ChoNongSan.Application.Admin.ManagementCategories
         Task<List<CategoryVm>> GetListCat();
 
         Task<CategoryVm> GetCatById(int CatID);
+
+        Task<PageResult<CategoryVm>> GetCatsPaging(GetCatsPagingRequest request);
     }
 }

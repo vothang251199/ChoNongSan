@@ -1,4 +1,5 @@
-﻿using ChoNongSan.ViewModels.Requests.Admin;
+﻿using ChoNongSan.ViewModels.Common;
+using ChoNongSan.ViewModels.Requests.Admin;
 using ChoNongSan.ViewModels.Requests.Admin.ManagementCTV;
 using ChoNongSan.ViewModels.Responses.Admin;
 using System;
@@ -11,7 +12,7 @@ namespace ChoNongSan.Application.Admin.ManagementCTVes
 {
     public interface IManagementCtvService
     {
-        Task<List<ListCtvViewModel>> GetListCtv();
+        Task<PageResult<CtvVm>> GetCtvPaging(GetCtvPagingRequest request);
 
         Task<int> CreateCTV(CreateCTVRequest request);
 

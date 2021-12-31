@@ -10,5 +10,9 @@ namespace ChoNongSan.ApiService
     public interface IUserApi
     {
         Task<string> Login(LoginRequest request);
+
+        Task<string> ForgotPassword(ForgetPasswordRequest request);
+
+        Task<string> ResetPassword(ResetPassRequest request);
     }
 }

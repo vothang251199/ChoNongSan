@@ -42,5 +42,43 @@ namespace ChoNongSan.ApiService
             var rs = JsonConvert.SerializeObject(failed);
             return (rs);
         }
+
+        public async Task<string> ResetPassword(ResetPassRequest request)
+        {
+            var apiurl = _config["AppSettings:ApiUrl"];
+            var json = JsonConvert.SerializeObject(request);
+            var httpContnet = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            //client.BaseAddress = new Uri("")
+            var response = await client.PutAsync(apiurl + $"/api/tai-khoan/khoi-phuc-mat-khau", httpContnet);
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                return data;
+            }
+            var failed = new { message = "Gọi api thất bại", status = "FAILED" };
+            var rs = JsonConvert.SerializeObject(failed);
+            return (rs);
+        }
+
+        public async Task<string> ForgotPassword(ForgetPasswordRequest request)
+        {
+            var apiurl = _config["AppSettings:ApiUrl"];
+            var json = JsonConvert.SerializeObject(request);
+            var httpContnet = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            //client.BaseAddress = new Uri("")
+            var response = await client.PostAsync(apiurl + "/api/tai-khoan/quen-mat-khau", httpContnet);
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                return data;
+            }
+            var failed = new { message = "Gọi api thất bại", status = "FAILED" };
+            var rs = JsonConvert.SerializeObject(failed);
+            return (rs);
+        }
     }
 }

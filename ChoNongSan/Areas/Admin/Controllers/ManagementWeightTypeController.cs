@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChoNongSan.Areas.Admin.Controllers
 {
-    [Area("Admin")]
     [Authorize]
+    [Area("Admin")]
     public class ManagementWeightTypeController : Controller
     {
         public IActionResult Index()
