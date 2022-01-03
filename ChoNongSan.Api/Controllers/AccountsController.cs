@@ -6,6 +6,7 @@ using ChoNongSan.ViewModels.Requests.Common.Accounts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,6 +32,20 @@ namespace ChoNongSan.Api.Controllers
             return Ok(await _accountService.GetAll());
         }
 
+        [HttpGet("so-dien-thoai/{phoneNumber}")]
+        public async Task<IActionResult> GetAccountByPhone([FromRoute] string phoneNumber)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber && x.IsDelete == false);
+            if (user == null)
+                return BadRequest(new { message = "Tài khoản không tồn tại", status = "FAILED" });
+            var result = await _accountService.GetAccountByPhone(phoneNumber);
+            return Ok(new { data = result, status = "OK" });
+        }
+
         [HttpPost("dang-nhap")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -42,23 +57,25 @@ namespace ChoNongSan.Api.Controllers
             var user = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.UserName.Contains(request.LoginName.ToLower())
                 || x.PhoneNumber.Contains(request.LoginName) || x.Email.Contains(request.LoginName.ToLower()));
 
-            if (user == null) return Ok(new { message = "Thông tin đăng nhập không chính xác", status = "FAILED" });
+            if (user == null) return BadRequest(new { message = "Thông tin đăng nhập không chính xác", status = "FAILED" });
             if (user.IsDelete == true) return BadRequest(new { message = "Tài khoản đã bị khóa", status = "FAILED" });
 
             var pass = (request.Password + user.KeySecurity.Trim()).ToMD5();
-            if (user.Password != pass) return Ok(new { message = "Thông tin đăng nhập không chính xác", status = "FAILED" });
+            if (user.Password != pass) return BadRequest(new { message = "Thông tin đăng nhập không chính xác", status = "FAILED" });
             var result = await _accountService.Login(request);
 
             return Ok(new { data = result, status = "OK" });
         }
 
-        [HttpPut("cap-nhat-tai-khoan")]
-        public async Task<IActionResult> Update([FromForm] UpdateAccountRequest request)
+        [HttpPut("cap-nhat-tai-khoan/{AccountID}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromRoute] int AccountID, [FromForm] UpdateAccountRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            request.AccountID = AccountID;
 
             var user = await _context.Accounts.FindAsync(request.AccountID);
 
@@ -127,8 +144,8 @@ namespace ChoNongSan.Api.Controllers
                 return BadRequest(ModelState);
             }
             var user = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.Email == request.Email);
-            if (user == null) return Ok(new { message = "Email không tồn tại trên hệ thống", status = "FAILED" });
-            var result = await _accountService.ForgotPassword(request);
+            if (user == null) return BadRequest(new { message = "Email không tồn tại trên hệ thống", status = "FAILED" });
+            var result = _accountService.ForgotPassword(request);
             return Ok(new { message = result, status = "OK" });
         }
 

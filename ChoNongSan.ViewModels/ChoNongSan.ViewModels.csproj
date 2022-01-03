@@ -13,4 +13,8 @@
     <ProjectReference Include="..\ChoNongSan.Data\ChoNongSan.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Responses\TinDang\" />
+  </ItemGroup>
+
 </Project>

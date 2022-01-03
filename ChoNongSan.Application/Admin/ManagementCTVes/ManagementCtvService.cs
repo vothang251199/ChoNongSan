@@ -55,8 +55,7 @@ namespace ChoNongSan.Application.Admin.ManagementCTVes
 
             if (!String.IsNullOrEmpty(request.Keyword))
             {
-                lsCtv = lsCtv.Where(x => x.UserName.ToLower().Contains(request.Keyword.ToLower())
-                    || x.PhoneNumber == request.Keyword || x.Email.ToLower().Contains(request.Keyword.ToLower())).ToList();
+                lsCtv = lsCtv.Where(x => x.UserName.ToLower().Contains(request.Keyword.ToLower())).ToList();
             }
 
             var totalRow = lsCtv.Count();

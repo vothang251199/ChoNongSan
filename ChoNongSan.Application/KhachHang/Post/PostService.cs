@@ -91,13 +91,13 @@ namespace ChoNongSan.Application.KhachHang.Posts
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<PageResult<ListPostVm>> GetAllByCategoryID(GetCatIDPostPagingRequest request)
+        public async Task<PageResult<PostVm>> GetAllByCategoryID(GetCatIDPostPagingRequest request)
         {
             var lsPost = await _context.Posts.AsNoTracking().Where(x => x.CategoryId == request.CategoryID).ToListAsync();
             var totalRow = lsPost.Count();
             var data = lsPost.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new ListPostVm()
+                .Select(x => new PostVm()
                 {
                     PostID = x.PostId,
                     Title = x.Title,
@@ -113,7 +113,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
                     Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,
                 }).ToList();
 
-            var pageResult = new PageResult<ListPostVm>()
+            var pageResult = new PageResult<PostVm>()
             {
                 TotalRecords = totalRow,
                 Items = data,
@@ -123,9 +123,15 @@ namespace ChoNongSan.Application.KhachHang.Posts
             return pageResult;
         }
 
-        public async Task<PageResult<ListPostVm>> GetAllBySearchPaging(GetSearchPostPagingRequest request)
+        public async Task<PageResult<PostVm>> GetAllBySearchAndCatIdPaging(GetSearchPostPagingRequest request)
         {
-            var lsPost = await _context.Posts.Where(x => x.ProductName.Contains(request.KeyWord)).ToListAsync();
+            var lsPost = await _context.Posts.Where(x => x.IsHidden == false && x.StatusPost == 2).ToListAsync();
+            if (!String.IsNullOrEmpty(request.KeyWord))
+            {
+                request.KeyWord = request.KeyWord.ToLower();
+                lsPost = lsPost.Where(x => x.ProductName.ToLower().Contains(request.KeyWord)
+                 || x.Address.ToLower().Contains(request.KeyWord) || x.Title.ToLower().Contains(request.KeyWord)).ToList();
+            }
 
             if (request.CategoryID != null)
             {
@@ -136,10 +142,11 @@ namespace ChoNongSan.Application.KhachHang.Posts
 
             var data = lsPost.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new ListPostVm()
+                .Select(x => new PostVm()
                 {
                     PostID = x.PostId,
                     Title = x.Title,
+                    Address = x.Address,
                     ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.PostId == x.PostId && p.IsDefault == true).ImagePath,
                     ProductName = x.ProductName,
                     NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.AccountId).FullName,
@@ -152,7 +159,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
                     Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,
                 }).ToList();
 
-            var pageResult = new PageResult<ListPostVm>()
+            var pageResult = new PageResult<PostVm>()
             {
                 TotalRecords = totalRow,
                 Items = data,
@@ -162,10 +169,10 @@ namespace ChoNongSan.Application.KhachHang.Posts
             return pageResult;
         }
 
-        public async Task<List<ListPostVm>> GetAllPostBySearch(string keyword)
+        public async Task<List<PostVm>> GetAllPostBySearch(string keyword)
         {
             var lsPost = await _context.Posts.Where(x => x.ProductName.Contains(keyword)).ToListAsync();
-            var data = lsPost.Select(x => new ListPostVm()
+            var data = lsPost.Select(x => new PostVm()
             {
                 PostID = x.PostId,
                 Title = x.Title,
@@ -266,10 +273,10 @@ namespace ChoNongSan.Application.KhachHang.Posts
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<ListPostVm>> GetListPost()
+        public async Task<List<PostVm>> GetListPost()
         {
             var lsPost = await _context.Posts.ToListAsync();
-            var data = lsPost.Select(x => new ListPostVm()
+            var data = lsPost.Select(x => new PostVm()
             {
                 PostID = x.PostId,
                 Title = x.Title,
@@ -313,6 +320,45 @@ namespace ChoNongSan.Application.KhachHang.Posts
             };
 
             return viewModel;
+        }
+
+        public async Task<PageResult<PostVm>> GetAllByStatusPaging(GetPostByStatusRequest request)
+        {
+            var lsPost = await _context.Posts.ToListAsync();
+            if ((request.Status) != null)
+            {
+                lsPost = lsPost.Where(x => x.StatusPost == (request.Status)).ToList();
+            }
+
+            var totalRow = lsPost.Count();
+
+            var data = lsPost.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new PostVm()
+                {
+                    PostID = x.PostId,
+                    Title = x.Title,
+                    Address = x.Address,
+                    ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.PostId == x.PostId && p.IsDefault == true).ImagePath,
+                    ProductName = x.ProductName,
+                    NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.AccountId).FullName,
+                    Price = x.Price,
+                    WeightName = _context.WeightTypes.AsNoTracking().FirstOrDefault(p => p.WeightId == x.WeightId).WeightName,
+                    WeightNumber = x.WeightNumber,
+                    ViewCount = x.ViewCount,
+                    CatName = _context.Categories.AsNoTracking().FirstOrDefault(p => p.CategoryId == x.CategoryId).CateName,
+                    Lat = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lat,
+                    Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,
+                }).ToList();
+
+            var pageResult = new PageResult<PostVm>()
+            {
+                TotalRecords = totalRow,
+                Items = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
+            };
+            return pageResult;
         }
     }
 }

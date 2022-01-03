@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChoNongSan.Utilities", "Cho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChoNongSan.ViewModels", "ChoNongSan.ViewModels\ChoNongSan.ViewModels.csproj", "{D8E43E3B-3A27-4410-AEB2-6473A2FFDF8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoNongSan.AdminWeb", "ChoNongSan.AdminWeb\ChoNongSan.AdminWeb.csproj", "{CC4628EE-EA5F-4281-8023-563A7A81597D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoNongSan.ApiUsedForWeb", "ChoNongSan.ApiUsedForWeb\ChoNongSan.ApiUsedForWeb.csproj", "{3570E503-ADD1-4756-873F-850F0566FA9E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{D8E43E3B-3A27-4410-AEB2-6473A2FFDF8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8E43E3B-3A27-4410-AEB2-6473A2FFDF8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8E43E3B-3A27-4410-AEB2-6473A2FFDF8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC4628EE-EA5F-4281-8023-563A7A81597D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC4628EE-EA5F-4281-8023-563A7A81597D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC4628EE-EA5F-4281-8023-563A7A81597D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC4628EE-EA5F-4281-8023-563A7A81597D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3570E503-ADD1-4756-873F-850F0566FA9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3570E503-ADD1-4756-873F-850F0566FA9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3570E503-ADD1-4756-873F-850F0566FA9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3570E503-ADD1-4756-873F-850F0566FA9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

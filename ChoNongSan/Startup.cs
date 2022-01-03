@@ -1,16 +1,13 @@
 using AspNetCoreHero.ToastNotification;
-using ChoNongSan.ApiService;
+using ChoNongSan.ApiUsedForWeb.ApiService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ChoNongSan
 {
@@ -30,12 +27,12 @@ namespace ChoNongSan
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
             {
-                opt.LoginPath = "/Admin/User/Login";
                 opt.AccessDeniedPath = "/Account/Forbidden";
+                opt.LoginPath = new PathString("/User/Login/");
             });
 
-            services.AddControllersWithViews();
-            //services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            //services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSession(opt =>
             {
                 opt.IdleTimeout = TimeSpan.FromHours(3);
@@ -44,6 +41,8 @@ namespace ChoNongSan
             services.AddTransient<IUserApi, UserApi>();
             services.AddTransient<ICategoryApi, CategoryApi>();
             services.AddTransient<ICtvApi, CtvApi>();
+            services.AddTransient<IPostApi, PostApi>();
+            services.AddTransient<IMgtPostApi, MgtPostApi>();
 
             IMvcBuilder builder = services.AddRazorPages();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -81,11 +80,6 @@ namespace ChoNongSan
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "areas",
-                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                    );
-
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

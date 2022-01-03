@@ -1,17 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
-using SendGrid;
-using SendGrid.Helpers.Mail;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using MimeKit;
+using MailKit.Net.Smtp;
 using System.Threading.Tasks;
+using System;
 
 namespace ChoNongSan.Application.Common
 {
     public interface IMailService
     {
-        Task SendEmai(string toEmail, string title, string content);
+        bool SendEmai(string toEmail, string title, string content);
     }
 
     public class MailService : IMailService
@@ -23,14 +20,37 @@ namespace ChoNongSan.Application.Common
             _config = config;
         }
 
-        public async Task SendEmai(string toEmail, string title, string content)
+        public bool SendEmai(string toEmail, string title, string content)
         {
-            var apiKey = _config["SendGridAPIKey"];
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("chonongsan.vvt.vn@gmail.com", "Khôi phục mật khẩu");
-            var to = new EmailAddress(toEmail);
-            var msg = MailHelper.CreateSingleEmail(from, to, title, content, content);
-            var response = await client.SendEmailAsync(msg);
+            try
+            {
+                using (var client = new SmtpClient())
+                {
+                    client.Connect("smtp.gmail.com");
+                    client.Authenticate("chonongsan.vvt.vn@gmail.com", "Ge06vt251199@");
+
+                    var bodyBuilder = new BodyBuilder
+                    {
+                        HtmlBody = content,
+                    };
+
+                    var message = new MimeMessage
+                    {
+                        Body = bodyBuilder.ToMessageBody(),
+                    };
+
+                    message.From.Add(new MailboxAddress("ChoNongSan", "chonongsan.vvt.vn@gmail.com"));
+                    message.To.Add(new MailboxAddress("Me", toEmail));
+                    message.Subject = title;
+                    client.Send(message);
+                    client.Disconnect(true);
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

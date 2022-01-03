@@ -1,0 +1,120 @@
+﻿@using ChoNongSan.ViewModels.Common
+
+@using ChoNongSan.ViewModels.Responses
+
+@model PageResult<PostVm>
+
+@{
+    ViewData["Title"] = "Quản lý tin đăng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style>
+    li.nav-item > a.btn btn-custom-size a:active {
+        background-color: #40AA54
+    }
+</style>
+<div class="product-tab-area section-space-top-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="nav product-tab-nav product-tab-style-2" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a href="/QuanLyTinDang/Index/?statusPost=2" class="active btn btn-custom-size" id="reviews-tab" data-bs-toggle="tab" role="tab" aria-controls="reviews" aria-selected="false">
+                            Đang hiển thị
+                        </a>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <a href="/QuanLyTinDang/?statusPost=0" class="btn btn-custom-size" id="reviews-tab" data-bs-toggle="tab" role="tab" aria-controls="reviews" aria-selected="false">
+                            Đợi duyệt
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="/QuanLyTinDang/?statusPost=1" class="btn btn-custom-size" id="reviews-tab" data-bs-toggle="tab" role="tab" aria-controls="reviews" aria-selected="false">
+                            Bị từ chối
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="/QuanLyTinDang/?statusPost=3" class="btn btn-custom-size" id="reviews-tab" data-bs-toggle="tab" role="tab" aria-controls="reviews" aria-selected="false">
+                            Đã ẩn
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content product-tab-content">
+
+                    <div class="tab-pane fade show active" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                        <div class="product-review-body">
+                            <h4 class="heading mb-5">Tin được hiển thị</h4>
+                            <ul class="user-info-wrap">
+                                @foreach (var item in Model.Items)
+                                {
+                                    item.ImageDefault = ViewBag.ApiUrl + item.ImageDefault;
+                                    <li>
+                                        <ul class="user-info">
+                                            <li class="user-avatar">
+                                                <img src="@item.ImageDefault" alt="@item.ProductName">
+                                            </li>
+                                            <li class="user-comment">
+                                                <div class="rating-box">
+                                                    <ul>
+                                                        <li><i class="pe-7s-star"></i></li>
+                                                        <li><i class="pe-7s-star"></i></li>
+                                                        <li><i class="pe-7s-star"></i></li>
+                                                        <li><i class="pe-7s-star"></i></li>
+                                                        <li><i class="pe-7s-star"></i></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="meta">
+                                                    <span><strong>@item.Title -</strong> Ngày tạo</span>
+                                                </div>
+                                                <p class="short-desc mb-0">
+                                                    Mô tả
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                            @await Component.InvokeAsync("Pager", Model)
+                            <div class="feedback-area pt-5">
+                                <h2 class="heading mb-1">Add a review</h2>
+                                <p class="short-desc mb-3">Your email address will not be published.</p>
+                                <div class="rating-box">
+                                    <span>Your rating</span>
+                                    <ul class="ps-4">
+                                        <li><i class="pe-7s-star"></i></li>
+                                        <li><i class="pe-7s-star"></i></li>
+                                        <li><i class="pe-7s-star"></i></li>
+                                        <li><i class="pe-7s-star"></i></li>
+                                        <li><i class="pe-7s-star"></i></li>
+                                    </ul>
+                                </div>
+                                <form class="feedback-form pt-8" action="#">
+                                    <div class="group-input">
+                                        <div class="form-field me-md-6 mb-6 mb-md-0">
+                                            <input type="text" name="name" placeholder="Your Name*" class="input-field">
+                                        </div>
+                                        <div class="form-field me-md-6 mb-6 mb-md-0">
+                                            <input type="text" name="email" placeholder="Your Email*" class="input-field">
+                                        </div>
+                                        <div class="form-field">
+                                            <input type="text" name="number" placeholder="Phone number" class="input-field">
+                                        </div>
+                                    </div>
+                                    <div class="form-field mt-6">
+                                        <textarea name="message" placeholder="Message" class="textarea-field"></textarea>
+                                    </div>
+                                    <div class="button-wrap mt-8">
+                                        <button type="submit" value="submit" class="btn btn-custom-size lg-size btn-secondary btn-primary-hover btn-lg rounded-0" name="submit">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

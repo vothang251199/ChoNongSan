@@ -13,11 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\ChoNongSan.ApiUsedForWeb\ChoNongSan.ApiUsedForWeb.csproj" />
     <ProjectReference Include="..\ChoNongSan.ViewModels\ChoNongSan.ViewModels.csproj" />
   </ItemGroup>
 

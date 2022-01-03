@@ -1,0 +1,50 @@
+﻿@using ChoNongSan.ViewModels.Common
+@using ChoNongSan.ViewModels.Responses.Admin
+@model PageResult<CategoryVm>
+
+@{
+    ViewData["Title"] = "Quản lý danh mục";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Quản lý danh mục</h1>
+
+<a class="btn btn-primary" role="button" asp-controller="MgtCat" asp-action="Create">Thêm mới</a>
+@if (@TempData["ALertMessage"] != null)
+{
+    <div class="alert alert-success" style="text-align:center; margin:30px 0">
+        <h3>@TempData["ALertMessage"]</h3>
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã danh mục
+            </th>
+            <th>
+                Tên danh mục
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CateName)
+                </td>
+                <td>
+                    @Html.ActionLink("Sửa", "Edit", new { categoryId = item.CategoryID }) |
+                    @*@Html.ActionLink("Chi tiết", "Details", new { categoryId = item.CategoryID }) |*@
+                    @Html.ActionLink("Xóa", "Delete", new { categoryId = item.CategoryID })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@await Component.InvokeAsync("Pager", Model)

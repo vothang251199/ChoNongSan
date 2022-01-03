@@ -17,11 +17,13 @@ namespace ChoNongSan.Application.KhachHang.Posts
 
         Task<bool> HiddenPost(int PostID);
 
-        Task<PageResult<ListPostVm>> GetAllBySearchPaging(GetSearchPostPagingRequest request);
+        Task<PageResult<PostVm>> GetAllBySearchAndCatIdPaging(GetSearchPostPagingRequest request);
 
-        Task<PageResult<ListPostVm>> GetAllByCategoryID(GetCatIDPostPagingRequest request);
+        Task<PageResult<PostVm>> GetAllByStatusPaging(GetPostByStatusRequest request);
 
-        Task<List<ListPostVm>> GetAllPostBySearch(string keyword);
+        Task<PageResult<PostVm>> GetAllByCategoryID(GetCatIDPostPagingRequest request);
+
+        Task<List<PostVm>> GetAllPostBySearch(string keyword);
 
         Task<int> AddImage(int postId, PostImageCreateRequest request);
 
@@ -35,6 +37,6 @@ namespace ChoNongSan.Application.KhachHang.Posts
 
         Task AddViewcount(int postID);
 
-        Task<List<ListPostVm>> GetListPost();
+        Task<List<PostVm>> GetListPost();
     }
 }

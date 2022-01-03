@@ -34,6 +34,7 @@ namespace ChoNongSan.Api.Controllers
 
         [HttpPost("dang-ky")]
         [AllowAnonymous]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Register([FromForm] RegisterRequest request)
         {
             if (!ModelState.IsValid)
@@ -80,6 +81,13 @@ namespace ChoNongSan.Api.Controllers
             if (catExist == null) return BadRequest("Danh mục không tồn tại");
             var lsPostByCatId = await _postService.GetAllByCategoryID(request);
             return Ok(lsPostByCatId);
+        }
+
+        [HttpGet("tin-theo-trang-thai")]
+        public async Task<IActionResult> GetAllByCatIdAndKeywordPaging([FromQuery] GetPostByStatusRequest request)
+        {
+            var lsPost = await _postService.GetAllByStatusPaging(request);
+            return Ok(lsPost);
         }
 
         [HttpPost("tao-bai-dang")]

@@ -24,8 +24,10 @@ namespace ChoNongSan.Application.Common.Accounts
 
         Task<int> ChangePassword(ChangePassRequest request);
 
-        Task<string> ForgotPassword(ForgetPasswordRequest request);
+        string ForgotPassword(ForgetPasswordRequest request);
 
         Task<string> ResetPassword(ResetPassRequest request);
+
+        Task<Account> GetAccountByPhone(string phone);
     }
 }

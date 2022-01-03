@@ -1,5 +1,7 @@
 ﻿using ChoNongSan.Application.Common.Banners;
+using ChoNongSan.Application.KhachHang.Posts;
 using ChoNongSan.Data.Models;
+using ChoNongSan.ViewModels.Common;
 using ChoNongSan.ViewModels.Common.Banners;
 using ChoNongSan.ViewModels.Requests.Common.Banners;
 using Microsoft.AspNetCore.Http;
@@ -17,12 +19,14 @@ namespace ChoNongSan.Api.Controllers
     public class CommonsController : ControllerBase
     {
         private readonly IBannerService _bannerService;
+        private readonly IPostService _postService;
         private readonly ChoNongSanContext _context;
 
         public CommonsController(IBannerService bannerService,
-            ChoNongSanContext context)
+            ChoNongSanContext context, IPostService postService)
         {
             _bannerService = bannerService;
+            _postService = postService;
             _context = context;
         }
 
@@ -82,13 +86,20 @@ namespace ChoNongSan.Api.Controllers
             return BadRequest();
         }
 
-        [HttpGet("banner-{BannerID}")]
+        [HttpGet("banner/{BannerID}")]
         public async Task<IActionResult> GetBannerById(int BannerID)
         {
             var banner = await _bannerService.GetBannerById(BannerID);
             if (banner == null)
                 return BadRequest("Không tìm thấy banner");
             return Ok(banner);
+        }
+
+        [HttpGet("tat-ca-tin-dang")]
+        public async Task<IActionResult> GetAllByCatIdAndKeywordPaging([FromQuery] GetSearchPostPagingRequest request)
+        {
+            var lsPost = await _postService.GetAllBySearchAndCatIdPaging(request);
+            return Ok(lsPost);
         }
     }
 }

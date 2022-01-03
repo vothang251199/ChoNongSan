@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewData["Title"] - Khách hàng</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assetsKH/images/logo.png" />
+
+    <!-- CSS
+    ============================================ -->
+    <!-- Vendor CSS (Contain Bootstrap, Icon Fonts) -->
+    <link rel="stylesheet" href="~/assetsKH/css/vendor/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/assetsKH/css/vendor/Pe-icon-7-stroke.css" />
+
+    <!-- Plugin CSS (Global Plugins Files) -->
+    <link rel="stylesheet" href="~/assetsKH/css/plugins/animate.min.css">
+    <link rel="stylesheet" href="~/assetsKH/css/plugins/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/assetsKH/css/plugins/swiper-bundle.min.css">
+    <link rel="stylesheet" href="~/assetsKH/css/plugins/nice-select.css">
+    <link rel="stylesheet" href="~/assetsKH/css/plugins/magnific-popup.min.css" />
+
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="~/assetsKH/css/style.css">
+</head>
+
+<body>
+
+    <div class="main-wrapper">
+
+        <!-- Begin Main Header Area -->
+        <!-- Main Header Area End Here -->
+        <!-- Begin Main Content Area -->
+        <main class="main-content">
+            <div style="display: flex;height:50px; margin: 50px 0 80px 0" class="breadcrumb-area breadcrumb-height">
+                <div style="margin: auto; display: flex" class="row col-md-6">
+                    <div class="row col-10" style="margin:auto;margin-left:100px; width:700px">
+                        <div class="col-md-6">
+                            <ul style="display:inline">
+                                <li style="float:left; margin-top:12px">
+                                    <a href="/home/index">Trang chủ <i class="pe-7s-angle-right"></i></a>
+                                </li>
+                                <li style="float: left; margin-top: 12px">@ViewBag.Title</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6" style="text-align:right">
+                            <a href="/Home/Index" class="header-logo">
+                                <img style="height:33px; width:33px" src="~/assetsKH/images/logo.png" alt="Header Logo">
+                                <h3 style="margin:5px 0 0 40px">ChoNongSan</h3>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="login-register-area section-space-y-axis-20">
+                <div class="container">
+                    <div class="row" style="display:flex">
+
+                        <div class="col-lg-6 pt-10 pt-lg-0" style="margin:auto">
+                            @if (@TempData["ALertMessage"] != null)
+                            {
+                                <div class="alert alert-success" style="text-align:center">
+                                    <h5>@TempData["ALertMessage"]</h5>
+                                </div>
+                            }
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- Main Content Area End Here -->
+        <!-- Begin Footer Area -->
+        <div class="footer-area" style="margin-top:50px;">
+
+            <div class="footer-bottom py-3" data-bg-color="#40AA54">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="copyright">
+                                <span class="copyright-text text-white">© 2021 Phát triển bởi VVT <i class="fa fa-heart text-danger"></i> by  <a href="https://hasthemes.com/" target="_blank">HasThemes</a> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Area End Here -->
+        <!-- Begin Scroll To Top -->
+        <a class="scroll-to-top" href="">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+        <!-- Scroll To Top End Here -->
+    </div>
+
+    <!-- Global Vendor, plugins JS -->
+    <!-- JS Files
+    ============================================ -->
+    <!-- Global Vendor, plugins JS -->
+    <!-- Vendor JS -->
+    <script src="~/assetsKH/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="~/assetsKH/js/vendor/jquery-3.5.1.min.js"></script>
+    <script src="~/assetsKH/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="~/assetsKH/js/vendor/modernizr-3.11.2.min.js"></script>
+    <script src="~/assetsKH/js/vendor/jquery.waypoints.js"></script>
+
+    <!--Plugins JS-->
+    <script src="~/assetsKH/js/plugins/wow.min.js"></script>
+    <script src="~/assetsKH/js/plugins/jquery-ui.min.js"></script>
+    <script src="~/assetsKH/js/plugins/swiper-bundle.min.js"></script>
+    <script src="~/assetsKH/js/plugins/jquery.nice-select.js"></script>
+    <script src="~/assetsKH/js/plugins/parallax.min.js"></script>
+    <script src="~/assetsKH/js/plugins/jquery.magnific-popup.min.js"></script>
+
+    <!--Main JS (Common Activation Codes)-->
+    <script src="~/assetsKH/js/main.js"></script>
+</body>
+</html>

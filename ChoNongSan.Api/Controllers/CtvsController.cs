@@ -50,7 +50,7 @@ namespace ChoNongSan.Api.Controllers
         {
             if (!string.IsNullOrEmpty(request.KeyWord))
             {
-                var posts = await _postService.GetAllBySearchPaging(request);
+                var posts = await _postService.GetAllBySearchAndCatIdPaging(request);
                 return Ok(posts);
             }
 

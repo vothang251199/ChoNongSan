@@ -16,7 +16,11 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+
 using System.Net.Http.Headers;
+
+using MailKit.Net.Smtp;
+using MimeKit;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,21 +88,24 @@ namespace ChoNongSan.Application.Common.Accounts
             {
                 new Claim(ClaimTypes.Name, request.LoginName.ToLower()),
                 new Claim(ClaimTypes.Role, Convert.ToString(user.RolesId)),
-                new Claim(ClaimTypes.Thumbprint, Convert.ToString(_config["ApiUrl"] +user.Avatar)),
+                new Claim(ClaimTypes.Thumbprint, _config["ApiUrl"] +  Convert.ToString(string.IsNullOrEmpty(user.Avatar) ? "/user-content/avatar-null.png" : user.Avatar)),
             };
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(_config["Tokens:Issuer"],
-                _config["Tokens:Issuer"],
-                claims,
-                expires: DateTime.Now.AddHours(3),
-                signingCredentials: creds);
+               _config["Tokens:Issuer"],
+               claims,
+               expires: DateTime.Now.AddHours(3),
+               signingCredentials: creds);
+
             var result = new LoginViewModel()
             {
                 account = user,
                 token = new JwtSecurityTokenHandler().WriteToken(token),
             };
+
             return result;
         }
 
@@ -117,10 +124,12 @@ namespace ChoNongSan.Application.Common.Accounts
                 KeySecurity = salt,
                 IsDelete = false,
                 CreateDate = DateTime.Now,
+                Avatar = "/user-content/avatar-null.png",
                 RolesId = 3,
             };
 
             _context.Accounts.Add(user);
+
             return await _context.SaveChangesAsync();
         }
 
@@ -150,7 +159,7 @@ namespace ChoNongSan.Application.Common.Accounts
             return "/" + USER_CONTENT_FOLDER_NAME + "/" + originalFileName;
         }
 
-        public async Task<string> ForgotPassword(ForgetPasswordRequest request)
+        public string ForgotPassword(ForgetPasswordRequest request)
         {
             string pattern = @"0123456789zxcvbnmasdfghjklqwertyuiop[]{}~!@#$%^&*()+";
             Random rd = new Random();
@@ -167,13 +176,16 @@ namespace ChoNongSan.Application.Common.Accounts
 
             var tokenEmail = Convert.ToBase64String(strBytes);  //chuyển bytes thành string để máy hiểu
 
-            string url = $"{_config["WebUrl"]}/Admin/User/ResetPassword?tokensEmail=" + tokenEmail;
+            string url = $"{_config["AdminWebUrl"]}/User/ResetPassword?tokensEmail=" + tokenEmail;
             string titleEmail = "Khôi Phục Mật Khẩu";
 
             string contentEmail = "<h1>Làm theo hướng dẫn để khôi phục mật khẩu của bạn</h1>"
                 + $"<p>Để khôi phục mật khẩu. Bấm vào <a href='{url}'>đây</a></p>";
-            await _mailService.SendEmai(request.Email, titleEmail, contentEmail);
-            return "URL khôi phục mật khẩu đã được gửi đến email. Vui lòng kiểm tra email.";
+
+            var result = _mailService.SendEmai(request.Email, titleEmail, contentEmail);
+            if (result == true)
+                return "URL khôi phục mật khẩu đã được gửi đến email. Vui lòng kiểm tra email.";
+            return "Lỗi";
         }
 
         public async Task<string> ResetPassword(ResetPassRequest request)
@@ -205,6 +217,13 @@ namespace ChoNongSan.Application.Common.Accounts
                 NumberOfPost = account.NumberOfPost,
             };
             return result;
+        }
+
+        public async Task<Account> GetAccountByPhone(string phone)
+        {
+            var account = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.PhoneNumber == phone && x.IsDelete == false);
+
+            return account;
         }
     }
 }
