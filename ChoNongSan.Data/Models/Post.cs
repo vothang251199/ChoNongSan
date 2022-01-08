@@ -29,13 +29,14 @@ namespace ChoNongSan.Data.Models
         public bool? IsDeliver { get; set; }
         public string Quality { get; set; }
         public int? ViewCount { get; set; }
-        public DateTime? Expiry { get; set; }
         public string Reason { get; set; }
         public bool? IsHidden { get; set; }
         public int? Ctv { get; set; }
         public int CategoryId { get; set; }
-        public int? LocationId { get; set; }
+        public int LocationId { get; set; }
+        public int? Expiry { get; set; }
 
+        public virtual Account Account { get; set; }
         public virtual Category Category { get; set; }
         public virtual Location Location { get; set; }
         public virtual WeightType Weight { get; set; }

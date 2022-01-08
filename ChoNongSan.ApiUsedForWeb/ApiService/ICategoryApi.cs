@@ -1,10 +1,11 @@
 ﻿using ChoNongSan.ViewModels.Common;
-using ChoNongSan.ViewModels.Requests.Admin.ManagementCategory;
-using ChoNongSan.ViewModels.Responses.Admin;
-using Microsoft.AspNetCore.Http;
+using ChoNongSan.ViewModels.Requests.Common;
+using ChoNongSan.ViewModels.Requests.DanhMuc;
+using ChoNongSan.ViewModels.Responses;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -12,7 +13,9 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 {
     public interface ICategoryApi
     {
-        Task<PageResult<CategoryVm>> GetCatPaging(GetCatsPagingRequest request);
+        Task<PageResult<CategoryVm>> GetCatPaging(GetPagingCommonRequest request);
+
+        Task<List<CategoryVm>> GetListCat();
 
         Task<string> CreateCat(CreateCatRequest request);
 
@@ -34,13 +37,12 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             _config = config;
         }
 
-        public async Task<PageResult<CategoryVm>> GetCatPaging(GetCatsPagingRequest request)
+        public async Task<PageResult<CategoryVm>> GetCatPaging(GetPagingCommonRequest request)
         {
-            var apiurl = _config["ApiUrl"];
-
             var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync(apiurl + $"/api/admin/danh-muc-phan-trang?Keyword=" +
-                $"{request.Keyword}&PageIndex={request.PageIndex}&PageSize={request.PageSize}");
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+            var response = await client.GetAsync($"/api/danh-muc/danh-muc-phan-trang?Keyword=" +
+                $"{request.Keyword}&ById={request.ById}&PageIndex={request.PageIndex}&PageSize={request.PageSize}");
             var body = await response.Content.ReadAsStringAsync();
             var lsCat = JsonConvert.DeserializeObject<PageResult<CategoryVm>>(body);
             return lsCat;
@@ -53,7 +55,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var requestContent = new MultipartFormDataContent();
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.CatName) ? "" : request.CatName), "catName");
 
-            var response = await client.PostAsync("/api/admin/them-moi-danh-muc", requestContent);
+            var response = await client.PostAsync("/api/danh-muc/them-moi-danh-muc", requestContent);
 
             var data = await response.Content.ReadAsStringAsync();
             return data;
@@ -66,7 +68,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var requestContent = new MultipartFormDataContent();
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.CatName) ? "" : request.CatName), "catName");
 
-            var response = await client.PutAsync($"/api/admin/cap-nhat-danh-muc/{request.CatID}", requestContent);
+            var response = await client.PutAsync($"/api/danh-muc/cap-nhat-danh-muc/{request.CatID}", requestContent);
 
             var data = await response.Content.ReadAsStringAsync();
             return data;
@@ -77,7 +79,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_config["ApiUrl"]);
 
-            var response = await client.GetAsync($"/api/admin/danh-muc/{catId}");
+            var response = await client.GetAsync($"/api/danh-muc/{catId}");
 
             var data = await response.Content.ReadAsStringAsync();
             return data;
@@ -88,10 +90,22 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_config["ApiUrl"]);
 
-            var response = await client.DeleteAsync($"/api/admin/xoa-danh-muc/{catId}");
+            var response = await client.DeleteAsync($"/api/danh-muc/xoa-danh-muc/{catId}");
 
             var data = await response.Content.ReadAsStringAsync();
             return data;
+        }
+
+        public async Task<List<CategoryVm>> GetListCat()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+
+            var response = await client.GetAsync($"/api/danh-muc/tat-ca-danh-muc");
+
+            var body = await response.Content.ReadAsStringAsync();
+            var lsCat = JsonConvert.DeserializeObject<List<CategoryVm>>(body);
+            return lsCat;
         }
     }
 }

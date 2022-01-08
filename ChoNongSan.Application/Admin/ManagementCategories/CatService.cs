@@ -1,12 +1,12 @@
 ﻿using ChoNongSan.Data.Models;
 using ChoNongSan.ViewModels.Common;
-using ChoNongSan.ViewModels.Requests.Admin.ManagementCategory;
-using ChoNongSan.ViewModels.Responses.Admin;
+using ChoNongSan.ViewModels.Requests.Common;
+using ChoNongSan.ViewModels.Requests.DanhMuc;
+using ChoNongSan.ViewModels.Responses;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ChoNongSan.Application.Admin.ManagementCategories
@@ -58,7 +58,7 @@ namespace ChoNongSan.Application.Admin.ManagementCategories
             return result;
         }
 
-        public async Task<PageResult<CategoryVm>> GetCatsPaging(GetCatsPagingRequest request)
+        public async Task<PageResult<CategoryVm>> GetCatsPaging(GetPagingCommonRequest request)
         {
             var lsCat = await _context.Categories.AsNoTracking().Where(x => x.IsDelete == false).ToListAsync();
 

@@ -1,0 +1,262 @@
+﻿@using ChoNongSan.ViewModels.Requests.TinDang
+@using ChoNongSan.ViewModels.Responses
+
+@model CreatePostRequest
+
+@{
+    ViewData["Title"] = "Tạo tin đăng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<CategoryVm> lsCat = ViewBag.CategoryList;
+    List<WeightVm> lsWeight = ViewBag.WeightList;
+}
+
+<div class="container ">
+    <form asp-action="TaoMoi" method="post" enctype="multipart/form-data">
+        <div class="row d-flex">
+            <div class="col-lg-6 col-12 mx-auto" style="margin-bottom:30px">
+
+                <div class="checkbox-form " style="margin:auto">
+                    <h3 style="padding-top:30px">Tạo tin đăng mới</h3>
+                    <div class="row ">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="col-md-6" hidden>
+                            <div class="checkout-form-list form-group">
+                                <input value="@Model.AccountID" asp-for="AccountID" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập tên sản phẩm" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <span style="color:red">*</span>@Html.DisplayNameFor(model => model.CategoryID)
+                            <div class="checkout-form-list form-group">
+                                @*<input id="inCat" type="number" asp-for="CategoryID" hidden value="" />*@
+                                <select class="myniceselect nice-select wide" id="ddCatId" asp-for="CategoryID">
+                                    <option disabled selected value="">Chọn danh mục</option>
+                                    @foreach (var item in lsCat)
+                                    {
+                                        <option value="@item.CategoryID">@item.CateName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CategoryID" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="checkout-form-list form-group">
+                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.ProductName)
+                                <input asp-for="ProductName" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập tên sản phẩm" />
+                                <span asp-validation-for="ProductName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="checkout-form-list form-group">
+                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Title)
+                                <input asp-for="Title" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập tiêu đề" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="checkout-form-list form-group">
+                                @Html.DisplayNameFor(model => model.Description)
+                                <textarea asp-for="Description" style="padding-left: 18px" class="form-control" placeholder="Nhập mô tả"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="checkout-form-list form-group">
+                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.WeightId)
+                                <select class="myniceselect nice-select wide" asp-for="WeightId">
+                                    <option disabled selected value="">Chọn đơn vị</option>
+                                    @foreach (var item in lsWeight)
+                                    {
+                                        <option value="@item.WeightId">@item.WeightName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="WeightId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="checkout-form-list form-group">
+                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.WeightNumber)
+                                <input style="padding-left:18px; height:42px" asp-for="WeightNumber" class="form-control" placeholder="Số lượng cần bán?" />
+                                <span asp-validation-for="WeightNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="checkout-form-list form-group">
+                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Price)
+                                <input asp-for="Price" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập giá" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="checkout-form-list form-group">
+                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.PhoneNumber)
+                                <input value="@Model.PhoneNumber" asp-for="PhoneNumber" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập số điệ thoại" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="checkout-form-list form-group">
+                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Quality)
+                                <select class="myniceselect nice-select wide" asp-for="Quality">
+                                    <option disabled selected value="">Chọn chất lượng</option>
+                                    <option value="Tốt">Tốt</option>
+                                    <option value="Trung bình">Trung bình</option>
+                                    <option value="Thấp">Thấp</option>
+                                </select>
+                                <span asp-validation-for="Quality" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="checkout-form-list form-group">
+                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Expiry)
+                                <input min="1" style="height:42px;padding-left: 18px" asp-for="Expiry" class="form-control" placeholder="Nhập số ngày" />
+                                <span asp-validation-for="Expiry" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="checkout-form-list form-group">
+                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Address)
+                                <input value="@Model.Address" asp-for="Address" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập địa chỉ" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-center">
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="IsDeliver" />
+                                    @Html.DisplayNameFor(model => model.IsDeliver)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-12 " style="margin-bottom:20px">
+                <div class="your-order">
+                    <h3 class="text-center">Thêm ảnh cho sản phẩm</h3>
+                    <div class="payment-method">
+                        <div class="payment-accordion">
+                            <div id="accordion">
+                                <div class="col-md-12 d-flex" style="margin:30px 0">
+
+                                    <div class="checkout-form-list form-group col-10 m-0 m-auto custom-file d-flex align-items-center" style="position: relative">
+                                        <input multiple style="display:none; " onchange="loadFile(event)" id="input_img" asp-for="ThumbnailImage" class="form-control" />
+                                        <input id="btnAddImg" type="button" class="h-100 w-100 p-0 btn btn-link m-auto" onclick="document.getElementById('input_img').click();" style="position: absolute; right: 0; top: 0;left:0;bottom:0;border:3px dashed #ff0000" />
+                                        <div class="m-auto d-flex align-items-center" style="flex-direction:column;height:160px">
+                                            <img style="margin-top:17%;height: 70px; width: 70px" class="p-0 col-12" src="~/assetsKH/icon/icon-camera-add-removebg.png" />
+                                            <h6 style="font-family: Roboto; margin-top:10px" class="col-12 text-center">Chọn từ 01 đến 06 ảnh</h6>
+                                        </div>
+
+                                        <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div style="margin-top:30px" id="collapseOne" class="collapse show">
+                                    <div class="card-body row">
+                                        @for (var i = 0; i < 6; i++)
+                                        {
+                                            var imgId = "demo" + i;
+                                            var idDiv = "divImg" + i;
+                                            var idColse = "closeImg" + i;
+                                            <div id="@idDiv" hidden="hidden" class="align-items-center img-thumbnail col-6 col-lg-4" style="padding:0 7px;height:150px;display:flex; position: relative">
+                                                <a href="#">
+                                                    <img id="@imgId" src="" style="height:auto; margin:15px 0" />
+                                                </a>
+                                                <button type="reset" id="@i" class="btn btn-link p-0" style="position: absolute;right:8px; top:0" onclick="closeImg(this.id)">
+                                                    <img class="rounded" style="width:15px; height:15px" src="~/assetsKH/icon/img-close.jpg" />
+                                                </button>
+                                            </div>
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-12 d-flex">
+                <div class="form-group m-auto rounded" style="background-color: #40AA54">
+                    <button onclick="fcCheckCat()" id="btnSubmit" type="submit" style="font-size:30px; font-family:Roboto;font-style:unset;padding: 4px 30px; color:#ffffff" class="btn btn-link">
+                        Tạo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        let counter = 0;
+        const arrImg = [];
+        //load ảnh
+        var loadFile = function (event) {
+            //var test = event.target.files[0];
+            var lent = event.target.files.length;
+            if (lent != 0) {
+                for (var i = 0; i < lent; i++) {
+                    var checkImg = true;
+                    if (arrImg.length != 0) {
+                        for (var x = 0; x < arrImg.length; x++) {
+                            if (arrImg[x] == event.target.files[i].lastModified)   //Kiểm tra ảnh đã được thêm hay chưa
+                            {
+                                checkImg = false;
+                                break;
+                            }
+                        }
+                    } else {
+                        checkImg = true;
+                    }
+
+                    //gán url vào src của img
+                    if (checkImg) {
+                        for (var a = 0; a < 6; a++) {
+                            if (document.getElementById('demo' + a).getAttribute('src') == "") {
+                                arrImg[arrImg.length] = (event.target.files[i]).lastModified;
+                                document.getElementById('demo' + a).src = URL.createObjectURL(event.target.files[i]);
+                                document.getElementById('divImg' + a).removeAttribute('hidden');
+                                counter++;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (counter == 6) {
+                        document.getElementById("btnAddImg").disabled = true;
+                    }
+                }
+            }
+        };
+
+        //xóa ảnh
+
+        function closeImg(clicked_id) {
+            var imgId = "demo" + clicked_id;
+            var idDiv = "divImg" + clicked_id;
+            document.getElementById(imgId).setAttribute('src', "");
+            document.getElementById(idDiv).setAttribute('hidden', "hidden");
+            counter--;
+            if (counter < 6 && counter >= 0) {
+                document.getElementById("btnAddImg").disabled = false;
+            }
+            arrImg.splice(clicked_id, 1);
+        }
+
+        //function fcCheckCat() {
+        //    var e = document.getElementById("ddCatId").value;
+        //    document.getElementById("inCat").value = e;
+        //    var a = document.getElementById("inCat").value;
+        //}
+
+        $(document).ready(function () {
+
+        });
+    </script>
+}

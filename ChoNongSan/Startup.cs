@@ -1,5 +1,6 @@
 using AspNetCoreHero.ToastNotification;
 using ChoNongSan.ApiUsedForWeb.ApiService;
+using ChoNongSan.Application.Common.Files;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,7 +43,8 @@ namespace ChoNongSan
             services.AddTransient<ICategoryApi, CategoryApi>();
             services.AddTransient<ICtvApi, CtvApi>();
             services.AddTransient<IPostApi, PostApi>();
-            services.AddTransient<IMgtPostApi, MgtPostApi>();
+            services.AddTransient<IStorageService, FileStorageService>();
+            services.AddTransient<IWeightApi, WeightApi>();
 
             IMvcBuilder builder = services.AddRazorPages();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");

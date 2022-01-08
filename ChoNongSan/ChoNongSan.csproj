@@ -14,7 +14,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChoNongSan.ApiUsedForWeb\ChoNongSan.ApiUsedForWeb.csproj" />
+    <ProjectReference Include="..\ChoNongSan.Application\ChoNongSan.Application.csproj" />
     <ProjectReference Include="..\ChoNongSan.ViewModels\ChoNongSan.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\img-test\" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 ﻿using ChoNongSan.Data.Models;
 using ChoNongSan.ViewModels.Common;
-using ChoNongSan.ViewModels.Common.Banners;
-using ChoNongSan.ViewModels.Requests.Common.Banners;
+using ChoNongSan.ViewModels.Requests.Banners;
 using ChoNongSan.ViewModels.Responses;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,5 @@
 ﻿@model ChoNongSan.ViewModels.Common.PageResultBase
+
 @{
     var urlTemplate = Url.Action() + "?pageIndex={0}";
     var request = ViewContext.HttpContext.Request;
@@ -12,29 +13,12 @@
         {
             foreach (var item in (string[])request.Query[key])
             {
-                if (key.Contains("keyword"))
-                {
-                    if (!String.IsNullOrEmpty(item)) urlTemplate += "&" + key + "=" + item;
-                }
-                else
-                {
-                    urlTemplate += "&" + key + "=" + item;
-                }
-
+                urlTemplate += "&" + key + "=" + item;
             }
         }
         else
         {
-            if (key.Contains("keyword"))
-            {
-                if (!String.IsNullOrEmpty(request.Query[key]))
-                    urlTemplate += "&" + key + "=" + request.Query[key];
-            }
-            else
-            {
-                urlTemplate += "&" + key + "=" + request.Query[key];
-            }
-
+            urlTemplate += "&" + key + "=" + request.Query[key];
         }
     }
 

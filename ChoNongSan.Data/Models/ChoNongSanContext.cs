@@ -1,6 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -35,7 +33,6 @@ namespace ChoNongSan.Data.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=tcp:vvtazure.database.windows.net,1433;Initial Catalog=ChoNongSan;Persist Security Info=False;User ID=vothang;Password=Vt251199@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
@@ -178,13 +175,13 @@ namespace ChoNongSan.Data.Models
                     .WithMany(p => p.Loves)
                     .HasForeignKey(d => d.AccountId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Favorite_Account");
+                    .HasConstraintName("FK_Love_Account");
 
                 entity.HasOne(d => d.Post)
                     .WithMany(p => p.Loves)
                     .HasForeignKey(d => d.PostId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Favorite_Post");
+                    .HasConstraintName("FK_Love_Post");
             });
 
             modelBuilder.Entity<Post>(entity =>
@@ -200,8 +197,6 @@ namespace ChoNongSan.Data.Models
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
                 entity.Property(e => e.Ctv).HasColumnName("CTV");
-
-                entity.Property(e => e.Expiry).HasColumnType("date");
 
                 entity.Property(e => e.LocationId).HasColumnName("LocationID");
 
@@ -221,6 +216,12 @@ namespace ChoNongSan.Data.Models
 
                 entity.Property(e => e.WeightId).HasColumnName("WeightID");
 
+                entity.HasOne(d => d.Account)
+                    .WithMany(p => p.Posts)
+                    .HasForeignKey(d => d.AccountId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Post_Account");
+
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.CategoryId)
@@ -230,6 +231,7 @@ namespace ChoNongSan.Data.Models
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.LocationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Post_Location");
 
                 entity.HasOne(d => d.Weight)
@@ -285,6 +287,6 @@ namespace ChoNongSan.Data.Models
             //OnModelCreatingPartial(modelBuilder);
         }
 
-        //public partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        //private partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

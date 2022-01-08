@@ -1,8 +1,7 @@
 ﻿using ChoNongSan.Application.Common.Files;
 using ChoNongSan.Data.Models;
 using ChoNongSan.ViewModels.Common;
-using ChoNongSan.ViewModels.Common.Banners;
-using ChoNongSan.ViewModels.Requests.Common.Banners;
+using ChoNongSan.ViewModels.Requests.Banners;
 using ChoNongSan.ViewModels.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;

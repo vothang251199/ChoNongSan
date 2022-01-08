@@ -1,5 +1,6 @@
 ﻿using ChoNongSan.ApiUsedForWeb.ApiService;
-using ChoNongSan.ViewModels.Requests.Common.Accounts;
+using ChoNongSan.ViewModels.Requests.TaiKhoan;
+using ChoNongSan.ViewModels.Requests.TaiKhoan.KhachHang;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;

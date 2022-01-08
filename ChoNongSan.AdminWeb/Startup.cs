@@ -46,7 +46,6 @@ namespace ChoNongSan.AdminWeb
             services.AddTransient<ICategoryApi, CategoryApi>();
             services.AddTransient<ICtvApi, CtvApi>();
             services.AddTransient<IPostApi, PostApi>();
-            services.AddTransient<IMgtPostApi, MgtPostApi>();
 
             IMvcBuilder builder = services.AddRazorPages();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");

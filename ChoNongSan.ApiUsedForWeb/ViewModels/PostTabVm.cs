@@ -9,6 +9,8 @@ namespace ChoNongSan.ApiUsedForWeb.ViewModels
     public class PostTabVm
     {
         public Tab ActiveTab { get; set; }
+        public int? pageIndex { get; set; }
+        public int? pageSize { get; set; }
     }
 
     public enum Tab

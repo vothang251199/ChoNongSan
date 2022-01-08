@@ -2,7 +2,7 @@
 
 @using ChoNongSan.ViewModels.Responses
 
-@model PageResult<PostVm>
+@model PageResult<PostVmTongQuat>
 
 @{
     ViewData["Title"] = "Trang chủ";
@@ -51,18 +51,18 @@
         </a>
     </li>
 </ul>
-<div class="tab-content" id="myTabContent">
+<div class="tab-content "  id="myTabContent">
     <div class="tab-pane fade show active" id="all-items" role="tabpanel" aria-labelledby="all-items-tab">
         <div class="product-item-wrap row">
 
             @foreach (var item in Model.Items)
             {
                 item.ImageDefault = ViewBag.ApiUrl + item.ImageDefault;
-                <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="col-xl-3 col-lg-4 col-sm-6 pt-6 pt-sm-0">
                     <div class="product-item">
                         <div class="product-img img-zoom-effect">
-                            <a href="single-product.html">
-                                <img class="img-full" src="@item.ImageDefault" alt="@item.ProductName">
+                            <a href="single-product.html" style="display:flex">
+                                <img style="margin:auto;width:262px; height:291px" class="img-full" src="@item.ImageDefault" alt="@item.ProductName">
                             </a>
                             <div class="product-add-action">
                                 <ul>
@@ -75,9 +75,9 @@
                             </div>
                         </div>
                         <div class="product-content">
-                            <a class="product-name" href="single-product.html">@item.ProductName</a>
+                            <a class="product-name" href="single-product.html">@item.Title</a>
                             <div class="price-box pb-1">
-                                <span class="new-price">@item.Price</span>
+                                <span class="new-price">@item.TimePost </span>
                             </div>
                             <div class="rating-box">
                                 <ul>
@@ -1488,4 +1488,10 @@
         </div>
     </div>
 </div>
-@await Component.InvokeAsync("Pager", Model)
+<br />
+<br />
+<div style="display: flex;">
+    <div style="margin:auto">
+        @await Component.InvokeAsync("Pager", Model)
+    </div>
+</div>

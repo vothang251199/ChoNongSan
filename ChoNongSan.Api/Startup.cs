@@ -1,20 +1,16 @@
-using ChoNongSan.Api.Models;
 using ChoNongSan.Application.Admin.ManagementCategories;
 using ChoNongSan.Application.Admin.ManagementCTVes;
 using ChoNongSan.Application.Common;
 using ChoNongSan.Application.Common.Accounts;
 using ChoNongSan.Application.Common.Banners;
+using ChoNongSan.Application.Common.DonVi;
 using ChoNongSan.Application.Common.Files;
 using ChoNongSan.Application.CTV;
 using ChoNongSan.Application.KhachHang.Posts;
 using ChoNongSan.Data.Models;
-using ChoNongSan.ViewModels.Requests.Common.Accounts;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,9 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ChoNongSan.Api
 {
@@ -52,6 +46,7 @@ namespace ChoNongSan.Api
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<IBannerService, BannerService>();
             services.AddTransient<IMailService, MailService>();
+            services.AddTransient<IWeightService, WeightService>();
             //services.AddTransient<UserManager<Account>, UserManager<Account>>();
 
             //services.AddTransient<SignInManager<Account>, SignInManager<Account>>();

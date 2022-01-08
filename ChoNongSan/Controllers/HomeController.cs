@@ -1,6 +1,7 @@
 ﻿using ChoNongSan.ApiUsedForWeb.ApiService;
 using ChoNongSan.Models;
 using ChoNongSan.ViewModels.Common;
+using ChoNongSan.ViewModels.Requests.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -22,11 +23,12 @@ namespace ChoNongSan.Controllers
             _config = config;
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 2)
+        public async Task<IActionResult> Index(string keyword, int byid, int pageIndex = 1, int pageSize = 10)
         {
-            var request = new GetSearchPostPagingRequest()
+            var request = new GetPagingCommonRequest()
             {
-                KeyWord = keyword,
+                ById = byid,
+                Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize
             };

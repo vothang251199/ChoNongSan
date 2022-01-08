@@ -1,14 +1,12 @@
 ﻿using ChoNongSan.Data.Models;
 using ChoNongSan.Utilities.Extenstions;
 using ChoNongSan.ViewModels.Common;
-using ChoNongSan.ViewModels.Requests.Admin;
-using ChoNongSan.ViewModels.Requests.Admin.ManagementCTV;
-using ChoNongSan.ViewModels.Responses.Admin;
+using ChoNongSan.ViewModels.Requests.Common;
+using ChoNongSan.ViewModels.Requests.TaiKhoan.Ctv;
+using ChoNongSan.ViewModels.Responses;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ChoNongSan.Application.Admin.ManagementCTVes
@@ -49,7 +47,7 @@ namespace ChoNongSan.Application.Admin.ManagementCTVes
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<PageResult<CtvVm>> GetCtvPaging(GetCtvPagingRequest request)
+        public async Task<PageResult<CtvVm>> GetCtvPaging(GetPagingCommonRequest request)
         {
             var lsCtv = await _context.Accounts.AsNoTracking().Where(x => x.RolesId == 2 && x.IsDelete == false).ToListAsync();
 

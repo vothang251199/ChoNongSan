@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ChoNongSan.ApiUsedForWeb.ApiService;
-using ChoNongSan.ViewModels.Common;
-using ChoNongSan.ViewModels.Requests.Admin.ManagementCategory;
-using ChoNongSan.ViewModels.Responses.Admin;
+using ChoNongSan.ViewModels.Requests.Common;
+using ChoNongSan.ViewModels.Requests.DanhMuc;
+using ChoNongSan.ViewModels.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +26,7 @@ namespace ChoNongSan.AdminWeb.Controllers
 
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 2)
         {
-            var request = new GetCatsPagingRequest()
+            var request = new GetPagingCommonRequest()
             {
                 Keyword = keyword,
                 PageIndex = pageIndex,

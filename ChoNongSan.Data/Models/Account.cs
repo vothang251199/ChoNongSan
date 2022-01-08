@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -12,6 +11,7 @@ namespace ChoNongSan.Data.Models
         {
             HistoryMoneys = new HashSet<HistoryMoney>();
             Loves = new HashSet<Love>();
+            Posts = new HashSet<Post>();
             Reviews = new HashSet<Review>();
         }
 
@@ -33,6 +33,7 @@ namespace ChoNongSan.Data.Models
         public virtual Role Roles { get; set; }
         public virtual ICollection<HistoryMoney> HistoryMoneys { get; set; }
         public virtual ICollection<Love> Loves { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
     }
 }

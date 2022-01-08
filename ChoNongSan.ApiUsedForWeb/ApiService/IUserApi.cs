@@ -1,7 +1,9 @@
-﻿using ChoNongSan.ViewModels.Requests.Common.Accounts;
+﻿using ChoNongSan.ViewModels.Requests.TaiKhoan;
+using ChoNongSan.ViewModels.Requests.TaiKhoan.KhachHang;
 using ChoNongSan.ViewModels.Responses;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,8 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
         Task<string> ForgotPassword(ForgetPasswordRequest request);
 
         Task<string> ResetPassword(ResetPassRequest request);
+
+        Task<AccountVm> GetUserById(int accountID);
     }
 
     public class UserApi : IUserApi
@@ -104,6 +108,18 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var failed = new { message = "Gọi api thất bại", status = "FAILED" };
             var rs = JsonConvert.SerializeObject(failed);
             return (rs);
+        }
+
+        public async Task<AccountVm> GetUserById(int accountID)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+            var response = await client.GetAsync($"api/tai-khoan/{accountID}");
+            var body = await response.Content.ReadAsStringAsync();
+            var obj = (JObject)JsonConvert.DeserializeObject(body);
+            var a = Convert.ToString(obj["data"]);
+            var result = JsonConvert.DeserializeObject<AccountVm>(a);
+            return result;
         }
     }
 }

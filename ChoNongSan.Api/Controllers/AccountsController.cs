@@ -1,12 +1,13 @@
-﻿using ChoNongSan.Application.Common;
+﻿using ChoNongSan.Application.Admin.ManagementCTVes;
 using ChoNongSan.Application.Common.Accounts;
 using ChoNongSan.Data.Models;
 using ChoNongSan.Utilities.Extenstions;
-using ChoNongSan.ViewModels.Requests.Common.Accounts;
+using ChoNongSan.ViewModels.Requests.TaiKhoan;
+using ChoNongSan.ViewModels.Requests.TaiKhoan.Ctv;
+using ChoNongSan.ViewModels.Requests.TaiKhoan.KhachHang;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,10 +19,12 @@ namespace ChoNongSan.Api.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly ChoNongSanContext _context;
+        private readonly IManagementCtvService _mgtCtvService;
 
-        public AccountsController(IAccountService accountService,
+        public AccountsController(IAccountService accountService, IManagementCtvService mgtCtvService,
             ChoNongSanContext context)
         {
+            _mgtCtvService = mgtCtvService;
             _accountService = accountService;
             _context = context;
         }
@@ -65,6 +68,31 @@ namespace ChoNongSan.Api.Controllers
             var result = await _accountService.Login(request);
 
             return Ok(new { data = result, status = "OK" });
+        }
+
+        [HttpPost("dang-ky-khach-hang")]
+        [AllowAnonymous]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Register([FromForm] RegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userExist = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.UserName == request.UserName.ToLower());
+            var phoneExist = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
+            var emailExist = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.Email == request.Email.ToLower());
+
+            if (userExist != null) return BadRequest(new { message = "Tên tài khoản đã tồn tại", status = "FAILED" });
+            if (phoneExist != null) return BadRequest(new { message = "Số điện thoại đã tồn tại", status = "FAILED" });
+            if (emailExist != null) return BadRequest(new { message = "Email đã tồn tại.", status = "FAILED" });
+
+            var accountId = await _accountService.Register(request);
+            if (accountId == 0) return BadRequest(new { message = "Đăng ký tài khoản thất bại", status = "FAILED" });
+
+            var account = await _accountService.GetAccountById(accountId);
+            return Ok(new { message = "Đăng ký tài khoản thành công", status = "OK", data = account });
         }
 
         [HttpPut("cap-nhat-tai-khoan/{AccountID}")]
@@ -171,6 +199,47 @@ namespace ChoNongSan.Api.Controllers
 
             var result = await _accountService.GetAccountById(accountID);
             return Ok(new { data = result, status = "OK" });
+        }
+
+        //Amin Management CTV
+        [HttpPost("them-ctv")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> CreateCTV([FromForm] CreateCTVRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userExist = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.UserName == request.UserName.ToLower());
+            if (userExist != null)
+                return BadRequest(new { message = "Tài khoản đã tồn tại", status = "FAILED" });
+
+            var result = await _mgtCtvService.CreateCTV(request);
+            if (result == 0)
+                return BadRequest(new { message = "Tạo Cộng Tác Viên không thành công", status = "FAILED" });
+
+            return Ok(new { message = "Tạo Cộng Tác Viên thành công", status = "OK" });
+        }
+
+        [HttpPut("doi-mat-khau-ctv/{CtvID}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdatePassCTV([FromRoute] int CtvID, [FromForm] UpdatePassCTVRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            request.AccountID = CtvID;
+            var user = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.AccountId == request.AccountID && x.IsDelete == false);
+            if (user == null)
+                return BadRequest(new { message = "Tài khoản không tồn tại", status = "FAILED" });
+
+            var result = await _mgtCtvService.UpdatePassCTV(request);
+            if (result == 0)
+                return BadRequest(new { message = "Đổi mật khẩu không thành công", status = "FAILED" });
+
+            return Ok(new { message = "Đổi mật khẩu thành công", status = "OK" });
         }
     }
 }

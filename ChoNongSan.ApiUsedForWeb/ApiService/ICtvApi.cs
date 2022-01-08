@@ -1,11 +1,10 @@
 ﻿using ChoNongSan.ViewModels.Common;
-using ChoNongSan.ViewModels.Requests.Admin.ManagementCTV;
-using ChoNongSan.ViewModels.Responses.Admin;
+using ChoNongSan.ViewModels.Requests.Common;
+using ChoNongSan.ViewModels.Requests.TaiKhoan.Ctv;
+using ChoNongSan.ViewModels.Responses;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -13,7 +12,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 {
     public interface ICtvApi
     {
-        Task<PageResult<CtvVm>> GetCtvPaging(GetCtvPagingRequest request);
+        Task<PageResult<CtvVm>> GetCtvPaging(GetPagingCommonRequest request);
 
         Task<string> CreateCtv(CreateCTVRequest request);
 
@@ -44,7 +43,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             return data;
         }
 
-        public async Task<PageResult<CtvVm>> GetCtvPaging(GetCtvPagingRequest request)
+        public async Task<PageResult<CtvVm>> GetCtvPaging(GetPagingCommonRequest request)
         {
             var apiurl = _config["ApiUrl"];
 
@@ -58,7 +57,6 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 
         public async Task<string> CreateCtv(CreateCTVRequest request)
         {
-            var json = JsonConvert.SerializeObject(request);
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_config["ApiUrl"]);
             var requestContent = new MultipartFormDataContent();

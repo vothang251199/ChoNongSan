@@ -1,7 +1,10 @@
 ﻿using ChoNongSan.ApiUsedForWeb.ApiService;
-using ChoNongSan.ViewModels.Requests.Common.Accounts;
+using ChoNongSan.ApiUsedForWeb.ViewModels;
+using ChoNongSan.ViewModels.Requests.TaiKhoan;
+using ChoNongSan.ViewModels.Requests.TaiKhoan.KhachHang;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +14,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -98,7 +102,7 @@ namespace ChoNongSan.Controllers
             var userPrincipal = this.ValidateToken(token);
             var authProperties = new AuthenticationProperties()
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(20),
                 IsPersistent = true, //lưu tài khoản để ko cần đăng nhập lại
             };
 
@@ -173,6 +177,50 @@ namespace ChoNongSan.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Remove("Token");
             return RedirectToAction("Login", "User");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult Profile(ProfileTabVm vm)
+        {
+            if (vm == null)
+            {
+                vm.ActiveTab = TabProfile.Display;
+            }
+            var accountID = User.Claims.Where(x => x.Type == "Id")
+               .Select(c => c.Value).SingleOrDefault();
+            vm.accountId = Convert.ToInt32(accountID);
+            ViewBag.HiddenLayOut = 1;
+
+            return View(vm);
+        }
+
+        public IActionResult SwitchTabs(string tabname)
+        {
+            var vm = new ProfileTabVm();
+            switch (tabname)
+            {
+                case "Display":
+                    vm.ActiveTab = TabProfile.Display;
+                    break;
+
+                case "Love":
+                    vm.ActiveTab = TabProfile.Love;
+                    break;
+
+                case "Update":
+                    vm.ActiveTab = TabProfile.Update;
+                    break;
+
+                case "ChangePass":
+                    vm.ActiveTab = TabProfile.ChangePass;
+                    break;
+
+                default:
+                    vm.ActiveTab = TabProfile.Display;
+                    break;
+            }
+            return RedirectToAction(nameof(UserController.Profile), vm);
         }
 
         private ClaimsPrincipal ValidateToken(string jwtToken)
