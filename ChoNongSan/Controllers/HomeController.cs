@@ -1,11 +1,15 @@
 ﻿using ChoNongSan.ApiUsedForWeb.ApiService;
+using ChoNongSan.ApiUsedForWeb.ViewModels;
 using ChoNongSan.Models;
 using ChoNongSan.ViewModels.Common;
 using ChoNongSan.ViewModels.Requests.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ChoNongSan.Controllers
@@ -15,27 +19,64 @@ namespace ChoNongSan.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IPostApi _postApi;
         private readonly IConfiguration _config;
+        private readonly ICategoryApi _categoryApi;
 
-        public HomeController(ILogger<HomeController> logger, IPostApi postApi, IConfiguration config)
+        public HomeController(ILogger<HomeController> logger, IPostApi postApi, IConfiguration config,
+            ICategoryApi categoryApi)
         {
+            _categoryApi = categoryApi;
             _logger = logger;
             _postApi = postApi;
             _config = config;
         }
 
-        public async Task<IActionResult> Index(string keyword, int byid, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, string tabname, int pageIndex = 1, int pageSize = 10)
         {
-            var request = new GetPagingCommonRequest()
-            {
-                ById = byid,
-                Keyword = keyword,
-                PageIndex = pageIndex,
-                PageSize = pageSize
-            };
+            HomeTabVm vm = new HomeTabVm();
+            
+            GetPagingCommonRequest request = new GetPagingCommonRequest();
+
+            request.ById = Convert.ToInt32(tabname);
+
+            request.Keyword = keyword;
+            request.PageIndex = pageIndex;
+            request.PageSize = pageSize;
+
             var data = await _postApi.GetPostPaging(request);
+            vm.Data = data;
+
+            var lsCat = await _categoryApi.GetListCat();
+
+            foreach (var i in lsCat)
+            {
+                i.Image = _config["ApiUrl"] + i.Image;
+            }
+
+            vm.ListCat = lsCat;
+            vm.ActiveTab =(int) request.ById;
+
             ViewBag.Keyword = keyword;
             ViewBag.ApiUrl = _config["ApiUrl"];
-            return View(data);
+            return View(vm);
+        }
+
+        public async Task<IActionResult> SwitchTabs(string tabname)
+        {
+            var vm = new HomeTabVm();
+            var lsCat = await _categoryApi.GetListCat();
+            foreach (var i in lsCat)
+            {
+                if (Convert.ToInt32(tabname) == i.CategoryID)
+                {
+                    vm.ActiveTab = i.CategoryID;
+                }
+                else
+                {
+                    vm.ActiveTab = 0;
+                }
+            }
+
+            return RedirectToAction(nameof(QuanLyTinDang.Index), vm);
         }
 
         public IActionResult Privacy()

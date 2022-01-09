@@ -11,26 +11,26 @@ namespace ChoNongSan.ViewModels.Requests.TinDang
     public class CreatePostRequest
     {
         [Display(Name = "Tiêu đề")]
-        [Required(ErrorMessage = "Vui lòng nhập tiêu đề cho bài viết")]
+        [Required(ErrorMessage = "Vui lòng nhập Tiêu đề")]
         public string Title { get; set; }
 
         [Display(Name = "Tên sản phẩm")]
-        [Required(ErrorMessage = "Vui lòng nhập tên sản phẩm")]
+        [Required(ErrorMessage = "Vui lòng nhập Tên sản phẩm")]
         public string ProductName { get; set; }
 
         [Display(Name = "Mô tả")]
         public string Description { get; set; }
 
         [Display(Name = "Khối lượng")]
-        [Required(ErrorMessage = "Vui lòng nhập khối lượng")]
+        [Required(ErrorMessage = "Vui lòng nhập Khối lượng")]
         public int WeightNumber { get; set; }
 
         [Display(Name = "Giá")]
-        [Required(ErrorMessage = "Vui lòng nhập giá cho sản phẩm")]
+        [Required(ErrorMessage = "Vui lòng nhập Giá")]
         public decimal Price { get; set; }
 
         [Display(Name = "Chất lượng")]
-        [Required(ErrorMessage = "Vui lòng chọn chọn chất lượng sản phẩm của bạn")]
+        [Required(ErrorMessage = "Vui lòng chọn chọn Chất lượng")]
         public string Quality { get; set; }
 
         [Display(Name = "Địa chỉ")]
@@ -42,8 +42,8 @@ namespace ChoNongSan.ViewModels.Requests.TinDang
         [RegularExpression(@"^((09|03|07|08|05)((\d){8}))$", ErrorMessage = "Số điện thoại không đúng định dạng")]
         public string PhoneNumber { get; set; }
 
-        [Display(Name = "Thời hạn")]
-        [Required(ErrorMessage = "Vui lòng nhập Thời hạn cho sản phẩm của bạn")]
+        [Display(Name = "Thời hạn bảo quản")]
+        [Required(ErrorMessage = "Vui lòng nhập Số ngày")]
         public int? Expiry { get; set; }
 
         [Display(Name = "Giao hàng")]
@@ -60,7 +60,7 @@ namespace ChoNongSan.ViewModels.Requests.TinDang
         public int WeightId { get; set; }
 
         [Display(Name = "Ảnh sản phẩm")]
-        [Required(ErrorMessage = "Vui lòng chọn Ảnh cho tin đăng")]
+        [Required(ErrorMessage = "Vui lòng chọn Ảnh")]
         public List<IFormFile> ThumbnailImage { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace ChoNongSan.Data.Models
         public int CategoryId { get; set; }
         public string CateName { get; set; }
         public bool? IsDelete { get; set; }
+        public string Image { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }
     }

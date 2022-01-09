@@ -94,6 +94,7 @@ namespace ChoNongSan.Application.Admin.ManagementCategories
             {
                 CategoryID = x.CategoryId,
                 CateName = x.CateName,
+                Image = x.Image
             }).ToList();
             return lsCat;
         }

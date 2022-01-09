@@ -90,14 +90,7 @@ namespace ChoNongSan.Controllers
             ViewBag.Phone = user.PhoneNumber;
             ViewBag.Address = user.Address;
 
-            var model = new CreatePostRequest()
-            {
-                AccountID = Convert.ToInt32(userId),
-                PhoneNumber = user.PhoneNumber,
-                Address = user.Address,
-            };
-
-            return View(model);
+            return View();
         }
 
         [HttpPost]
@@ -110,13 +103,9 @@ namespace ChoNongSan.Controllers
                 ViewBag.WeightList = await _weightApi.GetListWeight();
                 var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
                 var user = await _userApi.GetUserById(Convert.ToInt32(userId));
-                var model = new CreatePostRequest()
-                {
-                    AccountID = Convert.ToInt32(userId),
-                    PhoneNumber = user.PhoneNumber,
-                    Address = user.Address,
-                };
-                return View(model);
+                ViewBag.Phone = user.PhoneNumber;
+                ViewBag.Address = user.Address;
+                return View(request);
             }
 
             var result = await _postApi.CreatePost(request);

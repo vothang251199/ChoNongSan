@@ -52,37 +52,37 @@
                     <div class="row align-items-center">
                         <div class="col-lg-12">
                             <div class="header-middle-wrap">
-                                <a href="/Home/Index" class="header-logo">
+                                <a href="/Home/Index" class="col-auto header-logo">
                                     <img style="height:33px; width:33px" src="~/assetsKH/images/logo.png" alt="Header Logo">
                                     <h3 class="d-none d-sm-block" style="height:100%; width:100%;margin:5px 0 0 10px">ChoNongSan</h3>
                                 </a>
-                                <div class="d-none d-lg-block" style="width:auto">
-                                    <form action="#" class="header-searchbox">
-                                        <input class="input-field" type="text" placeholder="Search Products">
+                                <div class="w-50 d-none d-lg-block col-auto px-3" >
+                                    <form asp-action="Index" method="get" class="header-searchbox">
+                                        <input name="keyword" value="@ViewBag.Keyword" class="input-field" type="text" placeholder="Tìm kiếm theo sản phẩm / địa chỉ / tiêu đề">
                                         <button class="btn btn-outline-whisper btn-primary-hover" type="submit"><i class="pe-7s-search"></i></button>
                                     </form>
                                 </div>
-                                <div class="header-right">
+                                <div class="header-right col-auto">
                                     <ul>
                                         <li class="d-block d-lg-none" style="padding-right:10px">
                                             <a href="#searchBar" class="search-btn toolbar-btn">
                                                 <i class="pe-7s-search"></i>
                                             </a>
                                         </li>
-                                        <li class="dropdown " style="padding-right:10px">
-                                            <button class="d-flex align-items-center btn btn-link dropdown-toggle ht-btn p-0" style="width:auto" type="button" id="settingButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <img class="rounded-circle img-thumbnail" style="height: 40px; width: 40px; " src="@avatar" />
+                                        <li class="dropdown " style="padding-right:3px">
+                                            <button class="d-flex align-items-center btn btn-link dropdown-toggle p-0" type="button" id="settingButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <img class="rounded-circle " style="height: 30px; width: 30px; " src="@avatar" />
 
-                                                <h5 class=" d-none d-lg-block" style=" margin:0;padding-left:15px;font-family: Arial">@userName</h5>
+                                                <h5 class=" d-none d-lg-block" style=" margin: 0; padding-left: 10px; font-family:  Poppins, sans-serif ">@userName</h5>
                                             </button>
 
                                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingButton">
                                                 @if (!String.IsNullOrEmpty(User.Identity.Name))
                                                 {
-                                                    <li><a class="dropdown-item" href="/User/Profile">Quản lý tài khoản</a></li>
+                                                    <li><a class="dropdown-item" style="height:32px" href="/User/Profile">Quản lý tài khoản</a></li>
                                                     <li>
                                                         <form asp-controller="User" asp-action="Logout" method="post">
-                                                            <input type="submit" class="dropdown-item" value="Đăng xuất" />
+                                                            <input type="submit" class="btn btn-link dropdown-item" style="padding:4px 16px" value="Đăng xuất" />
                                                         </form>
                                                     </li>
                                                 }
@@ -93,12 +93,14 @@
                                                 }
                                             </ul>
                                         </li>
+
                                         @if (!String.IsNullOrEmpty(User.Identity.Name))
                                         {
-                                            <li class="d-none d-lg-block">
-                                                <a style="margin-left:15px; padding-left:15px;border-left: 3px solid #000000" class="d-flex align-items-center" href="/QuanLyTinDang/TaoMoi">
-                                                    <img style="height: 35px; width: 35px" src="~/assetsKH/icon/icon-writing.png" />
-                                                    <h5 style="margin:0 0 0 10px">Đăng tin</h5>
+                                            <li class="h-100 d-none d-lg-block" style="padding-right:10px">|</li>
+                                            <li class="dropdown" style="padding-right:10px">
+                                                <a class="d-flex align-items-center" href="/QuanLyTinDang/TaoMoi">
+                                                    <img style="height: 30px; width: 30px" src="~/assetsKH/icon/icon-writing.png" />
+                                                    <h5 class="d-none d-lg-block" style="margin: 0; padding-left: 10px; font-family: Poppins">Đăng tin</h5>
                                                 </a>
                                             </li>
 
@@ -119,28 +121,28 @@
                 <div class="container">
                     <div class="main-header_nav position-relative">
                         <div class="row align-items-center">
-                            <div class="col-lg-12 d-none d-sm-block">
+                            <div class="col-lg-12 d-block">
                                 <div class="main-menu">
                                     <nav class="main-nav">
                                         <ul>
                                             <li class="drop-holder">
-                                                <a href="/Home">
-                                                    <img src="~/assetsKH/images/icons/icon-home.jpg" style="height:25px; width:25px" />
-                                                    Trang chủ  |
+                                                <a class="text-center" href="/Home">
+                                                    <img src="~/assetsKH/icon/icon-home.jpg" style="height: 15px; width: 15px; margin:0 4px 2px 0" />
+                                                    Trang chủ
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="/QuanLyTinDang">
-                                                    Quản lý bài đăng  |
+                                                <a class="text-center" href="/QuanLyTinDang">
+                                                    Quản lý bài đăng
                                                 </a>
                                             </li>
                                             <li class="megamenu-holder">
-                                                <a href="javascript:void(0)">
-                                                    Yêu thích  |
+                                                <a class="text-center" href="javascript:void(0)">
+                                                    Yêu thích
                                                 </a>
                                             </li>
                                             <li class="drop-holder">
-                                                <a href="javascript:void(0)">
+                                                <a class="text-center" href="javascript:void(0)">
                                                     Liên hệ
                                                 </a>
                                             </li>
@@ -205,7 +207,7 @@
                             <div class="harmic-offcanvas-top">
                                 <a href="#" class="button-close"><i class="pe-7s-close"></i></a>
                             </div>
-                            <span class="searchbox-info">Start typing and press Enter to search</span>
+                            <span class="searchbox-info">Nhập tìm kiếm của bạn</span>
                             <form action="#" class="hm-searchbox">
                                 <input type="text" placeholder="Search">
                                 <button class="search-btn" type="submit"><i class="pe-7s-search"></i></button>
@@ -225,12 +227,12 @@
             <div class="swiper-container main-slider swiper-arrow with-bg_white">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide animation-style-01">
-                        <div class="slide-inner bg-height" data-bg-image="assetsKH/images/slider/bg/1-1.jpg">
+                        <div class="slide-inner bg-height" data-bg-image="/assetsKH/images/slider/bg/1-1.jpg">
                             <div class="parallax-img-wrap">
                                 <div class="chilly">
                                     <div class="scene fill">
                                         <div class="expand-width" data-depth="0.2">
-                                            <img src="assetsKH/images/slider/inner-img/1-1-231x210.png" alt="Inner Image">
+                                            <img src="~/assetsKH/images/slider/inner-img/1-1-231x210.png" alt="trái ớt" />
                                         </div>
                                     </div>
                                 </div>
@@ -262,12 +264,12 @@
                         </div>
                     </div>
                     <div class="swiper-slide animation-style-01">
-                        <div class="slide-inner bg-height" data-bg-image="assetsKH/images/slider/bg/1-1.jpg">
+                        <div class="slide-inner bg-height" data-bg-image="/assetsKH/images/slider/bg/1-1.jpg">
                             <div class="parallax-img-wrap">
                                 <div class="chilly">
                                     <div class="scene fill">
                                         <div class="expand-width" data-depth="0.2">
-                                            <img src="~/assetsKH/images/slider/inner-img/1-1-231x210.png" alt="Inner Image">
+                                            <img src="~/assetsKH/images/slider/inner-img/1-1-231x210.png" alt="trái ớt" />
                                         </div>
                                     </div>
                                 </div>
@@ -311,43 +313,33 @@
         <!-- Begin Shipping Area -->
         @{ if (ViewBag.HiddenLayOut != 1)
             {
-                <div class="shipping-area section-space-top-100">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6">
-                                <div class="shipping-item">
-                                    <div class="shipping-img">
-                                        <img src="~/assetsKH/images/shipping/icon/plane.png" alt="Shipping Icon">
-                                    </div>
-                                    <div class="shipping-content">
-                                        <h5 class="title">Free Shipping</h5>
-                                        <p class="short-desc mb-0">Free Home Delivery Offer</p>
-                                    </div>
-                                </div>
+                <div class="shipping-area section-space-top-55">
+                    <div class="container ">
+                        <div class="row ">
+                            <div class="d-lg-block p-0 col-lg-3">
+
                             </div>
-                            <div class="col-lg-4 col-md-6 pt-6 pt-md-0">
-                                <div class="shipping-item">
-                                    <div class="shipping-img">
+                            <div class="col-6 p-0 col-lg-3">
+                                <div class="shipping-item row p-0 " style="margin:0 10px">
+                                    <div class="shipping-img col-auto mx-auto p-2">
                                         <img src="~/assetsKH/images/shipping/icon/earphones.png" alt="Shipping Icon">
                                     </div>
-                                    <div class="shipping-content">
-                                        <h5 class="title">Online Support</h5>
-                                        <p class="short-desc mb-0">24/7 Online Support Provide</p>
+                                    <div class="shipping-content col-auto mx-auto text-center">
+                                        <h5 class="title">Hỗ trợ trực tuyến</h5>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-6 pt-6 pt-lg-0">
-                                <div class="shipping-item">
-                                    <div class="shipping-img">
+                            <div class="col-6 p-0 col-lg-3">
+                                <div class="shipping-item row p-0" style="margin:0 10px">
+                                    <div class="shipping-img col-auto mx-auto p-2">
                                         <img src="~/assetsKH/images/shipping/icon/shield.png" alt="Shipping Icon">
                                     </div>
-                                    <div class="shipping-content">
-                                        <h5 class="title">Secure Payment</h5>
-                                        <p class="short-desc mb-0">Fully Secure Payment System</p>
+                                    <div class="shipping-content col-auto mx-auto text-center">
+                                        <h5 class="title">Thanh toán an toàn</h5>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                       </div>
                     </div>
                 </div>
             }
@@ -355,7 +347,7 @@
 
         <!-- Shipping Area End Here -->
         <!-- Begin Product Area -->
-        <div class="product-area section-space-top-100">
+        <div class="product-area section-space-top-55">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
@@ -372,11 +364,12 @@
         <!-- Begin Banner Area -->
         <!-- Banner Area End Here -->
         <!-- Begin Product Area -->
-        <div class="product-area section-space-top-100">
+        <div class="product-area section-space-top-55">
             <div class="container">
                 <div class="section-title text-center pb-55">
                     @*<span class="sub-title text-primary">Tin có nhiều lượt xem</span>*@
                     <h2 class="title mb-0">Tin có nhiều lượt xem</h2>
+                    <hr />
                 </div>
                 <div class="row">
                     <div class="col-lg-12">

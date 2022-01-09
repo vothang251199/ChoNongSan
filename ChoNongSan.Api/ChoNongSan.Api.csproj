@@ -22,8 +22,4 @@
     <ProjectReference Include="..\ChoNongSan.ViewModels\ChoNongSan.ViewModels.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\banner-content\" />
-  </ItemGroup>
-
 </Project>
