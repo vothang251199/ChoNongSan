@@ -55,14 +55,15 @@ namespace ChoNongSan.Controllers
             var obj = (JObject)JsonConvert.DeserializeObject(data);
             var status = Convert.ToString(obj["status"]);
 
+            var message = Convert.ToString(obj["message"]);
             if (status.Contains("FAILED"))
             {
-                var message = Convert.ToString(obj["message"]);
+                
                 TempData["ALertMessage"] = message;
                 return View();
             }
-
-            return RedirectToAction("Index", "Home");
+            TempData["ALertMessage"] = message;
+            return RedirectToAction("Login", "User");
         }
 
         [HttpGet]

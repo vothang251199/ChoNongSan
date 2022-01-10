@@ -5,49 +5,50 @@
     Layout = "~/Views/Shared/_LoginRegisterLayout.cshtml";
 }
 
-<form asp-action="Register">
+<form asp-action="Register" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="login-form">
         <h3>Đăng ký</h3>
+        <hr />
         <div class="row" style="margin-top:30px">
             <div class="col-12  form-group">
                 <label asp-for="FullName" class="control-label"></label>
-                <input asp-for="FullName" class="form-control" />
+                <input asp-for="FullName" class="rounded form-control" placeholder="Họ và tên" />
                 <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
 
             <div class="col-md-6 col-12 form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
+                <input asp-for="PhoneNumber" class="rounded form-control" placeholder="Số điện thoại" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="col-md-6 col-12 form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="rounded form-control" placeholder="Email" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="col-12 form-group">
                 <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
+                <input asp-for="UserName" class="rounded form-control" placeholder="Tên tài khoản" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="col-md-6 col-12 form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+                <input type="password" asp-for="Password" class="rounded form-control" placeholder="Mật khẩu" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="col-md-6 col-12 form-group">
                 <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
+                <input type="password" asp-for="ConfirmPassword" class="rounded form-control" placeholder="Xác nhận mật khẩu" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
-            <div class="col-12" style="display: flex; height: 50px; margin-top:20px">
+            <div class="col-md-12 col-lg-12 col-12 mt-4 row d-flex m-0" style=" margin-top:20px">
 
-                <span class="font-size-13 text-muted" style="padding-top:10px;">
+                <span class="font-size-13 text-muted col-auto mx-auto mt-sm-4 my-auto">
                     Bạn đã có tài khoản?
                     <a class="small" asp-controller="User" asp-action="Login"> <span style="color: #40AA54">Đăng nhập</span></a>
                 </span>
-                <button style="margin:auto; margin-left:90px" type="submit" class="btn btn-custom-size lg-size btn-success btn-white-hover rounded-5">Đăng ký</button>
+                <button style="margin:auto" type="submit" class="mt-4  col-auto btn btn-custom-size lg-size btn-success btn-white-hover rounded-5">Đăng ký</button>
             </div>
         </div>
     </div>

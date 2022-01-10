@@ -33,7 +33,7 @@ namespace ChoNongSan.Controllers
         public async Task<IActionResult> Index(string keyword, string tabname, int pageIndex = 1, int pageSize = 10)
         {
             HomeTabVm vm = new HomeTabVm();
-            
+
             GetPagingCommonRequest request = new GetPagingCommonRequest();
 
             request.ById = Convert.ToInt32(tabname);
@@ -53,7 +53,7 @@ namespace ChoNongSan.Controllers
             }
 
             vm.ListCat = lsCat;
-            vm.ActiveTab =(int) request.ById;
+            vm.ActiveTab = (int)request.ById;
 
             ViewBag.Keyword = keyword;
             ViewBag.ApiUrl = _config["ApiUrl"];

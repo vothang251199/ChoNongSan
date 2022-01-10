@@ -49,7 +49,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Password) ? "" : request.Password), "password");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.ConfirmPassword) ? "" : request.ConfirmPassword), "confirmPassword");
 
-            var response = await client.PostAsync("/api/khach-hang/dang-ky", requestContent);
+            var response = await client.PostAsync($"/api/tai-khoan/dang-ky-khach-hang", requestContent);
 
             var data = await response.Content.ReadAsStringAsync();
             return data;

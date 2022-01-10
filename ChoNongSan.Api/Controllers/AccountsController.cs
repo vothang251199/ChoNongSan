@@ -70,8 +70,8 @@ namespace ChoNongSan.Api.Controllers
             return Ok(new { data = result, status = "OK" });
         }
 
+        //[AllowAnonymous]
         [HttpPost("dang-ky-khach-hang")]
-        [AllowAnonymous]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Register([FromForm] RegisterRequest request)
         {
@@ -172,7 +172,7 @@ namespace ChoNongSan.Api.Controllers
                 return BadRequest(ModelState);
             }
             var user = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.Email == request.Email);
-            if (user == null) return BadRequest(new { message = "Email không tồn tại trên hệ thống", status = "FAILED" });
+            if (user == null) return BadRequest(new { message = "Email chưa đăng ký", status = "FAILED" });
             var result = _accountService.ForgotPassword(request);
             return Ok(new { message = result, status = "OK" });
         }

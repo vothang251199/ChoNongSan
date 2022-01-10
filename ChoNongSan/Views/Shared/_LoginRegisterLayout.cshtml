@@ -5,7 +5,7 @@
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@ViewData["Title"] - Khách hàng</title>
+    <title>@ViewData["Title"] - ChoNongSan</title>
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,37 +31,35 @@
 
 <body>
 
-    <div class="main-wrapper">
+    <div class="main-wrapper h-75">
 
         <!-- Begin Main Header Area -->
         <!-- Main Header Area End Here -->
         <!-- Begin Main Content Area -->
         <main class="main-content">
-            <div style="display: flex;height:50px; margin: 50px 0 80px 0" class="breadcrumb-area breadcrumb-height">
-                <div style="margin: auto; display: flex" class="row col-md-6">
-                    <div class="row col-10" style="margin:auto;margin-left:100px; width:700px">
-                        <div class="col-md-6">
-                            <ul style="display:inline">
-                                <li style="float:left; margin-top:12px">
-                                    <a href="/home/index">Trang chủ <i class="pe-7s-angle-right"></i></a>
-                                </li>
-                                <li style="float: left; margin-top: 12px">@ViewBag.Title</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6" style="text-align:right">
-                            <a href="/Home/Index" class="header-logo">
-                                <img style="height:33px; width:33px" src="~/assetsKH/images/logo.png" alt="Header Logo">
-                                <h3 style="margin:5px 0 0 40px">ChoNongSan</h3>
+            <div class="container">
+                <div class="row ">
+                    <div class="col-lg-6 mx-auto row pt-10 w-auto">
+                        <div class=" col-lg-12 px-0 mx-auto col-6 col-sm-auto mx-lg-auto pe-sm-0 row" >
+                            <a href="/Home/Index" class="mx-lg-auto  px-0 col-lg-12  header-logo row mx-auto w-auto" >
+                                <img class="col-12 mx-auto col-sm-3 col-lg-3 p-0  ml-sm-3 mx-sm-0 " style="height:33px; width:33px" src="~/assetsKH/images/logo.png" alt="Header Logo">
+                                <h3 class="mx-auto col-12 p-0 w-auto col-sm-9 col-lg-9 text-center me-md-8 me-lg-0 pe-lg-0 my-auto pt-1 pe-sm-7 pe-md-10">ChoNongSan</h3>
                             </a>
                         </div>
+                        <div class="mx-auto mt-lg-4 mx-lg-auto mt-lg-0 col-lg-auto col-6 ml-md-5 row m-0 my-sm-auto p-0" style="height:33px; width:auto">
+                            <a class="ps-lg-0 ps-md-10 ms-md-8 ms-lg-0 w-auto p-0 ps-0 ps-md-10 ps-lg-0 mt-2" style="" href="/home/index">Trang chủ <i class="pe-7s-angle-right"></i></a>
+                            <p class="w-auto p-0 mt-2 m-0" style="">@ViewBag.Title</p>
+                        </div>
+
                     </div>
                 </div>
             </div>
-            <div class="login-register-area section-space-y-axis-20">
+            
+            <div class="login-register-area section-space-y-axis-20 my-10">
                 <div class="container">
                     <div class="row" style="display:flex">
 
-                        <div class="col-lg-6 pt-10 pt-lg-0" style="margin:auto">
+                        <div class="col-lg-6 pt-10 pt-lg-0 mx-auto" >
                             @if (@TempData["ALertMessage"] != null)
                             {
                                 <div class="alert alert-success" style="text-align:center">
@@ -76,14 +74,14 @@
         </main>
         <!-- Main Content Area End Here -->
         <!-- Begin Footer Area -->
-        <div class="footer-area" style="margin-top:50px;">
+        <div class="footer-area">
 
             <div class="footer-bottom py-3" data-bg-color="#40AA54">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="copyright">
-                                <span class="copyright-text text-white">© 2021 Phát triển bởi VVT <i class="fa fa-heart text-danger"></i> by  <a href="https://hasthemes.com/" target="_blank">HasThemes</a> </span>
+                                <span class="copyright-text text-white">© 2021 Phát triển bởi <i class="fa fa-heart text-danger"></i> VVT </span>
                             </div>
                         </div>
                     </div>

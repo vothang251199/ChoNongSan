@@ -16,7 +16,7 @@
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@ViewData["Title"] - Khách hàng</title>
+    <title>@ViewData["Title"] - ChoNongSan</title>
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,9 +56,9 @@
                                     <img style="height:33px; width:33px" src="~/assetsKH/images/logo.png" alt="Header Logo">
                                     <h3 class="d-none d-sm-block" style="height:100%; width:100%;margin:5px 0 0 10px">ChoNongSan</h3>
                                 </a>
-                                <div class="w-50 d-none d-lg-block col-auto px-3" >
+                                <div class="w-50 d-none d-lg-block col-auto px-3">
                                     <form asp-action="Index" method="get" class="header-searchbox">
-                                        <input name="keyword" value="@ViewBag.Keyword" class="input-field" type="text" placeholder="Tìm kiếm theo sản phẩm / địa chỉ / tiêu đề">
+                                        <input name="keyword" value="@ViewBag.Keyword" class="input-field" type="text" placeholder="Tìm kiếm theo tên sản phẩm hoặc địa chỉ hoặc tiêu đề">
                                         <button class="btn btn-outline-whisper btn-primary-hover" type="submit"><i class="pe-7s-search"></i></button>
                                     </form>
                                 </div>
@@ -88,6 +88,7 @@
                                                 }
                                                 else
                                                 {
+                                                    <li><a class="dropdown-item" href="/User/ForgotPassword">Quên mật khẩu</a></li>
                                                     <li><a class="dropdown-item" href="/User/Login">Đăng nhập</a></li>
                                                     <li><a class="dropdown-item" href="/User/Register">Đăng ký</a></li>
                                                 }
@@ -133,7 +134,7 @@
                                             </li>
                                             <li>
                                                 <a class="text-center" href="/QuanLyTinDang">
-                                                    Quản lý bài đăng
+                                                    Quản lý tin đăng
                                                 </a>
                                             </li>
                                             <li class="megamenu-holder">
@@ -174,7 +175,7 @@
                                     <li>
                                         <a class="d-flex align-items-center" href="/QuanLyTinDang">
                                             <img style="width: 20px; height: 20px" src="~/assetsKH/icon/icon-mgt-post-removebg.png" />
-                                            <span style="margin-left: 10px;" class="mm-text">Quản lý bài đăng</span>
+                                            <span style="margin-left: 10px;" class="mm-text">Quản lý tin đăng</span>
                                         </a>
                                     </li>
                                     <li>
@@ -317,7 +318,6 @@
                     <div class="container ">
                         <div class="row ">
                             <div class="d-lg-block p-0 col-lg-3">
-
                             </div>
                             <div class="col-6 p-0 col-lg-3">
                                 <div class="shipping-item row p-0 " style="margin:0 10px">
@@ -339,7 +339,7 @@
                                     </div>
                                 </div>
                             </div>
-                       </div>
+                        </div>
                     </div>
                 </div>
             }
@@ -603,6 +603,7 @@
                     <div class="section-title text-center pb-55">
                         @*<span class="sub-title text-primary">Các</span>*@
                         <h2 class="title mb-0">Tin mới</h2>
+                        <hr />
                     </div>
                     <div class="row">
                         <div class="col-lg-12">

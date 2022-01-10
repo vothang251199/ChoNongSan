@@ -1,20 +1,20 @@
-﻿using ChoNongSan.Data.Models;
-using ChoNongSan.ViewModels.Responses;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ChoNongSan.ViewModels.Requests.TaiKhoan.KhachHang;
-using ChoNongSan.ViewModels.Requests.TaiKhoan;
-using Microsoft.EntityFrameworkCore;
+﻿using ChoNongSan.Application.Common.Files;
+using ChoNongSan.Data.Models;
 using ChoNongSan.Utilities.Extenstions;
-using System;
-using System.Text;
+using ChoNongSan.ViewModels.Requests.TaiKhoan;
+using ChoNongSan.ViewModels.Requests.TaiKhoan.KhachHang;
+using ChoNongSan.ViewModels.Responses;
 using Microsoft.AspNetCore.Http;
-using System.Net.Http.Headers;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using ChoNongSan.Application.Common.Files;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ChoNongSan.Application.Common.Accounts
 {
@@ -192,7 +192,7 @@ namespace ChoNongSan.Application.Common.Accounts
 
             var tokenEmail = Convert.ToBase64String(strBytes);  //chuyển bytes thành string để máy hiểu
 
-            string url = $"{_config["AdminWebUrl"]}/User/ResetPassword?tokensEmail=" + tokenEmail;
+            string url = $"{_config["WebUrl"]}/User/ResetPassword?tokensEmail=" + tokenEmail;
             string titleEmail = "Khôi Phục Mật Khẩu";
 
             string contentEmail = "<h1>Làm theo hướng dẫn để khôi phục mật khẩu của bạn</h1>"
@@ -230,7 +230,7 @@ namespace ChoNongSan.Application.Common.Accounts
                 Email = account.Email,
                 Address = account.Address,
                 CreateDate = account.CreateDate,
-                NumberOfPost = account.NumberOfPost,
+                NumberOfPost = account.NumberOfPost
             };
             return result;
         }
