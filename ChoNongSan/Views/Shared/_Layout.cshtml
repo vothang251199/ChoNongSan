@@ -138,7 +138,7 @@
                                                 </a>
                                             </li>
                                             <li class="megamenu-holder">
-                                                <a class="text-center" href="javascript:void(0)">
+                                                <a class="text-center" asp-controller="QuanLyTinDang" asp-action="YeuThich">
                                                     Yêu thích
                                                 </a>
                                             </li>
@@ -179,7 +179,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="d-flex align-items-center">
+                                        <a asp-controller="QuanLyTinDang" asp-action="YeuThich" class="d-flex align-items-center">
 
                                             <img style="width: 20px; height: 20px" src="~/assetsKH/icon/icon-love1-removebg.png" />
                                             <span style="margin-left: 10px;" class="mm-text">
@@ -347,15 +347,7 @@
 
         <!-- Shipping Area End Here -->
         <!-- Begin Product Area -->
-        <div class="product-area section-space-top-55">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        @RenderBody()
-                    </div>
-                </div>
-            </div>
-        </div>
+        @RenderBody()
         <!-- Product Area End Here -->
         <!-- Begin Banner Area -->
         <!-- Banner Area End Here -->

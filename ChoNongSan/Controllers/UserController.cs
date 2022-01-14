@@ -1,5 +1,6 @@
 ﻿using ChoNongSan.ApiUsedForWeb.ApiService;
 using ChoNongSan.ApiUsedForWeb.ViewModels;
+using ChoNongSan.Controllers.Components;
 using ChoNongSan.ViewModels.Requests.TaiKhoan;
 using ChoNongSan.ViewModels.Requests.TaiKhoan.KhachHang;
 using Microsoft.AspNetCore.Authentication;
@@ -13,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -58,7 +60,6 @@ namespace ChoNongSan.Controllers
             var message = Convert.ToString(obj["message"]);
             if (status.Contains("FAILED"))
             {
-                
                 TempData["ALertMessage"] = message;
                 return View();
             }
@@ -184,16 +185,49 @@ namespace ChoNongSan.Controllers
         [HttpGet]
         public IActionResult Profile(ProfileTabVm vm)
         {
+            var accountID = User.Claims.Where(x => x.Type == "Id")
+                   .Select(c => c.Value).SingleOrDefault();
+            vm.accountId = Convert.ToInt32(accountID);
             if (vm == null)
             {
-                vm.ActiveTab = TabProfile.Display;
+                vm.ActiveTab = TabProfile.ThongTin;
             }
-            var accountID = User.Claims.Where(x => x.Type == "Id")
-               .Select(c => c.Value).SingleOrDefault();
-            vm.accountId = Convert.ToInt32(accountID);
+
             ViewBag.HiddenLayOut = 1;
 
             return View(vm);
+        }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult> CapNhatTaiKhoan(UpdateAccountRequest request)
+        {
+            var accountID = User.Claims.Where(x => x.Type == "Id")
+               .Select(c => c.Value).SingleOrDefault();
+            if (!ModelState.IsValid)
+            {
+                var vm = new ProfileTabVm()
+                {
+                    ActiveTab = TabProfile.CapNhat,
+                    status = "yes",
+                    accountId = Convert.ToInt32(accountID),
+                    Request = request,
+                };
+
+                return View("Profile", vm);
+            }
+            else
+            {
+                var vm = new ProfileTabVm()
+                {
+                    ActiveTab = TabProfile.ThongTin,
+                    status = "no",
+                    accountId = Convert.ToInt32(accountID),
+                    Request = request,
+                };
+                await _userApi.Update(vm.accountId, vm.Request);
+                return View("Profile", vm);
+            }
         }
 
         public IActionResult SwitchTabs(string tabname)
@@ -201,24 +235,24 @@ namespace ChoNongSan.Controllers
             var vm = new ProfileTabVm();
             switch (tabname)
             {
-                case "Display":
-                    vm.ActiveTab = TabProfile.Display;
+                case "TaiKhoan":
+                    vm.ActiveTab = TabProfile.ThongTin;
                     break;
 
-                case "Love":
-                    vm.ActiveTab = TabProfile.Love;
+                case "YeuThich":
+                    vm.ActiveTab = TabProfile.YeuThich;
                     break;
 
-                case "Update":
-                    vm.ActiveTab = TabProfile.Update;
+                case "CapNhat":
+                    vm.ActiveTab = TabProfile.CapNhat;
                     break;
 
-                case "ChangePass":
-                    vm.ActiveTab = TabProfile.ChangePass;
+                case "DoiMK":
+                    vm.ActiveTab = TabProfile.DoiMK;
                     break;
 
                 default:
-                    vm.ActiveTab = TabProfile.Display;
+                    vm.ActiveTab = TabProfile.ThongTin;
                     break;
             }
             return RedirectToAction(nameof(UserController.Profile), vm);

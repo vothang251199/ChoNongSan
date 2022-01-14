@@ -65,6 +65,8 @@ namespace ChoNongSan.ViewModels.Responses
 
         [Display(Name = "Thời hạn sử dụng")]
         public int? Expiry { get; set; }
+        
+        public int? AccountId { get; set; }
 
         [Display(Name = "Tất cả ảnh")]
         public List<ImagePost> ListImage { get; set; }

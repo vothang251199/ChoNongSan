@@ -1,23 +1,20 @@
-﻿using ChoNongSan.ViewModels.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ChoNongSan.ViewModels.Requests.TaiKhoan;
 
 namespace ChoNongSan.ApiUsedForWeb.ViewModels
 {
     public class ProfileTabVm
     {
+        public UpdateAccountRequest Request { get; set; }
         public TabProfile ActiveTab { get; set; }
         public int accountId { get; set; }
+        public string status { get; set; }
     }
 
     public enum TabProfile
     {
-        Display,
-        Love,
-        Update,
-        ChangePass,
+        ThongTin,
+        YeuThich,
+        CapNhat,
+        DoiMK,
     }
 }

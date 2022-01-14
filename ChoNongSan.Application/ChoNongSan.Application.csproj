@@ -4,12 +4,22 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
 	<FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
 	<PackageReference Include="BingMapsRESTToolkit" Version="1.1.4" />
+	<PackageReference Include="EntityFramework" Version="6.4.4" />
 	<PackageReference Include="MailKit" Version="3.0.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 	<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.0" />

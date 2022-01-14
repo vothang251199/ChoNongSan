@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -24,6 +25,8 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
         Task<string> ResetPassword(ResetPassRequest request);
 
         Task<AccountVm> GetUserById(int accountID);
+
+        Task<string> Update(int accountID, UpdateAccountRequest request);
     }
 
     public class UserApi : IUserApi
@@ -74,13 +77,12 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 
         public async Task<string> ResetPassword(ResetPassRequest request)
         {
-            var apiurl = _config["ApiUrl"];
             var json = JsonConvert.SerializeObject(request);
             var httpContnet = new StringContent(json, Encoding.UTF8, "application/json");
 
             var client = _httpClientFactory.CreateClient();
-            //client.BaseAddress = new Uri("")
-            var response = await client.PutAsync(apiurl + $"/api/tai-khoan/khoi-phuc-mat-khau", httpContnet);
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+            var response = await client.PutAsync($"/api/tai-khoan/khoi-phuc-mat-khau", httpContnet);
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();
@@ -120,6 +122,36 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var a = Convert.ToString(obj["data"]);
             var result = JsonConvert.DeserializeObject<AccountVm>(a);
             return result;
+        }
+
+        public async Task<string> Update(int accountID, UpdateAccountRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+
+            var requestContent = new MultipartFormDataContent();
+            if (request.ThumbnailImage != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.ThumbnailImage.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.ThumbnailImage.OpenReadStream().Length);
+                }
+
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "thumbnailImage", request.ThumbnailImage.FileName);
+            }
+
+            request.AccountID = accountID;
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.FullName) ? "" : request.FullName), "fullName");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Email) ? "" : request.Email), "email");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.PhoneNumber) ? "" : request.PhoneNumber), "phoneNumber");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Address) ? "" : request.Address), "address");
+
+            var response = await client.PutAsync($"/api/tai-khoan/cap-nhat-tai-khoan/{accountID}", requestContent);
+
+            var model = await response.Content.ReadAsStringAsync();
+            return model;
         }
     }
 }

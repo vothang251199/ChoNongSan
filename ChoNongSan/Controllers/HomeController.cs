@@ -30,7 +30,7 @@ namespace ChoNongSan.Controllers
             _config = config;
         }
 
-        public async Task<IActionResult> Index(string keyword, string tabname, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, string tabname, int pageIndex = 1, int pageSize = 12)
         {
             HomeTabVm vm = new HomeTabVm();
 
@@ -54,6 +54,12 @@ namespace ChoNongSan.Controllers
 
             vm.ListCat = lsCat;
             vm.ActiveTab = (int)request.ById;
+
+            var a = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+            if (String.IsNullOrEmpty(a))
+                ViewBag.AccountId = 0;
+            else
+                ViewBag.AccountId = a;
 
             ViewBag.Keyword = keyword;
             ViewBag.ApiUrl = _config["ApiUrl"];

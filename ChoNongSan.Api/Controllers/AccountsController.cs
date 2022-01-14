@@ -178,7 +178,7 @@ namespace ChoNongSan.Api.Controllers
         }
 
         [HttpPut("khoi-phuc-mat-khau")]
-        public async Task<IActionResult> ResetPass([FromBody] ResetPassRequest request)
+        public async Task<IActionResult> ResetPass( ResetPassRequest request)
         {
             if (!ModelState.IsValid)
             {

@@ -28,7 +28,11 @@ namespace ChoNongSan.Controllers.Components
                 PageSize = (int)model.pageSize,
             };
             var data = await _postApi.GetAllByStatusPaging(request);
-            ViewBag.ApiUrl = _config["ApiUrl"];
+            foreach (var i in data.Items)
+            {
+                i.ImageDefault = _config["ApiUrl"] + i.ImageDefault;
+            }
+
             return await Task.FromResult((IViewComponentResult)View("Default", data));
         }
     }

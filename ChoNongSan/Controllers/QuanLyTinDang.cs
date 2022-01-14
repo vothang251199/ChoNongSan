@@ -1,17 +1,22 @@
 ﻿using ChoNongSan.ApiUsedForWeb.ApiService;
 using ChoNongSan.ApiUsedForWeb.ViewModels;
 using ChoNongSan.Application.Common.Files;
+using ChoNongSan.ViewModels.Common;
+using ChoNongSan.ViewModels.Requests.Common;
 using ChoNongSan.ViewModels.Requests.TinDang;
+using ChoNongSan.ViewModels.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ChoNongSan.Controllers
@@ -37,7 +42,8 @@ namespace ChoNongSan.Controllers
             _postApi = postApi;
         }
 
-        public IActionResult Index(PostTabVm vm, int pageIndex = 1, int pageSize = 10)
+        [HttpGet]
+        public IActionResult Index(PostTabVm vm, int pageIndex = 1, int pageSize = 5)
         {
             if (vm == null)
             {
@@ -80,6 +86,7 @@ namespace ChoNongSan.Controllers
             return RedirectToAction(nameof(QuanLyTinDang.Index), vm);
         }
 
+        [HttpGet]
         public async Task<IActionResult> TaoMoi()
         {
             ViewBag.CategoryList = await _categoryApi.GetListCat();
@@ -123,17 +130,38 @@ namespace ChoNongSan.Controllers
             return RedirectToAction(nameof(QuanLyTinDang.Index), vm);
         }
 
-        public async Task<JsonResult> ImageUpload(IFormFile img)
+        [HttpGet]
+        public async Task<IActionResult> YeuThich(int pageIndex = 1, int pageSize = 4)
         {
-            string url = "";
-            if (img != null)
+            var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+            GetPagingCommonRequest request = new GetPagingCommonRequest();
+
+            request.ById = Convert.ToInt32(userId);
+            request.PageIndex = pageIndex;
+            request.PageSize = pageSize;
+
+            var result = await _postApi.GetAllLoveByAccountId(request);
+            var obj = (JObject)JsonConvert.DeserializeObject(result);
+            var status = Convert.ToString(obj["status"]);
+            var model = obj["data"].ToObject<PageResult<PostVmTongQuat>>();
+            foreach (var i in model.Items)
             {
-                var originalFileName = ContentDispositionHeaderValue.Parse(img.ContentDisposition).FileName.Trim('"');
-                //var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-                await _storageService.SaveFileAsync(img.OpenReadStream(), originalFileName, "post");
-                url = "/img-test/" + originalFileName;
+                i.ImageDefault = _config["ApiUrl"] + i.ImageDefault;
             }
-            return Json(url);
+            return View(model);
+        }
+
+        public async Task<IActionResult> AddlovePost([FromBody] string postId)
+        {
+            var accountId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+            var request = new LoveRequest()
+            {
+                accountId = Convert.ToInt32(accountId),
+                postId = Convert.ToInt32(postId)
+            };
+            var data = await _postApi.AddPostLove(request);
+
+            return Json(data);
         }
     }
 }

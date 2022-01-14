@@ -4,11 +4,13 @@ using ChoNongSan.ViewModels.Requests.TinDang;
 using ChoNongSan.ViewModels.Responses;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ChoNongSan.ApiUsedForWeb.ApiService
@@ -18,8 +20,10 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
         Task<PageResult<PostVmTongQuat>> GetPostPaging(GetPagingCommonRequest request);
 
         Task<PageResult<PostVmTongQuat>> GetAllByStatusPaging(GetPagingCommonRequest request);
+        Task<string> GetAllLoveByAccountId(GetPagingCommonRequest request);
 
         Task<bool> CreatePost(CreatePostRequest request);
+        Task<string> AddPostLove(LoveRequest request);
     }
 
     public class PostApi : IPostApi
@@ -31,6 +35,20 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
         {
             _httpClientFactory = httpClientFactory;
             _config = config;
+        }
+
+        public async Task<string> AddPostLove(LoveRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContnet = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+
+            var response = await client.PostAsync($"/api/tin-dang/them-yeu-thich", httpContnet);
+
+            var data = await response.Content.ReadAsStringAsync();
+            return data;
         }
 
         public async Task<bool> CreatePost(CreatePostRequest request)
@@ -82,6 +100,17 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var body = await response.Content.ReadAsStringAsync();
             var lsPost = JsonConvert.DeserializeObject<PageResult<PostVmTongQuat>>(body);
             return lsPost;
+        }
+
+        public async Task<string> GetAllLoveByAccountId(GetPagingCommonRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+            var response = await client.GetAsync($"/api/tin-dang/danh-sach-yeu-thich?ById={request.ById}" +
+                $"&PageIndex={request.PageIndex}&PageSize={request.PageSize}");
+            var body = await response.Content.ReadAsStringAsync();
+            
+            return body;
         }
 
         public async Task<PageResult<PostVmTongQuat>> GetPostPaging(GetPagingCommonRequest request)

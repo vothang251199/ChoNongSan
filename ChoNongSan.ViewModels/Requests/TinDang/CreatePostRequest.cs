@@ -59,6 +59,12 @@ namespace ChoNongSan.ViewModels.Requests.TinDang
         [Required(ErrorMessage = "Vui lòng chọn Đơn vị")]
         public int WeightId { get; set; }
 
+        [Display(Name = "Lat")]
+        public string Lat { get; set; }
+
+        [Display(Name = "Lng")]
+        public string Lng { get; set; }
+
         [Display(Name = "Ảnh sản phẩm")]
         [Required(ErrorMessage = "Vui lòng chọn Ảnh")]
         public List<IFormFile> ThumbnailImage { get; set; }

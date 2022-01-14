@@ -10,13 +10,19 @@ using ChoNongSan.ViewModels.Requests.TinDang;
 using ChoNongSan.ViewModels.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Headers;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace ChoNongSan.Application.KhachHang.Posts
 {
@@ -43,6 +49,10 @@ namespace ChoNongSan.Application.KhachHang.Posts
         Task<List<PostVmTongQuat>> GetListPostForApp();
 
         Task<PageResult<PostVmTongQuat>> GetAllPostsViewHome(GetPagingCommonRequest request);
+
+        Task<string> AddLovePost(LoveRequest request);
+
+        Task<PageResult<PostVmTongQuat>> GetAllLoveByAccountId(GetPagingCommonRequest request);
     }
 
     public class PostService : IPostService
@@ -82,7 +92,8 @@ namespace ChoNongSan.Application.KhachHang.Posts
                 Lat = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == post.LocationId).Lat,
                 Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == post.LocationId).Lng,
                 ListImage = lsImage,
-                Expiry = post.Expiry
+                Expiry = post.Expiry,
+                AccountId = post.AccountId
             };
 
             return viewModel;
@@ -138,7 +149,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
                  || x.Address.ToLower().Contains(request.Keyword) || x.Title.ToLower().Contains(request.Keyword)).ToList();
             }
 
-            if (request.ById != 0)
+            if (request.ById != null && request.ById != 0)
             {
                 lsPost = lsPost.Where(x => x.CategoryId == request.ById).ToList();
             }
@@ -223,23 +234,17 @@ namespace ChoNongSan.Application.KhachHang.Posts
 
             if (!string.IsNullOrEmpty(request.Address))
             {
-                var geocdoe = new GeocodeRequest();
-                geocdoe.BingMapsKey = "AhccP2WRstNnaiP--eT_K3M0IH7WfyRvzfYzPebH6WxqFPfmRouhpObDoXCfMBly";
-                if (!request.Address.ToLower().Contains("việt nam"))
-                    geocdoe.Query = request.Address + ", Việt Nam";
-                else
-                    geocdoe.Query = request.Address;
-                var result = await geocdoe.Execute();
-                if (result.StatusCode == 200)
+                string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
+                using (var webClient = new System.Net.WebClient())
                 {
-                    var toolkitLocation = (result?.ResourceSets?.FirstOrDefault())
-                        ?.Resources?.FirstOrDefault() as BingMapsRESTToolkit.Location;
-                    //var latitude = toolkitLocation.Point.Coordinates[0];
-                    //var longitude = toolkitLocation.Point.Coordinates[1];
+                    var json = webClient.DownloadString(url);
+                    // Now parse with JSON.Net
+                    var datax = (JObject)JsonConvert.DeserializeObject(json);
+
                     post.Location = new Data.Models.Location()
                     {
-                        Lat = Convert.ToString(toolkitLocation.Point.Coordinates[0]),
-                        Lng = Convert.ToString(toolkitLocation.Point.Coordinates[1]),
+                        Lat = Convert.ToString(datax["result"][0]["location"]["lat"]),
+                        Lng = Convert.ToString(datax["result"][0]["location"]["lng"]),
                     };
                 }
             }
@@ -367,6 +372,63 @@ namespace ChoNongSan.Application.KhachHang.Posts
                 IsDefault = image.IsDefault,
             };
             return viewModel;
+        }
+
+        public async Task<string> AddLovePost(LoveRequest request)
+        {
+            try
+            {
+                var love = new Love()
+                {
+                    AccountId = request.accountId,
+                    PostId = request.postId
+                };
+                _context.Add(love);
+                await _context.SaveChangesAsync();
+                return "Tin đã được lưu vào danh sách yêu thích";
+            }
+            catch (Exception)
+            {
+                return "Không thể thêm tin vào yêu thích";
+            }
+        }
+
+        public async Task<PageResult<PostVmTongQuat>> GetAllLoveByAccountId(GetPagingCommonRequest request)
+        {
+            var lsPostLove = (from p in _context.Posts
+                              join lo in _context.Loves on p.PostId equals lo.PostId
+                              where lo.AccountId == request.ById
+                              select p);
+            var totalRow = lsPostLove.Count();
+
+            var data = await lsPostLove.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize).Select(x => new PostVmTongQuat()
+                {
+                    Title = x.Title,
+                    Description = x.Description,
+                    NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(y => y.AccountId == x.AccountId).FullName,
+                    ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(y => y.PostId == x.PostId && y.IsDefault == true).ImagePath,
+                    ProductName = x.ProductName,
+                    Price = x.Price,
+                    PostID = x.PostId,
+                    Lat = _context.Locations.AsNoTracking().FirstOrDefault(y => y.LocationId == x.LocationId).Lat,
+                    Lng = _context.Locations.AsNoTracking().FirstOrDefault(y => y.LocationId == x.LocationId).Lng,
+                    StatusPost = x.StatusPost,
+                    TimePost = x.PostTime,
+                    ViewCount = x.ViewCount,
+                    WeightName = _context.WeightTypes.AsNoTracking().FirstOrDefault(y => y.WeightId == x.WeightId).WeightName,
+                    WeightNumber = x.WeightNumber
+                }).ToListAsync();
+
+            var pageResult = new PageResult<PostVmTongQuat>()
+            {
+                TotalRecords = totalRow,
+                Items = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+            };
+
+            return pageResult;
         }
     }
 }

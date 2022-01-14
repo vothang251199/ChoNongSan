@@ -33,8 +33,8 @@ namespace ChoNongSan.Data.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=tcp:vvtazure.database.windows.net,1433;Initial Catalog=ChoNongSan;Persist Security Info=False;User ID=vothang;Password=Vt251199@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=.;Database= ChoNongSan; Integrated Security = True;");
             }
         }
 
@@ -49,6 +49,8 @@ namespace ChoNongSan.Data.Models
                 entity.Property(e => e.AccountId).HasColumnName("AccountID");
 
                 entity.Property(e => e.Avatar).IsUnicode(false);
+
+                entity.Property(e => e.ConfirmPassword).IsUnicode(false);
 
                 entity.Property(e => e.CreateDate).HasColumnType("datetime");
 
@@ -144,7 +146,7 @@ namespace ChoNongSan.Data.Models
                     .WithMany(p => p.ImagePosts)
                     .HasForeignKey(d => d.PostId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ImagePost_Post");
+                    .HasConstraintName("FK_ImagePost_Post1");
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -164,19 +166,21 @@ namespace ChoNongSan.Data.Models
 
             modelBuilder.Entity<Love>(entity =>
             {
+                entity.HasKey(e => new { e.PostId, e.AccountId });
+
                 entity.ToTable("Love");
 
-                entity.Property(e => e.LoveId).HasColumnName("LoveID");
+                entity.Property(e => e.PostId).HasColumnName("PostID");
 
                 entity.Property(e => e.AccountId).HasColumnName("AccountID");
 
-                entity.Property(e => e.PostId).HasColumnName("PostID");
+                entity.Property(e => e.AddTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Account)
                     .WithMany(p => p.Loves)
                     .HasForeignKey(d => d.AccountId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Love_Account");
+                    .HasConstraintName("FK_Favorite_Account");
 
                 entity.HasOne(d => d.Post)
                     .WithMany(p => p.Loves)
@@ -205,7 +209,7 @@ namespace ChoNongSan.Data.Models
                     .HasMaxLength(11)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PostTime).HasColumnType("date");
+                entity.Property(e => e.PostTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
 
@@ -284,6 +288,10 @@ namespace ChoNongSan.Data.Models
 
                 entity.Property(e => e.WeightName).HasMaxLength(20);
             });
+
+            OnModelCreatingPartial(modelBuilder);
         }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
