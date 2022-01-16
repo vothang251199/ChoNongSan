@@ -145,6 +145,7 @@ namespace ChoNongSan.Api.Controllers
         }
 
         [HttpPut("doi-mat-khau")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> ChangePass([FromForm] ChangePassRequest request)
         {
             if (!ModelState.IsValid)
@@ -178,7 +179,7 @@ namespace ChoNongSan.Api.Controllers
         }
 
         [HttpPut("khoi-phuc-mat-khau")]
-        public async Task<IActionResult> ResetPass( ResetPassRequest request)
+        public async Task<IActionResult> ResetPass(ResetPassRequest request)
         {
             if (!ModelState.IsValid)
             {

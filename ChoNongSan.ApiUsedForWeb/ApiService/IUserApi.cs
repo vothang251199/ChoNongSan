@@ -27,6 +27,8 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
         Task<AccountVm> GetUserById(int accountID);
 
         Task<string> Update(int accountID, UpdateAccountRequest request);
+
+        Task<string> ChangePass(ChangePassRequest request);
     }
 
     public class UserApi : IUserApi
@@ -120,7 +122,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var body = await response.Content.ReadAsStringAsync();
             var obj = (JObject)JsonConvert.DeserializeObject(body);
             var a = Convert.ToString(obj["data"]);
-            var result = JsonConvert.DeserializeObject<AccountVm>(a);
+            AccountVm result = JsonConvert.DeserializeObject<AccountVm>(a);
             return result;
         }
 
@@ -151,6 +153,23 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var response = await client.PutAsync($"/api/tai-khoan/cap-nhat-tai-khoan/{accountID}", requestContent);
 
             var model = await response.Content.ReadAsStringAsync();
+            return model;
+        }
+
+        public async Task<string> ChangePass(ChangePassRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+            var requestContent = new MultipartFormDataContent();
+            requestContent.Add(new StringContent(Convert.ToString(request.AccountID)), "accountID");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.OldPass) ? "" : request.OldPass), "oldPass");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.NewPass) ? "" : request.NewPass), "newPass");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.ConfirmNewPass) ? "" : request.ConfirmNewPass), "confirmNewPass");
+
+            var response = await client.PutAsync($"/api/tai-khoan/doi-mat-khau", requestContent);
+
+            var model = await response.Content.ReadAsStringAsync();
+
             return model;
         }
     }

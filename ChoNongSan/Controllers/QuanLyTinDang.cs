@@ -163,5 +163,12 @@ namespace ChoNongSan.Controllers
 
             return Json(data);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ChiTiet(int postId)
+        {
+            var model = await _postApi.GetDetail(postId);
+            return View(model);
+        }
     }
 }

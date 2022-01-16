@@ -5,7 +5,8 @@
 @{
     ViewData["Title"] = "Quản lý tin đăng";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    var accountId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+    Model.acountId = Convert.ToInt32(accountId);
 }
 @*<style>
         .product-tab-style-2 li.nav-item a.active {
@@ -43,6 +44,7 @@
 
                     @switch (Model.ActiveTab)
                     {
+
                         case ChoNongSan.ApiUsedForWeb.ViewModels.Tab.HienThi:
                             @await Component.InvokeAsync("HienThi", Model);
                             break;

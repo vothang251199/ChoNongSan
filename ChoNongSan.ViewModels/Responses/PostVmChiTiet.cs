@@ -15,9 +15,6 @@ namespace ChoNongSan.ViewModels.Responses
         [Display(Name = "Tiêu đề")]
         public string Title { get; set; }
 
-        [Display(Name = "Tên sản phẩm")]
-        public string ProductName { get; set; }
-
         [Display(Name = "Giá")]
         public decimal? Price { get; set; }
 
@@ -65,7 +62,7 @@ namespace ChoNongSan.ViewModels.Responses
 
         [Display(Name = "Thời hạn sử dụng")]
         public int? Expiry { get; set; }
-        
+
         public int? AccountId { get; set; }
 
         [Display(Name = "Tất cả ảnh")]

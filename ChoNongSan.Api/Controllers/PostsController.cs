@@ -31,22 +31,34 @@ namespace ChoNongSan.Api.Controllers
             _context = context;
         }
 
+        [HttpGet("tin-dang-co-nhieu-luot-xem/{number}")]
+        public IActionResult GetAllManyViews([FromRoute] int number)
+        {
+            return Ok(_postService.GetAllManyViews(number));
+        }
+
+        [HttpGet("tin-dang-moi-nhat/{number}")]
+        public IActionResult GetPostNew([FromRoute] int number)
+        {
+            return Ok(_postService.PostNew(number));
+        }
+
         [HttpGet("{postID}")]
-        public async Task<IActionResult> GetPostById(int postID)
+        public async Task<IActionResult> GetPostById([FromRoute] int postID)
         {
             var id = await _context.Posts.FindAsync(postID);
-            if (id == null) return BadRequest(new { message = "Không tìm thấy bài viết", status="FAILED"});
+            if (id == null) return BadRequest(new { message = "Không tìm thấy bài viết", status = "FAILED" });
 
             var post = await _postService.GetPostById(postID);
-            return Ok(new {data= post, status = "OK" });
+            return Ok(new { data = post, status = "OK" });
         }
 
         [HttpGet("danh-sach-yeu-thich")]
-        public async Task<IActionResult> GetAllPostLoveByAccountId([FromQuery]  GetPagingCommonRequest request)
+        public async Task<IActionResult> GetAllPostLoveByAccountId([FromQuery] GetPagingCommonRequest request)
         {
             if (request.ById == 0 || request.ById == null)
                 return BadRequest(new { message = "tài khoản không tồn tại", status = "FAILED" });
-            return Ok(new { data = await _postService.GetAllLoveByAccountId(request), status="OK"});
+            return Ok(new { data = await _postService.GetAllLoveByAccountId(request), status = "OK" });
         }
 
         [HttpGet("tat-ca-tin-dang-cho-app")]
@@ -61,10 +73,10 @@ namespace ChoNongSan.Api.Controllers
             return Ok(await _postService.GetAllPostsViewHome(request));
         }
 
-        [HttpGet("tin-theo-trang-thai")]
-        public async Task<IActionResult> GetAllPostByStatusPaging([FromQuery] GetPagingCommonRequest request)
+        [HttpGet("tin-theo-trang-thai/{accountId}")]
+        public async Task<IActionResult> GetAllPostByStatusPaging([FromRoute] int accountId, [FromQuery] GetPagingCommonRequest request)
         {
-            var lsPost = await _postService.GetAllByStatusPaging(request);
+            var lsPost = await _postService.GetAllByStatusPaging(accountId, request);
             return Ok(lsPost);
         }
 
@@ -78,7 +90,7 @@ namespace ChoNongSan.Api.Controllers
             }
 
             var result = await _postService.CreatePost(request);
-            if (result == 0) return BadRequest(new { message="Tạo tinđăng thất bại", status="FAILED"});
+            if (result == 0) return BadRequest(new { message = "Tạo tinđăng thất bại", status = "FAILED" });
             return Ok(new { message = "Tạo bài đăng thành công. Hãy chờ xét duyệt", status = "OK" });
         }
 
@@ -117,7 +129,7 @@ namespace ChoNongSan.Api.Controllers
             var post = await _context.Posts.FindAsync(request.postId);
 
             var lsExxist = _context.Loves.AsNoTracking().Where(x => x.AccountId == request.accountId && x.PostId == request.postId).ToList();
-            if(lsExxist.Count != 0)
+            if (lsExxist.Count != 0)
             {
                 return Ok(new { message = "Tin đã có trong danh sách yêu thích của bạn", status = "OK" });
             }

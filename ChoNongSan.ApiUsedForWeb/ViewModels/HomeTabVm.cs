@@ -13,6 +13,8 @@ namespace ChoNongSan.ApiUsedForWeb.ViewModels
         public int ActiveTab { get; set; }
 
         public PageResult<PostVmTongQuat> Data { get; set; }
+        public List<PostVmTongQuat> ListManyViews { get; set; }
+        public List<PostVmTongQuat> ListPostNew { get; set; }
 
         public List<CategoryVm> ListCat { get; set; }
         public CategoryVm Cat { get; set; }

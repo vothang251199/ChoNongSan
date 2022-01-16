@@ -11,6 +11,7 @@ namespace ChoNongSan.ApiUsedForWeb.ViewModels
         public Tab ActiveTab { get; set; }
         public int? pageIndex { get; set; }
         public int? pageSize { get; set; }
+        public int acountId { get; set; }
     }
 
     public enum Tab

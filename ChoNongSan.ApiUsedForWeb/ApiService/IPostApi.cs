@@ -19,11 +19,19 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
     {
         Task<PageResult<PostVmTongQuat>> GetPostPaging(GetPagingCommonRequest request);
 
-        Task<PageResult<PostVmTongQuat>> GetAllByStatusPaging(GetPagingCommonRequest request);
+        Task<PageResult<PostVmTongQuat>> GetAllByStatusPaging(int accountId, GetPagingCommonRequest request);
+
         Task<string> GetAllLoveByAccountId(GetPagingCommonRequest request);
 
         Task<bool> CreatePost(CreatePostRequest request);
+
         Task<string> AddPostLove(LoveRequest request);
+
+        Task<List<PostVmTongQuat>> ListManyViews(int number);
+
+        Task<List<PostVmTongQuat>> ListPostNew(int number);
+
+        Task<PostVmChiTiet> GetDetail(int postId);
     }
 
     public class PostApi : IPostApi
@@ -73,7 +81,6 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             }
 
             requestContent.Add(new StringContent(request.CategoryID.ToString()), "categoryID");
-            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.ProductName) ? "" : request.ProductName), "productName");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Title) ? "" : request.Title), "title");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Description) ? "" : request.Description), "description");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.PhoneNumber) ? "" : request.PhoneNumber), "phoneNumber");
@@ -92,11 +99,11 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<PageResult<PostVmTongQuat>> GetAllByStatusPaging(GetPagingCommonRequest request)
+        public async Task<PageResult<PostVmTongQuat>> GetAllByStatusPaging(int accountId, GetPagingCommonRequest request)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_config["ApiUrl"]);
-            var response = await client.GetAsync($"/api/tin-dang/tin-theo-trang-thai?ById={request.ById}&PageIndex={request.PageIndex}&PageSize={request.PageSize}");
+            var response = await client.GetAsync($"/api/tin-dang/tin-theo-trang-thai/{accountId}?ById={request.ById}&PageIndex={request.PageIndex}&PageSize={request.PageSize}");
             var body = await response.Content.ReadAsStringAsync();
             var lsPost = JsonConvert.DeserializeObject<PageResult<PostVmTongQuat>>(body);
             return lsPost;
@@ -109,8 +116,19 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var response = await client.GetAsync($"/api/tin-dang/danh-sach-yeu-thich?ById={request.ById}" +
                 $"&PageIndex={request.PageIndex}&PageSize={request.PageSize}");
             var body = await response.Content.ReadAsStringAsync();
-            
+
             return body;
+        }
+
+        public async Task<PostVmChiTiet> GetDetail(int postId)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+            var response = await client.GetAsync($"/api/tin-dang/{postId}");
+            var body = await response.Content.ReadAsStringAsync();
+            var obj = (JObject)JsonConvert.DeserializeObject(body);
+            var model = obj["data"].ToObject<PostVmChiTiet>();
+            return model;
         }
 
         public async Task<PageResult<PostVmTongQuat>> GetPostPaging(GetPagingCommonRequest request)
@@ -121,6 +139,26 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
                 $"{request.Keyword}&ById={request.ById}&PageIndex={request.PageIndex}&PageSize={request.PageSize}");
             var body = await response.Content.ReadAsStringAsync();
             var lsPost = JsonConvert.DeserializeObject<PageResult<PostVmTongQuat>>(body);
+            return lsPost;
+        }
+
+        public async Task<List<PostVmTongQuat>> ListManyViews(int number)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+            var response = await client.GetAsync($"/api/tin-dang/tin-dang-co-nhieu-luot-xem/{number}");
+            var body = await response.Content.ReadAsStringAsync();
+            List<PostVmTongQuat> lsPost = JsonConvert.DeserializeObject<List<PostVmTongQuat>>(body);
+            return lsPost;
+        }
+
+        public async Task<List<PostVmTongQuat>> ListPostNew(int number)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+            var response = await client.GetAsync($"/api/tin-dang/tin-dang-moi-nhat/{number}");
+            var body = await response.Content.ReadAsStringAsync();
+            List<PostVmTongQuat> lsPost = JsonConvert.DeserializeObject<List<PostVmTongQuat>>(body);
             return lsPost;
         }
     }

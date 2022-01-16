@@ -1,0 +1,117 @@
+﻿@using System.Security.Claims
+@using ChoNongSan.ApiUsedForWeb.ViewModels
+
+@model ProfileTabVm
+@{
+    var accountID = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+    var test = Model;
+}
+<style>
+    p {
+        color: #000000;
+        font-weight: lighter;
+    }
+
+    #submit {
+        background-color: #000000;
+        color: #ffffff;
+    }
+
+        #submit:hover {
+            background-color: #40AA54;
+        }
+</style>
+<div class="tab-pane fade show active">
+    <div class="myaccount-details">
+        <form asp-action="CapNhatTaiKhoan" asp-controller="User" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="myaccount-form-inner mx-auto row">
+                <div class="col-12 col-lg-6 d-lg-inline-flex p-0 ">
+                    <div class="mt-4 col-lg-6 col-12 d-flex align-items-center" style="flex-direction:column">
+                        <img id="avatar" class="img-fluid rounded-circle img-thumbnail" src="@ViewBag.Avatar" alt="Ảnh đại diện" style="width:100px; height:100px" />
+                        <label asp-for="Request.ThumbnailImage" class="mt-lg-2 control-label"></label>
+                        <span asp-validation-for="Request.ThumbnailImage" class="text-danger"></span>
+                        
+                    </div>
+
+                    <div class="col-lg-6 col-12 my-auto">
+                        <input id="input_img" type="file" onchange="loadFile(event)" asp-for="Request.ThumbnailImage" class="form-control" hidden />
+                        <button id="btnAddImg" class="mt-3 mx-auto d-flex align-items-center row p-0 col-12 btn btn-link" value="Đổi ảnh" type="button" onclick="document.getElementById('input_img').click();">
+                            <img class="col-12 mx-auto p-0" style="height:70px; width:70px" src="~/assetsKH/icon/icon-camera.png" />
+                            <p class="col-12 m-0">Đổi ảnh</p>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-12 p-0">
+                    <div class=" mt-4" hidden>
+                        <label asp-for="Request.AccountID" class="control-label"></label>
+                        <input asp-for="Request.AccountID" value="@Convert.ToInt32(accountID)" />
+                        <span asp-validation-for="Request.AccountID" class="text-danger"></span>
+                    </div>
+
+                    <div class=" mt-4">
+                        <span style="color:red">*</span><label asp-for="Request.FullName" class="control-label"></label>
+                        <input asp-for="Request.FullName" class="form-control" placeholder="Nhập họ và tên" />
+                        <span asp-validation-for="Request.FullName" class="text-danger"></span>
+                    </div>
+                    <div class="mt-4">
+                        <span style="color:red">*</span><label asp-for="Request.PhoneNumber" class="control-label"></label>
+                        <input asp-for="Request.PhoneNumber" class="form-control" placeholder="Nhập số điện thoại" />
+                        <span asp-validation-for="Request.PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 p-0">
+                    <div class="single-input mt-4">
+                        <span style="color:red">*</span><label asp-for="Request.Email" class="control-label"></label>
+                        <input asp-for="Request.Email" class="form-control" placeholder="Nhập Email" />
+                        <span asp-validation-for="Request.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="single-input mt-4">
+                        <label asp-for="Request.Address" class="control-label"></label>
+                        <input asp-for="Request.Address" class="form-control" placeholder="Nhập địa chỉ" />
+                        <span asp-validation-for="Request.Address" class="text-danger"></span>
+                    </div>
+                    <div class="single-input mt-4 d-flex align-items-center" style="flex-direction:column">
+                        <button id="submit" class="rounded btn btn-custom-size lg-size" type="submit">
+                            <span>Cập nhật</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    //$(document).ready(function () {
+    //    if (document.getElementById('avatar').src != "") {
+    //        document.getElementById('urlImg').value = document.getElementById('avatar').src;
+    //    }
+    //})
+        //load ảnh
+    var loadFile = function (event) {
+        var lent = event.target.files.length;
+        if (lent != 0) {
+            document.getElementById('avatar').src = URL.createObjectURL(event.target.files[0]);
+        }
+    };
+
+    @*var giuUrl = function () {
+        document.getElementById('urlImg').value = document.getElementById('avatar').src;
+        var test = document.getElementById('input_img').files;
+        document.getElementById('formFile').files = test;
+
+        @{
+            <text>
+                if (Model.Img != null)
+                {
+                    Model.Request.ThumbnailImage = Model.Img;
+                }
+            </text>
+        }
+
+    }*@
+</script>

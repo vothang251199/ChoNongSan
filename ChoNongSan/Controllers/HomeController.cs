@@ -20,10 +20,12 @@ namespace ChoNongSan.Controllers
         private readonly IPostApi _postApi;
         private readonly IConfiguration _config;
         private readonly ICategoryApi _categoryApi;
+        private readonly IUserApi _userApi;
 
         public HomeController(ILogger<HomeController> logger, IPostApi postApi, IConfiguration config,
-            ICategoryApi categoryApi)
+            ICategoryApi categoryApi, IUserApi userApi)
         {
+            _userApi = userApi;
             _categoryApi = categoryApi;
             _logger = logger;
             _postApi = postApi;
@@ -54,6 +56,20 @@ namespace ChoNongSan.Controllers
 
             vm.ListCat = lsCat;
             vm.ActiveTab = (int)request.ById;
+
+            var lsMany = await _postApi.ListManyViews(6);
+            foreach (var i in lsMany)
+            {
+                i.ImageDefault = _config["ApiUrl"] + i.ImageDefault;
+            }
+            vm.ListManyViews = lsMany;
+
+            var lsNew = await _postApi.ListPostNew(3);
+            foreach (var i in lsNew)
+            {
+                i.ImageDefault = _config["ApiUrl"] + i.ImageDefault;
+            }
+            vm.ListPostNew = lsNew;
 
             var a = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
             if (String.IsNullOrEmpty(a))

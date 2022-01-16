@@ -1,8 +1,10 @@
 ﻿@using System.Linq;
-@using System.Security.Claims;
+
 @{
-    var avatar = User.Claims.Where(x => x.Type == ClaimTypes.Thumbprint)
-                .Select(c => c.Value).SingleOrDefault();
+    var accountID = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+
+    var avatar = User.Claims.Where(x => x.Type == "Avatar")
+        .Select(c => c.Value).SingleOrDefault();
 
     var userName = User.Identity.Name;
     if (String.IsNullOrEmpty(avatar)) { avatar = "/assetsKH/images/avatar-null.png"; }
@@ -36,6 +38,7 @@
     <link rel="stylesheet" href="~/assetsKH/css/plugins/nice-select.css">
     <link rel="stylesheet" href="~/assetsKH/css/plugins/magnific-popup.min.css" />
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <!-- Style CSS -->
     <link rel="stylesheet" href="~/assetsKH/css/style.css">
 </head>
@@ -52,13 +55,14 @@
                     <div class="row align-items-center">
                         <div class="col-lg-12">
                             <div class="header-middle-wrap">
-                                <a href="/Home/Index" class="col-auto header-logo">
-                                    <img style="height:33px; width:33px" src="~/assetsKH/images/logo.png" alt="Header Logo">
-                                    <h3 class="d-none d-sm-block" style="height:100%; width:100%;margin:5px 0 0 10px">ChoNongSan</h3>
+                                <a href="/" class="col-auto header-logo">
+                                    @*<img style="height:33px; width:33px" src="~/assetsKH/images/logo.png" alt="Header Logo">
+                                        <h3 class="d-none d-sm-block" style="height:100%; width:100%;margin:5px 0 0 10px">ChoNongSan</h3>*@
+                                    <img style="width:170px; height:33px" src="~/assetsKH/images/logo/logo-chu-removebg.png" alt="logo" />
                                 </a>
                                 <div class="w-50 d-none d-lg-block col-auto px-3">
                                     <form asp-action="Index" method="get" class="header-searchbox">
-                                        <input name="keyword" value="@ViewBag.Keyword" class="input-field" type="text" placeholder="Tìm kiếm theo tên sản phẩm hoặc địa chỉ hoặc tiêu đề">
+                                        <input name="keyword" value="@ViewBag.Keyword" class="input-field" type="text" placeholder="Tìm kiếm theo tiêu đề hoặc địa chỉ">
                                         <button class="btn btn-outline-whisper btn-primary-hover" type="submit"><i class="pe-7s-search"></i></button>
                                     </form>
                                 </div>
@@ -356,355 +360,8 @@
         <!-- Begin Banner Area -->
         <!-- Banner Area End Here -->
         <!-- Begin Product Area -->
-        <div class="product-area section-space-top-55">
-            <div class="container">
-                <div class="section-title text-center pb-55">
-                    @*<span class="sub-title text-primary">Tin có nhiều lượt xem</span>*@
-                    <h2 class="title mb-0">Tin có nhiều lượt xem</h2>
-                    <hr />
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="swiper-container product-list-slider border-issue">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="product-list-item">
-                                        <div class="product-img img-zoom-effect">
-                                            <a href="single-product.html">
-                                                <img class="img-full" src="~/assetsKH/images/product/small-size/1-1-112x124.jpg" alt="Product Images">
-                                            </a>
-                                        </div>
-                                        <div class="product-content">
-                                            <a class="product-name" href="single-product.html">Black Pepper Grains</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">$80.00</span>
-                                            </div>
-                                            <div class="rating-box-wrap">
-                                                <div class="rating-box">
-                                                    <ul>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="product-add-action">
-                                                    <ul>
-                                                        <li>
-                                                            <a href="cart.html">
-                                                                <i class="pe-7s-cart"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product-list-item">
-                                        <div class="product-img img-zoom-effect">
-                                            <a href="single-product.html">
-                                                <img class="img-full" src="~/assetsKH/images/product/small-size/1-2-112x124.jpg" alt="Product Images">
-                                            </a>
-                                        </div>
-                                        <div class="product-content">
-                                            <a class="product-name" href="single-product.html">Peanut Big Bean</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">$80.00</span>
-                                            </div>
-                                            <div class="rating-box-wrap">
-                                                <div class="rating-box">
-                                                    <ul>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="product-add-action">
-                                                    <ul>
-                                                        <li>
-                                                            <a href="cart.html">
-                                                                <i class="pe-7s-cart"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product-list-item">
-                                        <div class="product-img img-zoom-effect">
-                                            <a href="single-product.html">
-                                                <img class="img-full" src="~/assetsKH/images/product/small-size/1-3-112x124.jpg" alt="Product Images">
-                                            </a>
-                                        </div>
-                                        <div class="product-content">
-                                            <a class="product-name" href="single-product.html">Dried Lemon Green</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">$80.00</span>
-                                            </div>
-                                            <div class="rating-box-wrap">
-                                                <div class="rating-box">
-                                                    <ul>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="product-add-action">
-                                                    <ul>
-                                                        <li>
-                                                            <a href="cart.html">
-                                                                <i class="pe-7s-cart"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product-list-item">
-                                        <div class="product-img img-zoom-effect">
-                                            <a href="single-product.html">
-                                                <img class="img-full" src="~/assetsKH/images/product/small-size/1-4-112x124.jpg" alt="Product Images">
-                                            </a>
-                                        </div>
-                                        <div class="product-content">
-                                            <a class="product-name" href="single-product.html">Natural Coconut</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">$80.00</span>
-                                            </div>
-                                            <div class="rating-box-wrap">
-                                                <div class="rating-box">
-                                                    <ul>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="product-add-action">
-                                                    <ul>
-                                                        <li>
-                                                            <a href="cart.html">
-                                                                <i class="pe-7s-cart"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product-list-item">
-                                        <div class="product-img img-zoom-effect">
-                                            <a href="single-product.html">
-                                                <img class="img-full" src="~/assetsKH/images/product/small-size/1-5-112x124.jpg" alt="Product Images">
-                                            </a>
-                                        </div>
-                                        <div class="product-content">
-                                            <a class="product-name" href="single-product.html">Black Peppepr Read</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">$80.00</span>
-                                            </div>
-                                            <div class="rating-box-wrap">
-                                                <div class="rating-box">
-                                                    <ul>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="product-add-action">
-                                                    <ul>
-                                                        <li>
-                                                            <a href="cart.html">
-                                                                <i class="pe-7s-cart"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="product-list-item">
-                                        <div class="product-img img-zoom-effect">
-                                            <a href="single-product.html">
-                                                <img class="img-full" src="~/assetsKH/images/product/small-size/1-6-112x124.jpg" alt="Product Images">
-                                            </a>
-                                        </div>
-                                        <div class="product-content">
-                                            <a class="product-name" href="single-product.html">Green Vegetable</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">$80.00</span>
-                                            </div>
-                                            <div class="rating-box-wrap">
-                                                <div class="rating-box">
-                                                    <ul>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                        <li><i class="pe-7s-star"></i></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="product-add-action">
-                                                    <ul>
-                                                        <li>
-                                                            <a href="cart.html">
-                                                                <i class="pe-7s-cart"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Add Arrows -->
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- Product Area End Here -->
         <!-- Begin Blog Area -->
-        @if (ViewBag.HiddenLayOut != 1)
-        {
-            <div class="blog-area section-space-y-axis-100">
-                <div class="container">
-                    <div class="section-title text-center pb-55">
-                        @*<span class="sub-title text-primary">Các</span>*@
-                        <h2 class="title mb-0">Tin mới</h2>
-                        <hr />
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="swiper-container blog-slider">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="blog-item">
-                                            <div class="blog-img img-zoom-effect">
-                                                <a href="blog-detail-left-sidebar.html">
-                                                    <img class="img-full" src="~/assetsKH/images/blog/medium-size/1-1-370x315.jpg" alt="Blog Image">
-                                                </a>
-                                            </div>
-                                            <div class="blog-content">
-                                                <div class="blog-meta text-dim-gray pb-3">
-                                                    <ul>
-                                                        <li class="date"><i class="fa fa-calendar-o me-2"></i>May 21, 2021</li>
-                                                        <li>
-                                                            <span class="comments me-3">
-                                                                <a href="javascript:void(0)">2 Comments</a>
-                                                            </span>
-                                                            <span class="link-share">
-                                                                <a href="javascript:void(0)">Share</a>
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <h5 class="title mb-4">
-                                                    <a href="blog-detail-left-sidebar.html">Lorem ipsum dolor consec adipisicing elit</a>
-                                                </h5>
-                                                <p class="short-desc mb-5">Lorem ipsum dolor sit amet, consectet adipi elit, sed do eius tempor incididunt ut labore gthydolore magna aliqua.</p>
-                                                <div class="button-wrap">
-                                                    <a class="btn btn-custom-size btn-dark btn-lg rounded-0" href="blog-detail-left-sidebar.html">Read More</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="blog-item">
-                                            <div class="blog-img img-zoom-effect">
-                                                <a href="blog-detail-left-sidebar.html">
-                                                    <img class="img-full" src="~/assetsKH/images/blog/medium-size/1-2-370x315.jpg" alt="Blog Image">
-                                                </a>
-                                            </div>
-                                            <div class="blog-content">
-                                                <div class="blog-meta text-dim-gray pb-3">
-                                                    <ul>
-                                                        <li class="date"><i class="fa fa-calendar-o me-2"></i>May 21, 2021</li>
-                                                        <li>
-                                                            <span class="comments me-3">
-                                                                <a href="javascript:void(0)">2 Comments</a>
-                                                            </span>
-                                                            <span class="link-share">
-                                                                <a href="javascript:void(0)">Share</a>
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <h5 class="title mb-4">
-                                                    <a href="blog-detail-left-sidebar.html">Voluptate minus temporibus nostrum adipi</a>
-                                                </h5>
-                                                <p class="short-desc mb-5">Lorem ipsum dolor sit amet, consectet adipi elit, sed do eius tempor incididunt ut labore gthydolore magna aliqua.</p>
-                                                <div class="button-wrap">
-                                                    <a class="btn btn-custom-size btn-dark btn-lg rounded-0" href="blog-detail-left-sidebar.html">Read More</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="blog-item">
-                                            <div class="blog-img img-zoom-effect">
-                                                <a href="blog-detail-left-sidebar.html">
-                                                    <img class="img-full" src="~/assetsKH/images/blog/medium-size/1-3-370x315.jpg" alt="Blog Image">
-                                                </a>
-                                            </div>
-                                            <div class="blog-content">
-                                                <div class="blog-meta text-dim-gray pb-3">
-                                                    <ul>
-                                                        <li class="date"><i class="fa fa-calendar-o me-2"></i>May 21, 2021</li>
-                                                        <li>
-                                                            <span class="comments me-3">
-                                                                <a href="javascript:void(0)">2 Comments</a>
-                                                            </span>
-                                                            <span class="link-share">
-                                                                <a href="javascript:void(0)">Share</a>
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <h5 class="title mb-4">
-                                                    <a href="blog-detail-left-sidebar.html">Corporis tempora molestiae nulla esse ipsam</a>
-                                                </h5>
-                                                <p class="short-desc mb-5">Lorem ipsum dolor sit amet, consectet adipi elit, sed do eius tempor incididunt ut labore gthydolore magna aliqua.</p>
-                                                <div class="button-wrap">
-                                                    <a class="btn btn-custom-size btn-dark btn-lg rounded-0" href="blog-detail-left-sidebar.html">Read More</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Add Arrows -->
-                                <div class="swiper-button-next"></div>
-                                <div class="swiper-button-prev"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-
         <!-- Blog Area End Here -->
         <!-- Begin Footer Area -->
         <div class="footer-area">
@@ -714,20 +371,20 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="widget-item">
                                 <div class="footer-logo pb-4">
-                                    <a href="index.html">
-                                        <img src="~/assetsKH/images/logo/dark.png" alt="Logo">
+                                    <a href="/">
+                                        <img src="~/assetsKH/images/logo/logo-chu-removebg.png" alt="logo" />
                                     </a>
                                 </div>
-                                <p class="short-desc mb-2">Lorem ipsum dolor sit amet, consectet adipi elit, sed do eius tempor incididun ut labore gthydolore. </p>
+                                <p class="short-desc mb-2">Mang lại cho bạn những thực phẩm mà bạn cần thiết cho mỗi bữa ăn của chính mình. </p>
                                 <div class="widget-contact-info pb-6">
                                     <ul>
                                         <li>
                                             <i class="pe-7s-map-marker"></i>
-                                            184 Main Rd E, St Albans VIC 3021,
+                                            99 Phương Nam, Tam Kỳ, Quảng Nam
                                         </li>
                                         <li>
                                             <i class="pe-7s-mail"></i>
-                                            <a href="mailto://info@example.com">info@example.com</a>
+                                            <a href="mailto://chonongsan.vvt.vn@gmail.com">chonongsan.vvt.vn@gmail.com</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -740,64 +397,49 @@
                         </div>
                         <div class="col-lg-2 offset-lg-1 col-md-6 pt-10 pt-lg-0">
                             <div class="widget-item">
-                                <h3 class="widget-title mb-5">Information</h3>
+                                <h3 class="widget-title mb-5">Thông tin</h3>
                                 <ul class="widget-list-item">
                                     <li>
-                                        <a href="javascript:void(0)">FAQ</a>
+                                        <a href="javascript:void(0)">CÂU HỎI THƯỜNG GẶP</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">Shipping</a>
+                                        <a href="javascript:void(0)">KHẢ NĂNG TIẾP CẬN</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">Returns</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Order Status</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Gift Card Balance</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Accessibility</a>
+                                        <a href="javascript:void(0)">SỐ DƯ QUÀ TẶNG</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-lg-2 offset-lg-1 col-md-6 pt-10 pt-lg-0">
                             <div class="widget-item">
-                                <h3 class="widget-title mb-5">My Account</h3>
+                                <h3 class="widget-title mb-5">TÀI KHOẢN CỦA TÔI</h3>
                                 <ul class="widget-list-item">
                                     <li>
-                                        <a href="javascript:void(0)">My Account</a>
+                                        <a href="javascript:void(0)">THỦ TỤC THANH TOÁN</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">Checkout</a>
+                                        <a href="javascript:void(0)">ĐIỀU KHOẢN SỬ DỤNG</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">Validation</a>
+                                        <a href="javascript:void(0)">THẨM ĐỊNH</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">Wishlist</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Terms of Use</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">FAQ</a>
+                                        <a href="javascript:void(0)">YÊU THÍCH</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 pt-10 pt-lg-0">
                             <div class="widget-item">
-                                <h3 class="widget-title mb-5">Newsletters</h3>
-                                <p class="short-desc">Lorem ipsum dolor sit amet, consectet adipi elit, sed do eius tempor.</p>
+                                <h3 class="widget-title mb-5">BẢNG TIN</h3>
+                                <p class="short-desc">Theo dõi chúng tôi để cập nhật thêm nhiều tin tức mới nhất.</p>
                             </div>
                             <div class="widget-form-area">
                                 <form class="widget-form" action="#">
-                                    <input class="input-field" type="email" autocomplete="off" placeholder="Your Email">
+                                    <input class="input-field" type="email" autocomplete="off" placeholder="Eamil của bạn">
                                     <div class="button-wrap pt-5">
-                                        <button class="btn btn-custom-size btn-primary btn-secondary-hover rounded-0" id="mc-submit">Send Mail</button>
+                                        <button class="btn btn-custom-size btn-primary btn-secondary-hover rounded" id="mc-submit">Gửi Mail</button>
                                     </div>
                                 </form>
                             </div>
@@ -805,12 +447,12 @@
                     </div>
                 </div>
             </div>
-            <div class="footer-bottom py-3" data-bg-color="#bac34e">
+            <div class="footer-bottom py-3" data-bg-color="#40AA54">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="copyright">
-                                <span class="copyright-text text-white">© 2021 Harmic Made with <i class="fa fa-heart text-danger"></i> by  <a href="https://hasthemes.com/" target="_blank">HasThemes</a> </span>
+                                <span class="copyright-text text-white">© 2021 Phát triển bởi <i class="fa fa-heart text-danger"></i> bởi  <a href="javascript:void(0)" target="_blank">VVT</a> </span>
                             </div>
                         </div>
                     </div>

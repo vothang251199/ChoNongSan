@@ -14,10 +14,6 @@ namespace ChoNongSan.ViewModels.Requests.TinDang
         [Required(ErrorMessage = "Vui lòng nhập Tiêu đề")]
         public string Title { get; set; }
 
-        [Display(Name = "Tên sản phẩm")]
-        [Required(ErrorMessage = "Vui lòng nhập Tên sản phẩm")]
-        public string ProductName { get; set; }
-
         [Display(Name = "Mô tả")]
         public string Description { get; set; }
 

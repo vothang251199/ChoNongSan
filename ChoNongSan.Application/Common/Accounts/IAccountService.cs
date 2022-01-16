@@ -104,7 +104,8 @@ namespace ChoNongSan.Application.Common.Accounts
                 new Claim(ClaimTypes.Role, Convert.ToString(user.RolesId)),
                 new Claim("Id", Convert.ToString(user.AccountId)),
                 new Claim("FullName", user.FullName),
-                new Claim(ClaimTypes.Thumbprint, _config["ApiUrl"] +  Convert.ToString(string.IsNullOrEmpty(user.Avatar) ? "/user-content/avatar-null.png" : user.Avatar)),
+                new Claim("UserName", user.UserName),
+                new Claim("Avatar", _config["ApiUrl"] +  user.Avatar),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));

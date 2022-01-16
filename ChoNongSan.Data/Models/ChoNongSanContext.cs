@@ -50,8 +50,6 @@ namespace ChoNongSan.Data.Models
 
                 entity.Property(e => e.Avatar).IsUnicode(false);
 
-                entity.Property(e => e.ConfirmPassword).IsUnicode(false);
-
                 entity.Property(e => e.CreateDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Email)
@@ -212,8 +210,6 @@ namespace ChoNongSan.Data.Models
                 entity.Property(e => e.PostTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.ProductName).HasMaxLength(50);
 
                 entity.Property(e => e.Quality).HasMaxLength(10);
 

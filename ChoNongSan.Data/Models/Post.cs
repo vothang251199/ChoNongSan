@@ -16,7 +16,6 @@ namespace ChoNongSan.Data.Models
 
         public int PostId { get; set; }
         public string Title { get; set; }
-        public string ProductName { get; set; }
         public string Description { get; set; }
         public int WeightId { get; set; }
         public int? WeightNumber { get; set; }

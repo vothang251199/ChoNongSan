@@ -30,7 +30,7 @@ namespace ChoNongSan.Controllers.Components
                 PageIndex = (int)model.pageIndex,
                 PageSize = (int)model.pageSize,
             };
-            var data = await _postApi.GetAllByStatusPaging(request);
+            var data = await _postApi.GetAllByStatusPaging(model.acountId, request);
             foreach (var i in data.Items)
             {
                 i.ImageDefault = _config["ApiUrl"] + i.ImageDefault;

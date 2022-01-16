@@ -15,9 +15,6 @@ namespace ChoNongSan.ViewModels.Responses
         [Display(Name = "Tiêu đề")]
         public string Title { get; set; }
 
-        [Display(Name = "Tên sản phẩm")]
-        public string ProductName { get; set; }
-
         [Display(Name = "Giá")]
         public decimal? Price { get; set; }
 
@@ -50,5 +47,14 @@ namespace ChoNongSan.ViewModels.Responses
 
         [Display(Name = "Mô tả")]
         public string Description { get; set; }
+
+        [Display(Name = "Lý do")]
+        public string Reason { get; set; }
+
+        [Display(Name = "Địa chỉ")]
+        public string Address { get; set; }
+
+        [Display(Name = "Địa chỉ")]
+        public int NumImg { get; set; }
     }
 }

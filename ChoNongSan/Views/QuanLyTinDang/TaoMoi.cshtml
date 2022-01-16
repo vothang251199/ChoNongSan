@@ -11,7 +11,7 @@
     List<WeightVm> lsWeight = ViewBag.WeightList;
 }
 
-<div class="container ">
+<div class="container pb-10">
     <form asp-action="TaoMoi" method="post" enctype="multipart/form-data">
         <div class="row d-flex">
             <div class="col-lg-6 col-12 mx-auto" style="margin-bottom:30px">
@@ -27,7 +27,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <span style="color:red">*</span>@Html.DisplayNameFor(model => model.CategoryID)
                             <div class="checkout-form-list form-group" style="height:42px">
                                 <select class="myniceselect nice-select wide" id="ddCatId" asp-for="CategoryID">
@@ -41,13 +41,6 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <div class="checkout-form-list form-group">
-                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.ProductName)
-                                <input asp-for="ProductName" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập tên sản phẩm" />
-                                <span asp-validation-for="ProductName" class="text-danger"></span>
-                            </div>
-                        </div>
                         <div class="col-md-12">
                             <div class="checkout-form-list form-group">
                                 <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Title)

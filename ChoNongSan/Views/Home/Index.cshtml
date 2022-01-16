@@ -11,6 +11,46 @@
     var id = ViewBag.AccountId;
 }
 
+<style>
+    .product-list-item .product-add-action ul li a {
+        background-color: #40AA54;
+    }
+
+    .pe-7s-like:before {
+        color: white;
+    }
+
+    .product-add-action ul li a {
+        background-color: #40AA54;
+    }
+
+        .product-add-action ul li a:hover {
+            background-color: black;
+        }
+
+    .product-tab-nav li a {
+        font-family: Arial, sans-serif;
+    }
+
+        .product-tab-nav li a.active {
+            color: #40AA54;
+            font-weight: 900;
+        }
+
+            .product-tab-nav li a.active div {
+                border: 3px solid #40AA54;
+            }
+
+        .product-tab-nav li a:hover {
+            color: #40AA54;
+            font-weight: 900;
+        }
+
+        .product-tab-nav li a div {
+            border: 2px outset #808080;
+        }
+</style>
+
 <div class="product-area section-space-top-100">
     <div class="container">
         <div class="row">
@@ -19,7 +59,7 @@
                 <ul class="nav product-tab-nav pb-10" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a href="/Home/Index?tabname=0" class="@(Model.ActiveTab == 0 ? "active" : string.Empty)">
-                            <div class="product-tab-icon rounded-circle img-thumbnail  p-0" style="border: 3px solid #40AA54; background-color: #e3f0de; margin-bottom: 15px">
+                            <div class="product-tab-icon rounded img-thumbnail  p-0" style=" background-color: #e3f0de; margin-bottom: 15px">
                                 <img style="margin:15px;height:66px; width:66px" src="~/assetsKH/images/icon-all-raucuqua-removebg.png" />
                             </div>
                             Tất cả
@@ -29,7 +69,7 @@
                     {
                         <li class="nav-item" role="presentation">
                             <a href="/Home/Index?tabname=@i.CategoryID" class="@(Model.ActiveTab == i.CategoryID ? "active" : string.Empty)">
-                                <div class="product-tab-icon rounded-circle img-thumbnail  p-0" style="border: 3px solid #40AA54; background-color: #e3f0de; margin-bottom: 15px">
+                                <div class="product-tab-icon rounded img-thumbnail  p-0" style=" background-color: #e3f0de; margin-bottom: 15px ">
                                     <img style="margin:15px;height:66px; width:66px" src="@i.Image" alt="Product Icon">
                                 </div>
                                 @i.CateName
@@ -52,14 +92,17 @@
                                     item.ImageDefault = ViewBag.ApiUrl + item.ImageDefault;
                                     <div class="col-xl-3 col-lg-4 col-sm-6 pt-6 pt-sm-0 ">
                                         <div class="product-item">
-                                            <div class="product-img img-zoom-effect">
-                                                <a href="single-product.html" style="display:flex">
-                                                    <img style="margin:auto;width:262px; height:291px" class="img-thumbnail img-full" src="@item.ImageDefault" alt="@item.ProductName">
+                                            <div class="product-img img-zoom-effect position-relative">
+                                                <a asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@item.PostID" style="display:flex">
+                                                    <img style="margin:auto;width:262px; height:291px" class="img-thumbnail img-full" src="@item.ImageDefault" alt="">
                                                 </a>
+                                                <div class="position-absolute d-flex align-items-center" style="flex-direction:column;color:white;width:35px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
+                                                    <p class="my-0" style="font-weight:lighter">@item.NumImg</p>
+                                                </div>
                                                 <div class="product-add-action">
                                                     <ul>
                                                         <li>
-                                                            <a name="@item.PostID" href="javascript:void(0)" class="btnAddLove rounded">
+                                                            <a asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@item.PostID" class="btnAddLove rounded">
                                                                 <i class="pe-7s-like"></i>
                                                             </a>
                                                         </li>
@@ -93,6 +136,120 @@
         </div>
     </div>
 </div>
+
+<!--tin có nhiều lượt xem Begin-->
+<div class="product-area section-space-top-55">
+    <div class="container">
+        <div class="section-title text-center pb-55">
+            @*<span class="sub-title text-primary">Tin có nhiều lượt xem</span>*@
+            <h2 class="title mb-0">Tin có nhiều lượt xem</h2>
+            <hr />
+        </div>
+        <div class="row">
+            <div class="col-lg-12 row mx-0">
+                @foreach (var p in Model.ListManyViews)
+                {
+                    <div class="swiper-slide col-12 col-lg-4 px-0 mx-0 h-auto">
+                        <div class="product-list-item">
+                            <div class="product-img img-zoom-effect position-relative">
+
+                                <a href="single-product.html" style="width:110px ">
+                                    <img style="height: 121px" class="img-full rounded img-thumbnail" src="@p.ImageDefault" alt="Product Images">
+                                </a>
+                                <div class="position-absolute d-flex align-items-center" style="flex-direction:column;color:white;width:30px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
+                                    <p class="my-0" style="font-weight:lighter">@p.NumImg</p>
+                                </div>
+                            </div>
+                            <div class="product-content" style="padding-left:10px">
+                                <div class="price-box pb-1">
+                                    <i class="bi bi-pencil-square" style="margin-right:10px"></i>
+                                    <a class=" font-weight-bold" href="javascript:void(0)">@p.Title</a>
+                                </div>
+                                <div class="price-box pb-1">
+                                    <i style="color: #dc9a0e; margin-right:10px" class="bi bi-tags-fill"></i>
+                                    <span class="new-price text-danger overflow-hidden" style="white-space:nowrap; text-overflow:ellipsis">@(p.Price.Value.ToString("N0") +" VNĐ")</span>
+                                </div>
+                                <div class="rating-box">
+                                    <div class="rating-box d-flex align-items-center">
+                                        <i class="bi bi-geo-alt-fill" style="color:black; margin-right:10px"></i>
+                                        <p class="m-0 overflow-hidden" style="white-space: nowrap; text-overflow: ellipsis">@p.Address</p>
+                                    </div>
+                                    <div class="product-add-action">
+                                        <ul>
+                                            <li>
+                                                <a name="@p.PostID" href="javascript:void(0)" class="btnAddLove rounded">
+                                                    <i class="pe-7s-like"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <!-- Add Arrows -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--tin có nhiều lượt xem End-->
+<!--tin mới nhất Begin-->
+<div class="blog-area section-space-y-axis-100">
+    <div class="container">
+        <div class="section-title text-center pb-55">
+            @*<span class="sub-title text-primary">Các</span>*@
+            <h2 class="title mb-0">Tin mới</h2>
+            <hr />
+        </div>
+        <div class="row">
+            <div class="col-lg-12 row mx-0">
+
+                @foreach (var p in Model.ListPostNew)
+                {
+                    <div class="swiper-slide col-12 col-lg-4 px-0 mx-0 h-auto">
+                        <div class="blog-item">
+                            <div class="blog-img img-zoom-effect">
+                                <a href="javascript:void(0)" style="width:360px">
+                                    <img class="img-full rounded img-thumbnail" style="height:306px" src="@p.ImageDefault" alt="">
+                                </a>
+                            </div>
+                            <div class="blog-content">
+                                <div class="blog-meta text-dim-gray pb-3">
+                                    <ul>
+                                        <li class="date"><i class="fa fa-calendar-o me-2"></i>@p.TimePost</li>
+                                        <li>
+                                            <span class="comments me-3">
+                                                <a href="javascript:void(0)">2 Bình luận</a>
+                                            </span>
+                                            @*<span class="link-share">
+                                                    <a href="javascript:void(0)">Chia sẻ</a>
+                                                </span>*@
+                                        </li>
+                                    </ul>
+                                </div>
+                                <h5 class="title mb-4">
+                                    <a href="blog-detail-left-sidebar.html">@p.Title</a>
+                                </h5>
+                                <p class="short-desc mb-5">@p.Description.</p>
+                                <div class="button-wrap">
+                                    <a class="btn btn-custom-size btn-dark btn-lg rounded-0" href="blog-detail-left-sidebar.html">Chi tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <!-- Add Arrows -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--tin mới nhất End-->
 
 @section Scripts{
 
