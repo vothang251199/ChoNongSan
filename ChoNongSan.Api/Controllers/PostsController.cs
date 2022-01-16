@@ -31,6 +31,12 @@ namespace ChoNongSan.Api.Controllers
             _context = context;
         }
 
+        [HttpGet("tang-luot-xem/{postId}")]
+        public IActionResult AddViewCount([FromRoute] int postId)
+        {
+            return Ok(_postService.AddViewcount(postId));
+        }
+
         [HttpGet("tin-dang-co-nhieu-luot-xem/{number}")]
         public IActionResult GetAllManyViews([FromRoute] int number)
         {
@@ -106,22 +112,6 @@ namespace ChoNongSan.Api.Controllers
             return Ok("Ẩn bài viết thành công");
         }
 
-        //Area Ctv
-        [HttpPut("duyet-bai-dang")]
-        public async Task<IActionResult> AcceptPost([FromForm] AcceptPostRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var post = await _context.Posts.FindAsync(request.PostID);
-            if (post == null) return BadRequest("Bài viết không tồn tại");
-
-            var result = await _ctvService.AcceptPost(request);
-            if (result == 0) return BadRequest();
-            return Ok();
-        }
-
         [HttpPost("them-yeu-thich")]
         public async Task<IActionResult> AddPostLove([FromBody] LoveRequest request)
         {
@@ -140,6 +130,22 @@ namespace ChoNongSan.Api.Controllers
 
             var result = await _postService.AddLovePost(request);
             return Ok(new { message = result, status = "OK" });
+        }
+
+        //Area Ctv
+        [HttpPut("duyet-bai-dang")]
+        public async Task<IActionResult> AcceptPost([FromForm] AcceptPostRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var post = await _context.Posts.FindAsync(request.PostID);
+            if (post == null) return BadRequest("Bài viết không tồn tại");
+
+            var result = await _ctvService.AcceptPost(request);
+            if (result == 0) return BadRequest();
+            return Ok();
         }
     }
 }

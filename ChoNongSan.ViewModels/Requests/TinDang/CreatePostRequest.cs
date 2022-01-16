@@ -10,6 +10,9 @@ namespace ChoNongSan.ViewModels.Requests.TinDang
 {
     public class CreatePostRequest
     {
+        [Required]
+        public string Device { get; set; }
+
         [Display(Name = "Tiêu đề")]
         [Required(ErrorMessage = "Vui lòng nhập Tiêu đề")]
         public string Title { get; set; }

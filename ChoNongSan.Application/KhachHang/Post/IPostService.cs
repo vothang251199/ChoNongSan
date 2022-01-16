@@ -4,6 +4,7 @@ using ChoNongSan.Application.KhachHang.PostImages;
 using ChoNongSan.Data.Models;
 using ChoNongSan.Utilities.Exceptions;
 using ChoNongSan.ViewModels.Common;
+using ChoNongSan.ViewModels.Requests;
 using ChoNongSan.ViewModels.Requests.Common;
 using ChoNongSan.ViewModels.Requests.DanhMuc;
 using ChoNongSan.ViewModels.Requests.TinDang;
@@ -74,7 +75,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
         public async Task<PostVmChiTiet> GetPostById(int postID)
         {
             var post = await _context.Posts.FindAsync(postID);
-            var lsImage = await _context.ImagePosts.AsNoTracking().Where(p => p.PostId == post.PostId).ToListAsync();
+            var lsImage = await _context.ImagePosts.AsNoTracking().Where(p => p.PostId == post.PostId).Select(y => y.ImagePath).ToListAsync();
             var viewModel = new PostVmChiTiet()
             {
                 PostID = post.PostId,
@@ -235,20 +236,23 @@ namespace ChoNongSan.Application.KhachHang.Posts
                 Expiry = request.Expiry
             };
 
-            if (!string.IsNullOrEmpty(request.Address))
+            if (PlatformEnum.Web.Equals(request.Device))
             {
-                string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
-                using (var webClient = new System.Net.WebClient())
+                if (!string.IsNullOrEmpty(request.Address))
                 {
-                    var json = webClient.DownloadString(url);
-                    // Now parse with JSON.Net
-                    var datax = (JObject)JsonConvert.DeserializeObject(json);
-
-                    post.Location = new Data.Models.Location()
+                    string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
+                    using (var webClient = new System.Net.WebClient())
                     {
-                        Lat = Convert.ToString(datax["result"][0]["location"]["lat"]),
-                        Lng = Convert.ToString(datax["result"][0]["location"]["lng"]),
-                    };
+                        var json = webClient.DownloadString(url);
+                        // Now parse with JSON.Net
+                        var datax = (JObject)JsonConvert.DeserializeObject(json);
+
+                        post.Location = new Data.Models.Location()
+                        {
+                            Lat = Convert.ToString(datax["result"][0]["location"]["lat"]),
+                            Lng = Convert.ToString(datax["result"][0]["location"]["lng"]),
+                        };
+                    }
                 }
             }
 
