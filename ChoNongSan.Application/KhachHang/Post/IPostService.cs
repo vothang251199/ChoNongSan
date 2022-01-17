@@ -9,6 +9,7 @@ using ChoNongSan.ViewModels.Requests.Common;
 using ChoNongSan.ViewModels.Requests.DanhMuc;
 using ChoNongSan.ViewModels.Requests.TinDang;
 using ChoNongSan.ViewModels.Responses;
+using ChoNongSan.ViewModels.Responses.TinDang;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -58,6 +59,8 @@ namespace ChoNongSan.Application.KhachHang.Posts
         List<PostVmTongQuat> GetAllManyViews(int number);
 
         List<PostVmTongQuat> PostNew(int number);
+
+        Task<List<PostVmTongQuat>> GetAllPostByAccountId(int accountId);
     }
 
     public class PostService : IPostService
@@ -236,28 +239,25 @@ namespace ChoNongSan.Application.KhachHang.Posts
                 Expiry = request.Expiry
             };
 
-			post.Location = new Data.Models.Location()
-			{
-				Lat = request.Lat,
-				Lng = request.Lng,
-			};
+            if (PlatformEnum.Web.Equals(request.PlatForm))
+            {
+                if (!string.IsNullOrEmpty(request.Address))
+                {
+                    string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
+                    using (var webClient = new System.Net.WebClient())
+                    {
+                        var json = webClient.DownloadString(url);
+                        // Now parse with JSON.Net
+                        var datax = (JObject)JsonConvert.DeserializeObject(json);
 
-			//if (!string.IsNullOrEmpty(request.Address))
-			//{
-			//    string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
-			//    using (var webClient = new System.Net.WebClient())
-			//    {
-			//        var json = webClient.DownloadString(url);
-			//        // Now parse with JSON.Net
-			//        var datax = (JObject)JsonConvert.DeserializeObject(json);
-
-			//        post.Location = new Data.Models.Location()
-			//        {
-			//            Lat = Convert.ToString(datax["result"][0]["location"]["lat"]),
-			//            Lng = Convert.ToString(datax["result"][0]["location"]["lng"]),
-			//        };
-			//    }
-			//}
+                        post.Location = new Data.Models.Location()
+                        {
+                            Lat = Convert.ToString(datax["result"][0]["location"]["lat"]),
+                            Lng = Convert.ToString(datax["result"][0]["location"]["lng"]),
+                        };
+                    }
+                }
+            }
 
 			if (request.ThumbnailImage != null)
             {
@@ -494,6 +494,31 @@ namespace ChoNongSan.Application.KhachHang.Posts
                 ViewCount = x.ViewCount,
                 WeightNumber = x.WeightNumber,
                 WeightName = _context.WeightTypes.AsNoTracking().FirstOrDefault(y => y.WeightId == x.WeightId).WeightName,
+            }).ToList();
+            return data;
+        }
+
+        public async Task<List<PostVmTongQuat>> GetAllPostByAccountId(int accountId)
+        {
+            var lsPost = await _context.Posts.AsNoTracking().Where(x => x.AccountId == accountId).ToListAsync();
+            var data = lsPost.Select(x => new PostVmTongQuat()
+            {
+                Title = x.Title,
+                PostID = x.PostId,
+                Address = x.Address,
+                Description = x.Description,
+                Price = x.Price,
+                Reason = x.Reason,
+                TimePost = x.PostTime,
+                StatusPost = x.StatusPost,
+                ViewCount = x.ViewCount,
+                WeightNumber = x.WeightNumber,
+                ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.IsDefault == true).ImagePath,
+                NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.AccountId).FullName,
+                Lat = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lat,
+                Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,
+                NumImg = _context.ImagePosts.AsNoTracking().Where(p => p.PostId == x.PostId).ToList().Count,
+                WeightName = _context.WeightTypes.AsNoTracking().FirstOrDefault(p => p.WeightId == x.WeightId).WeightName,
             }).ToList();
             return data;
         }

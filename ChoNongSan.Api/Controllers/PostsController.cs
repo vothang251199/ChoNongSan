@@ -31,6 +31,15 @@ namespace ChoNongSan.Api.Controllers
             _context = context;
         }
 
+        [HttpPost("all-post-by-accountId")]
+        public async Task<IActionResult> GetAllPostByAccountId(int accountId)
+        {
+            var user = await _context.Accounts.FindAsync(accountId);
+            if (user == null)
+                return BadRequest(new { message = "Tài khoản không tồn tại", status = "FAILED" });
+            return Ok(new { data = await _postService.GetAllPostByAccountId(accountId), status = "OK" });
+        }
+
         [HttpGet("tang-luot-xem/{postId}")]
         public IActionResult AddViewCount([FromRoute] int postId)
         {
