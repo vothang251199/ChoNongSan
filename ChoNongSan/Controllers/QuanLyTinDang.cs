@@ -116,7 +116,7 @@ namespace ChoNongSan.Controllers
                 return View(request);
             }
 
-            request.Device = "Web";
+            request.PlatForm = "Web";
             var result = await _postApi.CreatePost(request);
             if (!result)
             {
