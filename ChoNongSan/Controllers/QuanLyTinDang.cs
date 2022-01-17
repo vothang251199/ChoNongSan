@@ -2,6 +2,7 @@
 using ChoNongSan.ApiUsedForWeb.ViewModels;
 using ChoNongSan.Application.Common.Files;
 using ChoNongSan.ViewModels.Common;
+using ChoNongSan.ViewModels.Requests;
 using ChoNongSan.ViewModels.Requests.Common;
 using ChoNongSan.ViewModels.Requests.TinDang;
 using ChoNongSan.ViewModels.Responses;
@@ -115,6 +116,7 @@ namespace ChoNongSan.Controllers
                 return View(request);
             }
 
+            request.Device = "Web";
             var result = await _postApi.CreatePost(request);
             if (!result)
             {
@@ -167,7 +169,20 @@ namespace ChoNongSan.Controllers
         [HttpGet]
         public async Task<IActionResult> ChiTiet(int postId)
         {
+            await _postApi.AddViewCount(postId);
             var model = await _postApi.GetDetail(postId);
+            for (var i = 0; i < model.ListImage.Count; i++)
+            {
+                model.ListImage[i] = _config["ApiUrl"] + model.ListImage[i];
+            }
+
+            var a = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+            if (string.IsNullOrEmpty(a))
+                ViewBag.AccountId = 0;
+            else
+                ViewBag.AccountId = a;
+
+            ViewBag.HiddenLayOut = 1;
             return View(model);
         }
     }

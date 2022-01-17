@@ -66,6 +66,6 @@ namespace ChoNongSan.ViewModels.Responses
         public int? AccountId { get; set; }
 
         [Display(Name = "Tất cả ảnh")]
-        public List<ImagePost> ListImage { get; set; }
+        public List<string> ListImage { get; set; }
     }
 }

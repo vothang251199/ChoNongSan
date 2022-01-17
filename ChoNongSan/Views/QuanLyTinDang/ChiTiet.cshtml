@@ -3,129 +3,146 @@
 @{
     ViewData["Title"] = "Chi tiết";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var id = ViewBag.AccountId;
 }
+<style>
+    
+    .single-product-content .wishlist-btn-wrap .btn:hover {
+        background-color: #40AA54
+    }
+</style>
+<main class="main-content">
+    <div class="single-product-area section-space-y-axis-100 ">
+        <div class="container">
+            <input hidden value="@id" id="AccountId" />
+            <div class="row">
+                <div class="slider-area col-lg-6">
 
-<div>
-    <h4>Chi tiết</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PostID)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PostID)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.WeightNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.WeightNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.WeightName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.WeightName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.NameAccount)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.NameAccount)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ViewCount)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ViewCount)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Lat)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Lat)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Lng)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Lng)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CatName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CatName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusPost)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StatusPost)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TimePost)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TimePost)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Quality)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Quality)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeliver)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IsDeliver)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Expiry)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Expiry)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AccountId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AccountId)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+                    <!-- Main Slider -->
+                    <div class="swiper-container main-slider swiper-arrow with-bg_white d-flex align-items-center">
+                        @if (Model.ListImage.Count == 1)
+                        {
+                            <div class="swiper-slide">
+                                <img class="img-fluid rounded img-thumbnail" src="@Model.ListImage[0]" alt="Inner Image">
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="swiper-wrapper d-flex align-items-center">
+                                @foreach (var img in Model.ListImage)
+                                {
+                                    <div class="swiper-slide ">
+                                        <img class="img-fluid rounded img-thumbnail " src="@img" alt="Inner Image">
+                                    </div>
+
+                                    <!-- Add Arrows -->
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+
+                                }
+                            </div>
+                            <!-- Add Pagination -->
+                            <div class="  swiper-pagination "></div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-6 ">
+                    <div class="product-thumb-with-content row">
+                        <div class="col-12 order-lg-1 order-2 pt-10 pt-lg-0 mx-auto">
+                            <div class="single-product-content ">
+                                <h2 class="title">@Model.Title</h2>
+                                <div class="price-box pb-1">
+                                    <span class="new-price text-danger">@(Model.Price.Value.ToString("N0") + " VNĐ")</span>
+                                    @*<span class="old-price text-primary">$90.00</span>*@
+                                </div>
+                                <div class="rating-box-wrap pb-7">
+                                    <div class="rating-box">
+                                        <ul>
+                                            <li><i class="pe-7s-star"></i></li>
+                                            <li><i class="pe-7s-star"></i></li>
+                                            <li><i class="pe-7s-star"></i></li>
+                                            <li><i class="pe-7s-star"></i></li>
+                                            <li><i class="pe-7s-star"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="review-status ps-4">
+                                        <a href="javascript:void(0)">( 1 Đánh giá)</a>
+                                    </div>
+                                </div>
+                                <p class="short-desc mb-6">
+                                    @Model.Description
+                                </p>
+                                <ul class="quantity-with-btn pb-7">
+
+                                    <li class="wishlist-btn-wrap">
+                                        <a name="@Model.PostID" href="javascript:void(0)" id="btnAddLove" class="btn  rounded">
+                                            <i class="pe-7s-like"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="social-link pb-2 align-items-center justify-content-between">
+                                    <div class="social-link align-items-center ">
+                                        <span class="title pe-2 " style="font-weight:bold">Danh mục :</span>
+                                        <ul>
+                                            <li>
+                                                <a href="javascript:void(0)">@Model.CatName</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                                <div class="social-link align-items-center ">
+                                    <span class="title pe-2" style="font-weight:bold">Chia sẻ:</span>
+                                    <ul>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <i class="fa fa-facebook"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <i class="fa fa-youtube"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('#btnAddLove').click(function () {
+                var a = $(this).attr('name');
+                const id = $('#AccountId').val();
+                if (id == 0) {
+                    alert("Vui lòng đăng nhập để thêm tin");
+                } else {
+                    $.ajax({
+                    type: 'post',
+                    url: '@Url.Action("AddlovePost", "QuanLyTinDang")',
+                    contentType: "application/json",
+                    data: JSON.stringify(a),
+                    dataType: "json",
+                    success: function (result) {
+                        output = JSON.parse(result);
+                        alert(output.message);
+                    }
+                });
+                }
+
+            });
+        });
+    </script>
+}

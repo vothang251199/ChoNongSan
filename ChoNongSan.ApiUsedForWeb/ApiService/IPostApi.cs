@@ -32,6 +32,8 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
         Task<List<PostVmTongQuat>> ListPostNew(int number);
 
         Task<PostVmChiTiet> GetDetail(int postId);
+
+        Task AddViewCount(int postId);
     }
 
     public class PostApi : IPostApi
@@ -43,6 +45,14 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
         {
             _httpClientFactory = httpClientFactory;
             _config = config;
+        }
+
+        public async Task AddViewCount(int postId)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+
+            await client.GetAsync($"/api/tin-dang/tang-luot-xem/{postId}");
         }
 
         public async Task<string> AddPostLove(LoveRequest request)
@@ -81,6 +91,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             }
 
             requestContent.Add(new StringContent(request.CategoryID.ToString()), "categoryID");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Device) ? "Web" : request.Device), "device");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Title) ? "" : request.Title), "title");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Description) ? "" : request.Description), "description");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.PhoneNumber) ? "" : request.PhoneNumber), "phoneNumber");
@@ -93,7 +104,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             requestContent.Add(new StringContent(request.Expiry.ToString()), "expiry");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Quality) ? "" : request.Quality), "quality");
 
-            var response = await client.PostAsync("/api/tin-dang/tao-moi", requestContent);
+            var response = await client.PostAsync($"/api/tin-dang/tao-moi", requestContent);
 
             var result = await response.Content.ReadAsStringAsync();
             return response.IsSuccessStatusCode;

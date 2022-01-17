@@ -4,6 +4,7 @@ using ChoNongSan.Application.KhachHang.PostImages;
 using ChoNongSan.Data.Models;
 using ChoNongSan.Utilities.Exceptions;
 using ChoNongSan.ViewModels.Common;
+using ChoNongSan.ViewModels.Requests;
 using ChoNongSan.ViewModels.Requests.Common;
 using ChoNongSan.ViewModels.Requests.DanhMuc;
 using ChoNongSan.ViewModels.Requests.TinDang;
@@ -74,7 +75,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
         public async Task<PostVmChiTiet> GetPostById(int postID)
         {
             var post = await _context.Posts.FindAsync(postID);
-            var lsImage = await _context.ImagePosts.AsNoTracking().Where(p => p.PostId == post.PostId).ToListAsync();
+            var lsImage = await _context.ImagePosts.AsNoTracking().Where(p => p.PostId == post.PostId).Select(y => y.ImagePath).ToListAsync();
             var viewModel = new PostVmChiTiet()
             {
                 PostID = post.PostId,
