@@ -235,24 +235,30 @@ namespace ChoNongSan.Application.KhachHang.Posts
                 Expiry = request.Expiry
             };
 
-            if (!string.IsNullOrEmpty(request.Address))
-            {
-                string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
-                using (var webClient = new System.Net.WebClient())
-                {
-                    var json = webClient.DownloadString(url);
-                    // Now parse with JSON.Net
-                    var datax = (JObject)JsonConvert.DeserializeObject(json);
+			post.Location = new Data.Models.Location()
+			{
+				Lat = request.Lat,
+				Lng = request.Lng,
+			};
 
-                    post.Location = new Data.Models.Location()
-                    {
-                        Lat = Convert.ToString(datax["result"][0]["location"]["lat"]),
-                        Lng = Convert.ToString(datax["result"][0]["location"]["lng"]),
-                    };
-                }
-            }
+			//if (!string.IsNullOrEmpty(request.Address))
+			//{
+			//    string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
+			//    using (var webClient = new System.Net.WebClient())
+			//    {
+			//        var json = webClient.DownloadString(url);
+			//        // Now parse with JSON.Net
+			//        var datax = (JObject)JsonConvert.DeserializeObject(json);
 
-            if (request.ThumbnailImage != null)
+			//        post.Location = new Data.Models.Location()
+			//        {
+			//            Lat = Convert.ToString(datax["result"][0]["location"]["lat"]),
+			//            Lng = Convert.ToString(datax["result"][0]["location"]["lng"]),
+			//        };
+			//    }
+			//}
+
+			if (request.ThumbnailImage != null)
             {
                 //new ImagePost()
                 //{
