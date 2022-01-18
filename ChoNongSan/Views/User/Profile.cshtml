@@ -30,6 +30,9 @@
                         <a asp-route-tabname="DoiMK" asp-action="SwitchTabs" class="nav-link @(Model.ActiveTab == ChoNongSan.ApiUsedForWeb.ViewModels.TabProfile.DoiMK ? "active" : string.Empty)">Đổi mật khẩu</a>
                     </li>
                     <li class="nav-item">
+                        @*<form method="post" asp-controller="User" asp-action="Logout" class="nav-item">
+                                <input type="submit" class="nav-link" value="Đăng xuất" />
+                            </form>*@
                         <a class="nav-link" id="account-logout-tab" asp-controller="User" asp-action="Logout" role="tab" aria-selected="false">Đăng xuất</a>
                     </li>
                 </ul>

@@ -258,6 +258,14 @@ namespace ChoNongSan.Application.KhachHang.Posts
                     }
                 }
             }
+            else
+            {
+                post.Location = new Data.Models.Location()
+                {
+                    Lat = request.Lat,
+                    Lng = request.Lng,
+                };
+            }
 
             if (request.ThumbnailImage != null)
             {
@@ -513,7 +521,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
                 StatusPost = x.StatusPost,
                 ViewCount = x.ViewCount,
                 WeightNumber = x.WeightNumber,
-                ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.IsDefault == true).ImagePath,
+                ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.PostId == x.PostId && p.IsDefault == true).ImagePath,
                 NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.AccountId).FullName,
                 Lat = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lat,
                 Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,

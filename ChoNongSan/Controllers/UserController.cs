@@ -174,7 +174,7 @@ namespace ChoNongSan.Controllers
             return RedirectToAction("Login", "User");
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

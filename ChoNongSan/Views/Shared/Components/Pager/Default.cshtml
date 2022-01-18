@@ -1,5 +1,12 @@
 ﻿@model ChoNongSan.ViewModels.Common.PageResultBase
-
+<style>
+    .page-item.active .page-link {
+        background-color: #40AA54;
+    }
+    .page-item:hover .page-link {
+        background-color: #40AA54;
+    }
+</style>
 @{
     var urlTemplate = Url.Action() + "?pageIndex={0}";
     var request = ViewContext.HttpContext.Request;

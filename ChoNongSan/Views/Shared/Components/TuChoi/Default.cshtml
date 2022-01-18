@@ -3,74 +3,56 @@
 
 @model PageResult<PostVmTongQuat>
 
-<div class="tab-content product-tab-content">
-
-    <div class="tab-pane fade show active" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-        <div class="product-review-body">
-            <h4 class="heading mb-5">Tin bị từ chối</h4>
-            <br />
-            @if (Model.TotalRecords == 0)
-            {
-                <div style="display:flex" class="meta">
-                    <h3 style="margin:auto">
-                        <strong style="color:red">Không có tin nào trong mục này</strong>
-                    </h3>
+<h4 class="heading mb-5">Tin bị từ chối</h4>
+<hr />
+@if (Model.TotalRecords == 0)
+{
+    <div style="display:flex" class="meta">
+        <h3 style="margin:auto">
+            <strong style="color:red">Không có tin nào trong mục này</strong>
+        </h3>
+    </div>
+}
+else
+{
+    @foreach (var item in Model.Items)
+    {
+        <div class="col-12 pt-6">
+            <div class="product-item">
+                <div class="product-img img-zoom-effect">
+                    <a href="single-product.html">
+                        <img style="width:215px; height:240px" class="img-full img-thumbnail rounded" src="@item.ImageDefault" alt="Product Images">
+                    </a>
                 </div>
-            }
-            else
-            {
-                <div class="tab-content text-charcoal pt-8">
-                    <div class="tab-pane fade show active" id="list-view" role="tabpanel" aria-labelledby="list-view-tab">
-                        <div class="product-list-view row">
-                            @foreach (var item in Model.Items)
-                            {
-                                <div class="col-12 pt-6">
-                                    <div class="product-item">
-                                        <div class="product-img img-zoom-effect">
-                                            <a href="single-product.html">
-                                                <img class="img-full img-thumbnail rounded" src="@item.ImageDefault" alt="">
-                                            </a>
-                                            <div class="product-add-action">
-                                                <ul>
-                                                    <li>
-                                                        <a href="wishlist.html">
-                                                            <i class="pe-7s-like"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="product-content align-self-center">
-                                            <a class="product-name pb-2" href="single-product.html">@item.Title</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">@(item.Price.Value.ToString("N0")+ " VNĐ") / @item.WeightName</span>
-                                            </div>
-                                            <div class="rating-box pb-2">
-                                                <ul>
-                                                    <li><i class="pe-7s-star"></i></li>
-                                                    <li><i class="pe-7s-star"></i></li>
-                                                    <li><i class="pe-7s-star"></i></li>
-                                                    <li><i class="pe-7s-star"></i></li>
-                                                    <li><i class="pe-7s-star"></i></li>
-                                                </ul>
-                                            </div>
-                                            <p class="short-desc mb-0 text-wrap">Mô tả: @item.Description</p>
-                                            <p class="short-desc mb-0 text-wrap"><span style="font-weight:bold;color:red">Lý do:</span> @item.Reason</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
+                <div class="product-content align-self-center">
+                    <a class="product-name pb-2" href="single-product.html">Dried Lemon Green</a>
+                    <div class="price-box pb-1">
+                        <span class="new-price">@(item.Price.Value.ToString("N0") +" VNĐ")</span>
                     </div>
-                </div>
-                <br />
-                <br />
-                <div style="display: flex;">
-                    <div style="margin:auto">
-                        @await Component.InvokeAsync("Pager", Model)
+                    <div class="rating-box pb-2">
+                        <ul>
+                            <li><i class="pe-7s-star"></i></li>
+                            <li><i class="pe-7s-star"></i></li>
+                            <li><i class="pe-7s-star"></i></li>
+                            <li><i class="pe-7s-star"></i></li>
+                            <li><i class="pe-7s-star"></i></li>
+                        </ul>
                     </div>
+                    <p class="short-desc mb-2">
+                        @item.TimePost.Value.ToString("hh:mm dd/MM/yyyy")
+                    </p>
+                    <p class="short-desc mb-0">
+                        <span style="font-weight:bold" class="text-danger">Lý do:</span>
+                        @item.Reason
+                    </p>
                 </div>
-            }
+            </div>
         </div>
+    }
+}
+
+<div style="display: flex" class="mt-6">
+    <div style="margin:auto">
+        @await Component.InvokeAsync("Pager", Model)
     </div>
 </div>

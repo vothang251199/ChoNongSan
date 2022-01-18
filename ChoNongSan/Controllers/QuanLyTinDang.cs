@@ -44,7 +44,7 @@ namespace ChoNongSan.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(PostTabVm vm, int pageIndex = 1, int pageSize = 5)
+        public IActionResult Index(PostTabVm vm, int pageIndex = 1, int pageSize = 2)
         {
             if (vm == null)
             {

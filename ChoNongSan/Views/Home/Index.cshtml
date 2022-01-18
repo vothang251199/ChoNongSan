@@ -115,7 +115,7 @@
                                                     <strong class="new-price font-weight-bold" style="color: #d0021b; ">@(item.Price.Value.ToString("N0") + " VNĐ" )</strong>
                                                 </div>
                                                 <div class="price-box pb-1">
-                                                    <span class="new-price">@(item.TimePost.Value.ToShortDateString())</span>
+                                                    <span class="new-price">@(item.TimePost.Value.ToString("hh:mm dd/MM/yyyy"))</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -196,6 +196,7 @@
     </div>
 </div>
 <!--tin có nhiều lượt xem End-->
+
 <!--tin mới nhất Begin-->
 <div class="blog-area section-space-y-axis-100">
     <div class="container">
@@ -219,7 +220,7 @@
                             <div class="blog-content">
                                 <div class="blog-meta text-dim-gray pb-3">
                                     <ul>
-                                        <li class="date"><i class="fa fa-calendar-o me-2"></i>@p.TimePost</li>
+                                        <li class="date"><i class="fa fa-calendar-o me-2"></i>@(p.TimePost.Value.ToString("hh:mm dd/MM/yyyy"))</li>
                                         <li>
                                             <span class="comments me-3">
                                                 <a href="javascript:void(0)">2 Bình luận</a>

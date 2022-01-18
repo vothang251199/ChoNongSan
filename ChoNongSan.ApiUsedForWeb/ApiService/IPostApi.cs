@@ -91,7 +91,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             }
 
             requestContent.Add(new StringContent(request.CategoryID.ToString()), "categoryID");
-            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Device) ? "Web" : request.Device), "device");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.PlatForm) ? "Web" : request.PlatForm), "device");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Title) ? "" : request.Title), "title");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Description) ? "" : request.Description), "description");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.PhoneNumber) ? "" : request.PhoneNumber), "phoneNumber");

@@ -56,8 +56,7 @@
                         <div class="col-lg-12">
                             <div class="header-middle-wrap">
                                 <a href="/" class="col-auto header-logo">
-                                    @*<img style="height:33px; width:33px" src="~/assetsKH/images/logo.png" alt="Header Logo">
-                                        <h3 class="d-none d-sm-block" style="height:100%; width:100%;margin:5px 0 0 10px">ChoNongSan</h3>*@
+
                                     <img style="width:170px; height:33px" src="~/assetsKH/images/logo/logo-chu-removebg.png" alt="logo" />
                                 </a>
                                 <div class="w-50 d-none d-lg-block col-auto px-3">
@@ -83,11 +82,9 @@
                                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingButton">
                                                 @if (!String.IsNullOrEmpty(User.Identity.Name))
                                                 {
-                                                    <li><a class="dropdown-item" style="height:32px" href="/User/Profile">Quản lý tài khoản</a></li>
+                                                    <li><a class="dropdown-item" style="height:32px" asp-controller="User" asp-action="Profile">Quản lý tài khoản</a></li>
                                                     <li>
-                                                        <form asp-controller="User" asp-action="Logout" method="post">
-                                                            <input type="submit" class="btn btn-link dropdown-item" style="padding:4px 16px" value="Đăng xuất" />
-                                                        </form>
+                                                        <a class="dropdown-item" style="height:32px" asp-controller="User" asp-action="Logout">Đăng xuất</a>
                                                     </li>
                                                 }
                                                 else
