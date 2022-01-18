@@ -239,7 +239,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
 				Expiry = request.Expiry
 			};
 
-			if (PlatformEnum.Web.Equals(request.PlatForm))
+			if (PlatformEnum.Web.Equals(request.Platform))
 			{
 				if (!string.IsNullOrEmpty(request.Address))
 				{
@@ -521,7 +521,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
 				StatusPost = x.StatusPost,
 				ViewCount = x.ViewCount,
 				WeightNumber = x.WeightNumber,
-				ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.IsDefault == true).ImagePath,
+				ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.IsDefault == true && p.PostId == x.PostId).ImagePath,
 				NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.AccountId).FullName,
 				Lat = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lat,
 				Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,
