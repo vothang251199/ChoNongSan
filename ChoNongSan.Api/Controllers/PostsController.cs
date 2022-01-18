@@ -31,7 +31,7 @@ namespace ChoNongSan.Api.Controllers
             _context = context;
         }
 
-        [HttpPost("all-post-by-accountId")]
+        [HttpGet("all-post-by-accountId/{accountId}")]
         public async Task<IActionResult> GetAllPostByAccountId(int accountId)
         {
             var user = await _context.Accounts.FindAsync(accountId);
