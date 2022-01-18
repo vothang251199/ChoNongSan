@@ -315,5 +315,12 @@ namespace ChoNongSan.Controllers
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validateToken);
             return principal;
         }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult SoDuTaiKhoan()
+        {
+            return View();
+        }
     }
 }

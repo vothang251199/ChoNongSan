@@ -19,15 +19,18 @@ else
     {
         <div class="col-12 pt-6">
             <div class="product-item">
-                <div class="product-img img-zoom-effect my-auto" >
+                <div class="product-img img-zoom-effect my-auto position-relative" style="width: 235px;">
                     <a href="single-product.html">
-                        <img class="img-full img-thumbnail rounded " style="width:215px; height:240px" src="@item.ImageDefault" alt="Product Images">
+                        <img class="img-full img-thumbnail rounded " style=" height:240px" src="@item.ImageDefault" alt="Product Images">
                     </a>
+                    <div class="position-absolute d-flex align-items-center" style="flex-direction:column;color:white;width:35px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
+                        <p class="my-0" style="color:white;font-weight:lighter">@item.NumImg</p>
+                    </div>
                 </div>
                 <div class="product-content align-self-center">
                     <a class="product-name pb-2" href="single-product.html">Dried Lemon Green</a>
                     <div class="price-box pb-1">
-                        <span class="new-price">@(item.Price.Value.ToString("N0") +" VNĐ")</span>
+                        <span class="new-price text-danger">@(item.Price.Value.ToString("N0") +" VNĐ")</span>
                     </div>
                     <div class="rating-box pb-2">
                         <ul>
@@ -41,7 +44,11 @@ else
                     <p class="short-desc mb-0">
                         @item.TimePost.Value.ToString("hh:mm dd/MM/yyyy")
                     </p>
+                    
                 </div>
+                <button class="p-0 btn btn-link align-self-end mb-2 me-2" style="flex-direction:column">
+                    <img  style=" height:35px" src="~/assetsKH/icon/btn-an-tin.png" />
+                </button>
             </div>
         </div>
     }

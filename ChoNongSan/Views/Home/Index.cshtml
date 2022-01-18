@@ -12,6 +12,7 @@
 }
 
 <style>
+    
     .product-list-item .product-add-action ul li a {
         background-color: #40AA54;
     }
@@ -28,27 +29,42 @@
             background-color: black;
         }
 
-    .product-tab-nav li a {
+    /*.product-tab-nav li a {
         font-family: Arial, sans-serif;
-    }
+    }*/
 
         .product-tab-nav li a.active {
             color: #40AA54;
-            font-weight: 900;
+            font-weight: bold;
         }
 
             .product-tab-nav li a.active div {
                 border: 3px solid #40AA54;
+                box-shadow: 0 2px 5px;
             }
 
-        .product-tab-nav li a:hover {
-            color: #40AA54;
-            font-weight: 900;
-        }
+    .product-tab-nav li a:hover {
+        color: black;
+        font-weight: bold;
+    }
 
         .product-tab-nav li a div {
-            border: 2px outset #808080;
+            border: 1px solid #808080;
         }
+    a.product-name:hover {
+        color: #40AA54;
+    }
+    a.font-weight-bold:hover {
+        color: #40AA54;
+    }
+    
+    div.blog-content:hover h5.title.mb-4 a {
+        color: #40AA54;
+    }
+    div.blog-content:hover div.button-wrap a.btn-custom-size {
+        background-color: #40AA54;
+        color: white;
+    }
 </style>
 
 <div class="product-area section-space-top-100">
@@ -62,7 +78,7 @@
                             <div class="product-tab-icon rounded img-thumbnail  p-0" style=" background-color: #e3f0de; margin-bottom: 15px">
                                 <img style="margin:15px;height:66px; width:66px" src="~/assetsKH/images/icon-all-raucuqua-removebg.png" />
                             </div>
-                            Tất cả
+                            <label>Tất cả</label>
                         </a>
                     </li>
                     @foreach (var i in Model.ListCat)
@@ -72,7 +88,7 @@
                                 <div class="product-tab-icon rounded img-thumbnail  p-0" style=" background-color: #e3f0de; margin-bottom: 15px ">
                                     <img style="margin:15px;height:66px; width:66px" src="@i.Image" alt="Product Icon">
                                 </div>
-                                @i.CateName
+                                <label>@i.CateName</label>
                             </a>
                         </li>
                     }
@@ -110,7 +126,10 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <a class="product-name" href="single-product.html">@item.Title</a>
+                                                <div class="price-box pb-1">
+                                                    <i class="bi bi-pencil-square" style="margin-right:10px"></i>
+                                                    <a class=" font-weight-bold" href="javascript:void(0)">@item.Title</a>
+                                                </div>
                                                 <div class="price-box pb-1">
                                                     <strong class="new-price font-weight-bold" style="color: #d0021b; ">@(item.Price.Value.ToString("N0") + " VNĐ" )</strong>
                                                 </div>

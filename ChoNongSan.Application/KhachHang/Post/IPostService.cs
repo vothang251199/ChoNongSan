@@ -30,7 +30,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
 {
     public interface IPostService
     {
-        Task<int> CreatePost(CreatePostRequest request);
+        Task<bool> CreatePost(CreatePostRequest request);
 
         Task<bool> HiddenPost(int PostID);
 
@@ -217,96 +217,97 @@ namespace ChoNongSan.Application.KhachHang.Posts
             return data;
         }
 
-        public async Task<int> CreatePost(CreatePostRequest request)
+        public async Task<bool> CreatePost(CreatePostRequest request)
         {
-            var post = new Post()
+            try
             {
-                Title = request.Title,
-                Description = request.Description,
-                WeightNumber = request.WeightNumber,
-                Price = request.Price,
-                Quality = request.Quality,
-                Address = request.Address,
-                PhoneNumber = request.PhoneNumber,
-                IsDeliver = request.IsDeliver,
-                StatusPost = 0,
-                ViewCount = 0,
-                IsHidden = false,
-                PostTime = DateTime.Now,
-                AccountId = (int)request.AccountID,
-                CategoryId = request.CategoryID,
-                WeightId = request.WeightId,
-                Expiry = request.Expiry
-            };
-
-            if (PlatformEnum.Web.Equals(request.PlatForm))
-            {
-                if (!string.IsNullOrEmpty(request.Address))
+                var post = new Post()
                 {
-                    string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
-                    using (var webClient = new System.Net.WebClient())
-                    {
-                        var json = webClient.DownloadString(url);
-                        // Now parse with JSON.Net
-                        var datax = (JObject)JsonConvert.DeserializeObject(json);
-
-                        post.Location = new Data.Models.Location()
-                        {
-                            Lat = Convert.ToString(datax["result"][0]["location"]["lat"]),
-                            Lng = Convert.ToString(datax["result"][0]["location"]["lng"]),
-                        };
-                    }
-                }
-            }
-            else
-            {
-                post.Location = new Data.Models.Location()
-                {
-                    Lat = request.Lat,
-                    Lng = request.Lng,
+                    Title = request.Title,
+                    Description = request.Description,
+                    WeightNumber = request.WeightNumber,
+                    Price = request.Price,
+                    Quality = request.Quality,
+                    Address = request.Address,
+                    PhoneNumber = request.PhoneNumber,
+                    IsDeliver = request.IsDeliver,
+                    StatusPost = 0,
+                    ViewCount = 0,
+                    IsHidden = false,
+                    PostTime = DateTime.Now,
+                    AccountId = (int)request.AccountID,
+                    CategoryId = request.CategoryID,
+                    WeightId = request.WeightId,
+                    Expiry = request.Expiry
                 };
-            }
+                PlatformEnum check = PlatformEnum.Web;
+                if (request.PlatForm.Equals("App"))
+                    check = PlatformEnum.App;
 
-            if (request.ThumbnailImage != null)
-            {
-                //new ImagePost()
-                //{
-                //    ImagePath = await this.SaveFile(item),
-                //    IsDefault = true,
-                //}
-                var lsImg = new List<ImagePost>();
-                for (var i = 0; i < request.ThumbnailImage.Count; i++)
+                if (PlatformEnum.Web == check)
                 {
-                    if (i == 0)
+                    if (!string.IsNullOrEmpty(request.Address))
                     {
-                        lsImg.Add(new ImagePost()
+                        string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
+                        using (var webClient = new System.Net.WebClient())
                         {
-                            ImagePath = await this.SaveFile(request.ThumbnailImage[i]),
-                            IsDefault = true,
-                        });
-                    }
-                    else
-                    {
-                        lsImg.Add(new ImagePost()
-                        {
-                            ImagePath = await this.SaveFile(request.ThumbnailImage[i]),
-                            IsDefault = false,
-                        });
+                            var json = webClient.DownloadString(url);
+                            // Now parse with JSON.Net
+                            var datax = (JObject)JsonConvert.DeserializeObject(json);
+
+                            post.Location = new Data.Models.Location()
+                            {
+                                Lat = Convert.ToString(datax["result"][0]["location"]["lat"]),
+                                Lng = Convert.ToString(datax["result"][0]["location"]["lng"]),
+                            };
+                        }
                     }
                 }
-                post.ImagePosts = lsImg;
-                //post.ImagePosts = new List<ImagePost>()
-                //{
-                //    new ImagePost()
-                //    {
-                //        ImagePath = await this.SaveFile(item),
-                //        IsDefault = true,
-                //    }
-                //};
-            }
+                else
+                {
+                    post.Location = new Data.Models.Location()
+                    {
+                        Lat = request.Lat,
+                        Lng = request.Lng,
+                    };
+                }
 
-            _context.Posts.Add(post);
-            return await _context.SaveChangesAsync();
+                if (request.ThumbnailImage != null)
+                {
+                    var lsImg = new List<ImagePost>();
+                    for (var i = 0; i < request.ThumbnailImage.Count; i++)
+                    {
+                        if (i == 0)
+                        {
+                            lsImg.Add(new ImagePost()
+                            {
+                                ImagePath = await this.SaveFile(request.ThumbnailImage[i]),
+                                IsDefault = true,
+                            });
+                        }
+                        else
+                        {
+                            lsImg.Add(new ImagePost()
+                            {
+                                ImagePath = await this.SaveFile(request.ThumbnailImage[i]),
+                                IsDefault = false,
+                            });
+                        }
+                    }
+                    post.ImagePosts = lsImg;
+                }
+                var user = await _context.Accounts.FindAsync(request.AccountID);
+                user.NumberOfPost = user.NumberOfPost + 1;
+
+                _context.Posts.Add(post);
+                _context.Accounts.Update(user);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task<bool> HiddenPost(int PostID)
