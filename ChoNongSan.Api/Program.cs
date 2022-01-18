@@ -20,7 +20,7 @@ namespace ChoNongSan.Api
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("http://localhost:5001", "http://192.168.1.7:5001");
+                    webBuilder.UseUrls("http://localhost:5001", "http://192.168.1.6:5001");
                     webBuilder.UseStartup<Startup>();
                 });
     }
