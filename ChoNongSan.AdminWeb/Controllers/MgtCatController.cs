@@ -33,6 +33,10 @@ namespace ChoNongSan.AdminWeb.Controllers
                 PageSize = pageSize
             };
             var data = await _categoryApi.GetCatPaging(request);
+            foreach (var cat in data.Items)
+            {
+                cat.Image = _config["ApiUrl"] + cat.Image;
+            }
             ViewBag.Keyword = keyword;
             ViewBag.Link = "/MgtCat";
             ViewBag.Obj = data;
@@ -46,6 +50,7 @@ namespace ChoNongSan.AdminWeb.Controllers
         }
 
         [HttpPost]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create(CreateCatRequest request)
         {
             if (!ModelState.IsValid)
@@ -85,6 +90,7 @@ namespace ChoNongSan.AdminWeb.Controllers
         }
 
         [HttpPost]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Edit(UpdateCatRequest request)
         {
             if (!ModelState.IsValid)

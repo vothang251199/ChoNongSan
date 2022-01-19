@@ -12,7 +12,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 {
     public interface ICtvApi
     {
-        Task<PageResult<CtvVm>> GetCtvPaging(GetPagingCommonRequest request);
+        Task<PageResult<AccountVm>> GetCtvPaging(GetPagingCommonRequest request);
 
         Task<string> CreateCtv(CreateCTVRequest request);
 
@@ -43,15 +43,13 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             return data;
         }
 
-        public async Task<PageResult<CtvVm>> GetCtvPaging(GetPagingCommonRequest request)
+        public async Task<PageResult<AccountVm>> GetCtvPaging(GetPagingCommonRequest request)
         {
-            var apiurl = _config["ApiUrl"];
-
             var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync(apiurl + $"/api/admin/ctv-phan-trang?Keyword=" +
-                $"{request.Keyword}&PageIndex={request.PageIndex}&PageSize={request.PageSize}");
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+            var response = await client.GetAsync($"/api/tai-khoan/all-account?Keyword={request.Keyword}&ById={request.ById}&PageIndex={request.PageIndex}&PageSize={request.PageSize}");
             var body = await response.Content.ReadAsStringAsync();
-            var lsCat = JsonConvert.DeserializeObject<PageResult<CtvVm>>(body);
+            var lsCat = JsonConvert.DeserializeObject<PageResult<AccountVm>>(body);
             return lsCat;
         }
 
@@ -64,7 +62,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Password) ? "" : request.Password), "password");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.ConfirmPassword) ? "" : request.ConfirmPassword), "confirmPassword");
 
-            var response = await client.PostAsync("/api/admin/them-ctv", requestContent);
+            var response = await client.PostAsync("/api/tai-khoan/them-ctv", requestContent);
 
             var data = await response.Content.ReadAsStringAsync();
             return data;
@@ -78,7 +76,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Password) ? "" : request.Password), "password");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.ConfirmPassword) ? "" : request.ConfirmPassword), "confirmPassword");
 
-            var response = await client.PutAsync($"/api/admin/doi-mat-khau-ctv/{request.AccountID}", requestContent);
+            var response = await client.PutAsync($"/api/tai-khoan/doi-mat-khau-ctv/{request.AccountID}", requestContent);
 
             var data = await response.Content.ReadAsStringAsync();
             return data;

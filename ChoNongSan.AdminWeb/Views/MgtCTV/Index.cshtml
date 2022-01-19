@@ -1,6 +1,6 @@
 ﻿@using ChoNongSan.ViewModels.Common
 @using ChoNongSan.ViewModels.Responses
-@model PageResult<CtvVm>
+@model PageResult<AccountVm>
 
 @{
     ViewData["Title"] = "Quản lý CTV";
@@ -37,7 +37,7 @@
                     @Html.DisplayFor(modelItem => item.UserName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Phone)
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)

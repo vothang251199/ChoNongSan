@@ -18,7 +18,7 @@ namespace ChoNongSan.ViewModels.Common
         {
             get
             {
-                var pageCount = (double)TotalRecords / PageSize;
+                var pageCount = (double)TotalRecords / (PageSize == 0 ? TotalRecords : PageSize);
                 return (int)Math.Ceiling(pageCount);
             }
         }
