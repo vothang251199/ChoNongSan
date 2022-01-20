@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -53,12 +54,23 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_config["ApiUrl"]);
             var requestContent = new MultipartFormDataContent();
+            if (request.Image != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.Image.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.Image.OpenReadStream().Length);
+                }
+
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "image", request.Image.FileName);
+            }
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.CatName) ? "" : request.CatName), "catName");
 
             var response = await client.PostAsync("/api/danh-muc/them-moi-danh-muc", requestContent);
 
-            var data = await response.Content.ReadAsStringAsync();
-            return data;
+            var datax = await response.Content.ReadAsStringAsync();
+            return datax;
         }
 
         public async Task<string> EditCat(UpdateCatRequest request)
@@ -66,12 +78,23 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_config["ApiUrl"]);
             var requestContent = new MultipartFormDataContent();
+            if (request.Image != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.Image.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.Image.OpenReadStream().Length);
+                }
+
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                requestContent.Add(bytes, "image", request.Image.FileName);
+            }
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.CatName) ? "" : request.CatName), "catName");
 
             var response = await client.PutAsync($"/api/danh-muc/cap-nhat-danh-muc/{request.CatID}", requestContent);
 
-            var data = await response.Content.ReadAsStringAsync();
-            return data;
+            var datax = await response.Content.ReadAsStringAsync();
+            return datax;
         }
 
         public async Task<string> GetCatById(int catId)

@@ -25,8 +25,8 @@ namespace ChoNongSan.Api.Controllers
             _context = context;
         }
 
-        [HttpGet("danh-muc/{CategoryID}")]
-        public async Task<IActionResult> GetCatById(int CategoryID)
+        [HttpGet("{CategoryID}")]
+        public async Task<IActionResult> GetCatById([FromRoute] int CategoryID)
         {
             var cat = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.CategoryId == CategoryID && x.IsDelete == false);
             if (cat == null) return BadRequest(new { message = "Không tìm thấy danh mục", status = "FAILED" });
@@ -57,10 +57,15 @@ namespace ChoNongSan.Api.Controllers
                 return BadRequest(ModelState);
             }
             var catExist = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.CateName.ToLower().Contains(request.CatName.ToLower()));
+            int result = 0;
             if (catExist != null)
-                return BadRequest(new { message = "Danh mục đã tồn tại", status = "FAILED" });
-
-            var result = await _catService.CreateCat(request);
+            {
+                if (catExist.IsDelete == false)
+                {
+                    return BadRequest(new { message = "Danh mục đã tồn tại", status = "FAILED" });
+                }
+            }
+            result = await _catService.CreateCat(request, catExist);
             if (result == 0)
                 return BadRequest(new { message = "Thêm danh mục thất bại", status = "FAILED" });
             return Ok(new { message = "Thêm danh mục thành công", status = "OK" });

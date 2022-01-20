@@ -3,73 +3,54 @@
 
 @model PageResult<PostVmTongQuat>
 
-<div class="tab-content product-tab-content">
-
-    <div class="tab-pane fade show active" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-        <div class="product-review-body">
-            <h4 class="heading mb-5">Tin đợi duyệt</h4>
-            <br />
-            @if (Model.TotalRecords == 0)
-            {
-                <div style="display:flex" class="meta">
-                    <h3 style="margin:auto">
-                        <strong style="color:red">Không có tin nào trong mục này</strong>
-                    </h3>
-                </div>
-            }
-            else
-            {
-                <div class="tab-content text-charcoal pt-8">
-                    <div class="tab-pane fade show active" id="list-view" role="tabpanel" aria-labelledby="list-view-tab">
-                        <div class="product-list-view row">
-                            @foreach (var item in Model.Items)
-                            {
-                                <div class="col-12 pt-6">
-                                    <div class="product-item">
-                                        <div class="product-img img-zoom-effect">
-                                            <a href="single-product.html">
-                                                <img class="img-full img-thumbnail rounded" src="@item.ImageDefault" alt="">
-                                            </a>
-                                            <div class="product-add-action">
-                                                <ul>
-                                                    <li>
-                                                        <a href="wishlist.html">
-                                                            <i class="pe-7s-like"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="product-content align-self-center">
-                                            <a class="product-name pb-2" href="single-product.html">@item.Title</a>
-                                            <div class="price-box pb-1">
-                                                <span class="new-price">@(item.Price.Value.ToString("N0")+ " VNĐ") / @item.WeightName</span>
-                                            </div>
-                                            <div class="rating-box pb-2">
-                                                <ul>
-                                                    <li><i class="pe-7s-star"></i></li>
-                                                    <li><i class="pe-7s-star"></i></li>
-                                                    <li><i class="pe-7s-star"></i></li>
-                                                    <li><i class="pe-7s-star"></i></li>
-                                                    <li><i class="pe-7s-star"></i></li>
-                                                </ul>
-                                            </div>
-                                            <p class="short-desc mb-0 text-wrap">Mô tả: @item.Description</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
+<h4 class="heading mb-5">Tin đợi duyệt</h4>
+<hr />
+@if (Model.TotalRecords == 0)
+{
+    <div style="display:flex" class="meta">
+        <h3 style="margin:auto">
+            <strong style="color:red">Không có tin nào trong mục này</strong>
+        </h3>
+    </div>
+}
+else
+{
+    @foreach (var item in Model.Items)
+    {
+        <div class="col-12 pt-6">
+            <div class="product-item">
+                <div class="product-img img-zoom-effect my-auto position-relative" style="width: 235px;">
+                    <a href="single-product.html">
+                        <img class="img-full img-thumbnail rounded " style=" height:240px" src="@item.ImageDefault" alt="Product Images">
+                    </a>
+                    <div class="position-absolute d-flex align-items-center" style="flex-direction:column;color:white;width:35px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
+                        <p class="my-0" style="color:white;font-weight:lighter">@item.NumImg</p>
                     </div>
                 </div>
-                <br />
-                <br />
-                <div style="display: flex;">
-                    <div style="margin:auto">
-                        @await Component.InvokeAsync("Pager", Model)
+                <div class="product-content align-self-center">
+                    <a class="product-name pb-2" href="single-product.html">Dried Lemon Green</a>
+                    <div class="price-box pb-1">
+                        <span class="new-price text-danger">@(item.Price.Value.ToString("N0") +" VNĐ")</span>
                     </div>
+                    <div class="rating-box pb-2">
+                        <ul>
+                            <li><i class="pe-7s-star"></i></li>
+                            <li><i class="pe-7s-star"></i></li>
+                            <li><i class="pe-7s-star"></i></li>
+                            <li><i class="pe-7s-star"></i></li>
+                            <li><i class="pe-7s-star"></i></li>
+                        </ul>
+                    </div>
+                    <p class="short-desc mb-0">
+                        @item.TimePost.Value.ToString("hh:mm dd/MM/yyyy")
+                    </p>
                 </div>
-            }
+            </div>
         </div>
+    }
+}
+<div style="display: flex" class="mt-6">
+    <div style="margin:auto">
+        @await Component.InvokeAsync("Pager", Model)
     </div>
 </div>

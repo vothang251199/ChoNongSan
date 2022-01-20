@@ -15,6 +15,7 @@ namespace ChoNongSan.ViewModels.Responses
         [Display(Name = "Tên danh mục")]
         public string CateName { get; set; }
 
+        [Display(Name = "Ảnh")]
         public string Image { get; set; }
     }
 }

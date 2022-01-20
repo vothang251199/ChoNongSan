@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +14,10 @@ namespace ChoNongSan.ViewModels.Requests.DanhMuc
         public int CatID { get; set; }
 
         [Display(Name = "Tên danh mục")]
-        [Required(ErrorMessage = "Vui lòng nhập tên dannh mục")]
         public string CatName { get; set; }
+
+        [Display(Name = "Ảnh")]
+        [Required(ErrorMessage = "Vui lòng ảnh")]
+        public IFormFile Image { get; set; }
     }
 }

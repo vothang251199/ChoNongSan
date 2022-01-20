@@ -86,7 +86,7 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./app/assets/es6/constant/theme-constant.js":
+/***/ "/assetsAdmin/es6/constant/theme-constant.js":
 /*!***************************************************!*\
   !*** ./app/assets/es6/constant/theme-constant.js ***!
   \***************************************************/
@@ -98,7 +98,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n\r\nconst ThemeConstant = {\r
 
 /***/ }),
 
-/***/ "./app/assets/es6/pages/dashboard-e-commerce.js":
+/***/ "/assets/es6/pages/dashboard-e-commerce.js":
 /*!******************************************************!*\
   !*** ./app/assets/es6/pages/dashboard-e-commerce.js ***!
   \******************************************************/

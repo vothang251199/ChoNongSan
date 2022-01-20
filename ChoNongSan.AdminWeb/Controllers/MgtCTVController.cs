@@ -24,11 +24,12 @@ namespace ChoNongSan.AdminWeb.Controllers
             _config = config;
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 2)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 5)
         {
             var request = new GetPagingCommonRequest()
             {
                 Keyword = keyword,
+                ById = 2,
                 PageIndex = pageIndex,
                 PageSize = pageSize
             };

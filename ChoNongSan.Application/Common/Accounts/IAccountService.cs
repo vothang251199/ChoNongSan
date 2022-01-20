@@ -1,6 +1,8 @@
 ﻿using ChoNongSan.Application.Common.Files;
 using ChoNongSan.Data.Models;
 using ChoNongSan.Utilities.Extenstions;
+using ChoNongSan.ViewModels.Common;
+using ChoNongSan.ViewModels.Requests.Common;
 using ChoNongSan.ViewModels.Requests.TaiKhoan;
 using ChoNongSan.ViewModels.Requests.TaiKhoan.KhachHang;
 using ChoNongSan.ViewModels.Responses;
@@ -11,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
@@ -20,7 +23,7 @@ namespace ChoNongSan.Application.Common.Accounts
 {
     public interface IAccountService
     {
-        Task<List<Account>> GetAll();
+        Task<PageResult<AccountVm>> GetAll(GetPagingCommonRequest request);
 
         Task<AccountVm> GetAccountById(int accountID);
 
@@ -88,9 +91,64 @@ namespace ChoNongSan.Application.Common.Accounts
             }
         }
 
-        public async Task<List<Account>> GetAll()
+        public async Task<PageResult<AccountVm>> GetAll(GetPagingCommonRequest request)
         {
-            return await _context.Accounts.ToListAsync();
+            var lsUser = await _context.Accounts.Where(x => x.IsDelete == false).ToListAsync();
+            if (!String.IsNullOrEmpty(request.Keyword))
+            {
+                request.Keyword = request.Keyword.ToLower();
+                lsUser = lsUser.Where(x => x.FullName.Contains(request.Keyword) || x.UserName.Contains(request.Keyword)
+                 || x.PhoneNumber.Contains(request.Keyword) || x.Email.Contains(request.Keyword)).ToList();
+            }
+
+            if (request.ById != null && request.ById != 0)
+            {
+                lsUser = lsUser.Where(x => x.RolesId == request.ById).ToList();
+            }
+
+            var totalRow = lsUser.Count;
+            List<AccountVm> data;
+            if (request.PageIndex != 0 && request.PageSize != 0)
+            {
+                data = lsUser.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new AccountVm()
+                {
+                    AccountId = x.AccountId,
+                    FullName = x.FullName,
+                    UserName = x.UserName,
+                    Address = x.Address,
+                    Avatar = x.Avatar,
+                    CreateDate = x.CreateDate,
+                    Email = x.Email,
+                    NumberOfPost = x.NumberOfPost,
+                    PhoneNumber = x.PhoneNumber,
+                }).ToList();
+            }
+            else
+            {
+                data = lsUser.Select(x => new AccountVm()
+                {
+                    AccountId = x.AccountId,
+                    FullName = x.FullName,
+                    UserName = x.UserName,
+                    Address = x.Address,
+                    Avatar = x.Avatar,
+                    CreateDate = x.CreateDate,
+                    Email = x.Email,
+                    NumberOfPost = x.NumberOfPost,
+                    PhoneNumber = x.PhoneNumber,
+                }).ToList();
+            }
+
+            var pageResult = new PageResult<AccountVm>()
+            {
+                TotalRecords = totalRow,
+                Items = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
+            };
+            return pageResult;
         }
 
         public async Task<LoginVm> Login(LoginRequest request)

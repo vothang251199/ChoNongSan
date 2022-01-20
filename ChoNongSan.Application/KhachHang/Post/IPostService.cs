@@ -28,9 +28,9 @@ using System.Xml.Linq;
 
 namespace ChoNongSan.Application.KhachHang.Posts
 {
-	public interface IPostService
-	{
-		Task<int> CreatePost(CreatePostRequest request);
+    public interface IPostService
+    {
+        Task<bool> CreatePost(CreatePostRequest request);
 
 		Task<bool> HiddenPost(int PostID);
 
@@ -217,97 +217,98 @@ namespace ChoNongSan.Application.KhachHang.Posts
 			return data;
 		}
 
-		public async Task<int> CreatePost(CreatePostRequest request)
-		{
-			var post = new Post()
-			{
-				Title = request.Title,
-				Description = request.Description,
-				WeightNumber = request.WeightNumber,
-				Price = request.Price,
-				Quality = request.Quality,
-				Address = request.Address,
-				PhoneNumber = request.PhoneNumber,
-				IsDeliver = request.IsDeliver,
-				StatusPost = 0,
-				ViewCount = 0,
-				IsHidden = false,
-				PostTime = DateTime.Now,
-				AccountId = (int)request.AccountID,
-				CategoryId = request.CategoryID,
-				WeightId = request.WeightId,
-				Expiry = request.Expiry
-			};
+        public async Task<bool> CreatePost(CreatePostRequest request)
+        {
+            try
+            {
+                var post = new Post()
+                {
+                    Title = request.Title,
+                    Description = request.Description,
+                    WeightNumber = request.WeightNumber,
+                    Price = request.Price,
+                    Quality = request.Quality,
+                    Address = request.Address,
+                    PhoneNumber = request.PhoneNumber,
+                    IsDeliver = request.IsDeliver,
+                    StatusPost = 0,
+                    ViewCount = 0,
+                    IsHidden = false,
+                    PostTime = DateTime.Now,
+                    AccountId = (int)request.AccountID,
+                    CategoryId = request.CategoryID,
+                    WeightId = request.WeightId,
+                    Expiry = request.Expiry
+                };
+                PlatformEnum check = PlatformEnum.Web;
+                if (request.PlatForm.Equals("App"))
+                    check = PlatformEnum.App;
 
-			if (PlatformEnum.Web.Equals(request.Platform))
-			{
-				if (!string.IsNullOrEmpty(request.Address))
-				{
-					string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
-					using (var webClient = new System.Net.WebClient())
-					{
-						var json = webClient.DownloadString(url);
-						// Now parse with JSON.Net
-						var datax = (JObject)JsonConvert.DeserializeObject(json);
+                if (PlatformEnum.Web == check)
+                {
+                    if (!string.IsNullOrEmpty(request.Address))
+                    {
+                        string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
+                        using (var webClient = new System.Net.WebClient())
+                        {
+                            var json = webClient.DownloadString(url);
+                            // Now parse with JSON.Net
+                            var datax = (JObject)JsonConvert.DeserializeObject(json);
 
-						post.Location = new Data.Models.Location()
-						{
-							Lat = Convert.ToString(datax["result"][0]["location"]["lat"]),
-							Lng = Convert.ToString(datax["result"][0]["location"]["lng"]),
-						};
-					}
-				}
-			}
-			else
-			{
-				post.Location = new Data.Models.Location()
-				{
-					Lat = request.Lat,
-					Lng = request.Lng,
-				};
-			}
+                            post.Location = new Data.Models.Location()
+                            {
+                                Lat = Convert.ToString(datax["result"][0]["location"]["lat"]),
+                                Lng = Convert.ToString(datax["result"][0]["location"]["lng"]),
+                            };
+                        }
+                    }
+                }
+                else
+                {
+                    post.Location = new Data.Models.Location()
+                    {
+                        Lat = request.Lat,
+                        Lng = request.Lng,
+                    };
+                }
 
-			if (request.ThumbnailImage != null)
-			{
-				//new ImagePost()
-				//{
-				//    ImagePath = await this.SaveFile(item),
-				//    IsDefault = true,
-				//}
-				var lsImg = new List<ImagePost>();
-				for (var i = 0; i < request.ThumbnailImage.Count; i++)
-				{
-					if (i == 0)
-					{
-						lsImg.Add(new ImagePost()
-						{
-							ImagePath = await this.SaveFile(request.ThumbnailImage[i]),
-							IsDefault = true,
-						});
-					}
-					else
-					{
-						lsImg.Add(new ImagePost()
-						{
-							ImagePath = await this.SaveFile(request.ThumbnailImage[i]),
-							IsDefault = false,
-						});
-					}
-				}
-				post.ImagePosts = lsImg;
-				//post.ImagePosts = new List<ImagePost>()
-				//{
-				//    new ImagePost()
-				//    {
-				//        ImagePath = await this.SaveFile(item),
-				//        IsDefault = true,
-				//    }
-				//};
-			}
+                if (request.ThumbnailImage != null)
+                {
+                    var lsImg = new List<ImagePost>();
+                    for (var i = 0; i < request.ThumbnailImage.Count; i++)
+                    {
+                        if (i == 0)
+                        {
+                            lsImg.Add(new ImagePost()
+                            {
+                                ImagePath = await this.SaveFile(request.ThumbnailImage[i]),
+                                IsDefault = true,
+                            });
+                        }
+                        else
+                        {
+                            lsImg.Add(new ImagePost()
+                            {
+                                ImagePath = await this.SaveFile(request.ThumbnailImage[i]),
+                                IsDefault = false,
+                            });
+                        }
+                    }
+                    post.ImagePosts = lsImg;
+                }
+                var user = await _context.Accounts.FindAsync(request.AccountID);
+                user.NumberOfPost = user.NumberOfPost + 1;
 
-			_context.Posts.Add(post);
-			return await _context.SaveChangesAsync();
-		}
+                _context.Posts.Add(post);
+                _context.Accounts.Update(user);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
 		public async Task<bool> HiddenPost(int PostID)
 		{
@@ -506,29 +507,29 @@ namespace ChoNongSan.Application.KhachHang.Posts
 			return data;
 		}
 
-		public async Task<List<PostVmTongQuat>> GetAllPostByAccountId(int accountId)
-		{
-			var lsPost = await _context.Posts.AsNoTracking().Where(x => x.AccountId == accountId).ToListAsync();
-			var data = lsPost.Select(x => new PostVmTongQuat()
-			{
-				Title = x.Title,
-				PostID = x.PostId,
-				Address = x.Address,
-				Description = x.Description,
-				Price = x.Price,
-				Reason = x.Reason,
-				TimePost = x.PostTime,
-				StatusPost = x.StatusPost,
-				ViewCount = x.ViewCount,
-				WeightNumber = x.WeightNumber,
-				ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.IsDefault == true && p.PostId == x.PostId).ImagePath,
-				NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.AccountId).FullName,
-				Lat = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lat,
-				Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,
-				NumImg = _context.ImagePosts.AsNoTracking().Where(p => p.PostId == x.PostId).ToList().Count,
-				WeightName = _context.WeightTypes.AsNoTracking().FirstOrDefault(p => p.WeightId == x.WeightId).WeightName,
-			}).ToList();
-			return data;
-		}
-	}
+        public async Task<List<PostVmTongQuat>> GetAllPostByAccountId(int accountId)
+        {
+            var lsPost = await _context.Posts.AsNoTracking().Where(x => x.AccountId == accountId).ToListAsync();
+            var data = lsPost.Select(x => new PostVmTongQuat()
+            {
+                Title = x.Title,
+                PostID = x.PostId,
+                Address = x.Address,
+                Description = x.Description,
+                Price = x.Price,
+                Reason = x.Reason,
+                TimePost = x.PostTime,
+                StatusPost = x.StatusPost,
+                ViewCount = x.ViewCount,
+                WeightNumber = x.WeightNumber,
+                ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.PostId == x.PostId && p.IsDefault == true).ImagePath,
+                NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.AccountId).FullName,
+                Lat = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lat,
+                Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,
+                NumImg = _context.ImagePosts.AsNoTracking().Where(p => p.PostId == x.PostId).ToList().Count,
+                WeightName = _context.WeightTypes.AsNoTracking().FirstOrDefault(p => p.WeightId == x.WeightId).WeightName,
+            }).ToList();
+            return data;
+        }
+    }
 }

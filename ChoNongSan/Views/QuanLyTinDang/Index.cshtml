@@ -8,89 +8,158 @@
     var accountId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
     Model.acountId = Convert.ToInt32(accountId);
 }
-@*<style>
-        .product-tab-style-2 li.nav-item a.active {
-            background-color: forestgreen;
-        }
-    </style>*@
+
+<style>
+    a.btn.btn-custom-size.active {
+        box-shadow: 0 5px 7px;
+    }
+</style>
 
 <main class="main-content">
-    <div class="shop-area section-space-top-55">
+    <div class="shop-area section-space-y-axis-100">
         <div class="container">
             <div class="row">
-                <div class="col-12 order-lg-1 order-1">
-                    <ul id="tabpost" class="nav product-tab-nav product-tab-style-2" role="tablist">
-                        <li class="nav-item " role="presentation">
-                            <a asp-route-tabname="HienThi" asp-action="SwitchTabs" class="btn btn-custom-size @(Model.ActiveTab == ChoNongSan.ApiUsedForWeb.ViewModels.Tab.HienThi ? "active" : string.Empty)">
-                                Đang hiển thị
-                            </a>
-                        </li>
-                        <li class="nav-item " role="presentation">
-                            <a asp-route-tabname="DoiDuyet" asp-action="SwitchTabs" class=" btn btn-custom-size @(Model.ActiveTab == ChoNongSan.ApiUsedForWeb.ViewModels.Tab.DoiDuyet ? "active" : string.Empty)">
-                                Đợi duyệt
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a asp-route-tabname="TuChoi" asp-action="SwitchTabs" class=" btn btn-custom-size @(Model.ActiveTab == ChoNongSan.ApiUsedForWeb.ViewModels.Tab.TuChoi ? "active" : string.Empty)">
-                                Bị từ chối
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a asp-route-tabname="DaAn" asp-action="SwitchTabs" class=" btn btn-custom-size @(Model.ActiveTab == ChoNongSan.ApiUsedForWeb.ViewModels.Tab.DaAn ? "active" : string.Empty)">
-                                Đã ẩn
-                            </a>
-                        </li>
-                    </ul>
+                <div class="col-lg-3 order-2 pt-10 pt-lg-0">
+                    <div class="sidebar-area w-100">
+                        <div class="widgets-area mb-9">
+                            <div class="widgets-item d-flex align-items-center mb-2" >
 
-                    @switch (Model.ActiveTab)
-                    {
+                                <img class="ms-3 rounded-circle" src="~/assetsKH/icon/icon-vnd.png" style="width:55px; height:55px"/>
+                                <div class="ms-3 ">
+                                    <p class="mt-2 mb-0" >Số dư tài khoản</p>
+                                    <b class="font-size-20 mb-1">0 đ</b>
+                                </div>
+                            </div>
+                            <div class="widgets-item">
+                                <div class="widgets-checkbox w-auto">
+                                    <button style=" background-color: #dee2e6;" class="w-100 btn btn-link p-0" type="button" id="settingButton" data-bs-toggle="dropdown">
+                                        <div class=" d-flex align-items-center justify-content-center">
+                                            <span class="label-checkbox my-1" style="margin-right:5px">
+                                                Các gói nạp
+                                            </span>
+                                            <i class="fa fa-chevron-down"></i>
+                                        </div>
+                                    </button>
 
-                        case ChoNongSan.ApiUsedForWeb.ViewModels.Tab.HienThi:
-                            @await Component.InvokeAsync("HienThi", Model);
-                            break;
-                        case ChoNongSan.ApiUsedForWeb.ViewModels.Tab.DoiDuyet:
-                            @await Component.InvokeAsync("DoiDuyet", Model);
-                            break;
-                        case ChoNongSan.ApiUsedForWeb.ViewModels.Tab.TuChoi:
-                            @await Component.InvokeAsync("TuChoi", Model);
-                            break;
-                        case ChoNongSan.ApiUsedForWeb.ViewModels.Tab.DaAn:
-                            @await Component.InvokeAsync("DaAn", Model);
-                            break;
-                        default:
-                            break;
-                    }
+                                    <div class="dropdown-menu  dropdown-menu-end" aria-labelledby="settingButton">
+
+                                        <a class="dropdown-item ">
+                                            <div class=" d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center ">
+                                                    <input name="optradio" class="input-checkbox" style="margin-right:7px" type="radio" checked>
+                                                    <label class="label-checkbox mb-0" for="refine-item">
+                                                        500,000 đ
+                                                    </label>
+                                                </div>
+                                                <img style="height:30px; width:30px" class=" rounded-circle" src="~/assetsKH/icon/icon-vnd-black.jpg" />
+                                            </div>
+                                        </a>
+
+                                        <a class="dropdown-item">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center">
+
+                                                    <input name="optradio" class="input-checkbox" style="margin-right:7px" type="radio">
+                                                    <label class="label-checkbox mb-0" for="refine-item">
+                                                        200,000 đ
+                                                    </label>
+                                                </div>
+                                                <img style="height:30px; width:30px" class="rounded-circle" src="~/assetsKH/icon/icon-vnd-black.jpg" />
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <input name="optradio" class="input-checkbox" style="margin-right:7px" type="radio">
+                                                    <label class="label-checkbox mb-0" for="refine-item">
+                                                        100,000 đ
+                                                    </label>
+                                                </div>
+                                                <img style="height:30px; width:30px" class="rounded-circle" src="~/assetsKH/icon/icon-vnd-black.jpg" />
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <input name="optradio" class="input-checkbox" style="margin-right:7px" type="radio">
+                                                    <label class="label-checkbox mb-0" for="refine-item">
+                                                        50,000 đ
+                                                    </label>
+                                                </div>
+                                                <img style="height:30px; width:30px" class="rounded-circle" src="~/assetsKH/icon/icon-vnd-black.jpg" />
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <input name="optradio" class="input-checkbox" style="margin-right:7px" type="radio">
+                                                    <label class="label-checkbox mb-0" for="refine-item">
+                                                        20,000 đ
+                                                    </label>
+                                                </div>
+                                                <img style="height:30px; width:30px" class="rounded-circle" src="~/assetsKH/icon/icon-vnd-black.jpg" />
+                                            </div>
+                                        </a>
+                                        <button class="mx-5 btn btn-link mt-2" style="color:white;background-color: #40AA54">
+                                            <p class="mx-10 mb-0">Nạp ngay</p>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 order-1">
+                    <div class="product-topbar row col-lg-12 mx-auto rounded" style="border: 2px solid #dee2e6">
+                        <div class="col-lg-3 p-0 text-center" style="border-right: 2px solid #dee2e6">
+                            <a asp-route-tabname="HienThi" asp-action="SwitchTabs" class="w-100 btn btn-custom-size @(Model.ActiveTab == ChoNongSan.ApiUsedForWeb.ViewModels.Tab.HienThi ? "active" : string.Empty)">
+                                Đang hiển thị (0)
+                            </a>
+                        </div>
+                        <div class="col-lg-3 p-0 text-center" style="border-right: 2px solid #dee2e6">
+                            <a asp-route-tabname="DoiDuyet" asp-action="SwitchTabs" class="w-100 btn btn-custom-size @(Model.ActiveTab == ChoNongSan.ApiUsedForWeb.ViewModels.Tab.DoiDuyet ? "active" : string.Empty)">
+                                Đợi duyệt (0)
+                            </a>
+                        </div>
+                        <div class="col-lg-3 p-0 text-center" style="border-right: 2px solid #dee2e6">
+                            <a asp-route-tabname="TuChoi" asp-action="SwitchTabs" class=" w-100 btn btn-custom-size @(Model.ActiveTab == ChoNongSan.ApiUsedForWeb.ViewModels.Tab.TuChoi ? "active" : string.Empty)">
+                                Bị từ chối (0)
+                            </a>
+                        </div>
+                        <div class="col-lg-3 p-0 text-center">
+                            <a asp-route-tabname="DaAn" asp-action="SwitchTabs" class="w-100 btn btn-custom-size @(Model.ActiveTab == ChoNongSan.ApiUsedForWeb.ViewModels.Tab.DaAn ? "active" : string.Empty)">
+                                Đã ẩn (0)
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tab-content text-charcoal pt-8">
+
+                        <div class="tab-pane fade show active" id="list-view" role="tabpanel" aria-labelledby="list-view-tab">
+                            <div class="product-list-view row">
+                                @switch (Model.ActiveTab)
+                                {
+
+                                    case ChoNongSan.ApiUsedForWeb.ViewModels.Tab.HienThi:
+                                        @await Component.InvokeAsync("HienThi", Model);
+                                        break;
+                                    case ChoNongSan.ApiUsedForWeb.ViewModels.Tab.DoiDuyet:
+                                        @await Component.InvokeAsync("DoiDuyet", Model);
+                                        break;
+                                    case ChoNongSan.ApiUsedForWeb.ViewModels.Tab.TuChoi:
+                                        @await Component.InvokeAsync("TuChoi", Model);
+                                        break;
+                                    case ChoNongSan.ApiUsedForWeb.ViewModels.Tab.DaAn:
+                                        @await Component.InvokeAsync("DaAn", Model);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
-
-<main class="main-content">
-    <div class="product-tab-area section-space-top-100">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-@*@section Scripts {
-        <script type="text/javascript">
-
-            $(document).ready(function () {
-            var btnContainer = document.getElementById("tabpost");
-            var btns = btnContainer.getElementsByClassName("nav-item");
-            var btn = btnContainer.getElementsByClassName("btn btn-custom-size");
-            for (var i = 0; i < btn.length; i++) {
-                btn[i].addEventListener("click", function () {
-                    var current = document.getElementsByClassName("active");
-                    current[0].className = current[0].className.replace(" active", "");
-                    this.className += " active";
-                });
-        }
-    });
-        </script>
-    }*@

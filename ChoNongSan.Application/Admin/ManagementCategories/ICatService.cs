@@ -1,4 +1,5 @@
-﻿using ChoNongSan.ViewModels.Common;
+﻿using ChoNongSan.Data.Models;
+using ChoNongSan.ViewModels.Common;
 using ChoNongSan.ViewModels.Requests.Common;
 using ChoNongSan.ViewModels.Requests.DanhMuc;
 using ChoNongSan.ViewModels.Responses;
@@ -9,7 +10,7 @@ namespace ChoNongSan.Application.Admin.ManagementCategories
 {
     public interface ICatService
     {
-        Task<int> CreateCat(CreateCatRequest request);
+        Task<int> CreateCat(CreateCatRequest request, Category cat);
 
         Task<int> UpdateCat(UpdateCatRequest request);
 

@@ -2,6 +2,7 @@
 using ChoNongSan.Application.Common.Accounts;
 using ChoNongSan.Data.Models;
 using ChoNongSan.Utilities.Extenstions;
+using ChoNongSan.ViewModels.Requests.Common;
 using ChoNongSan.ViewModels.Requests.TaiKhoan;
 using ChoNongSan.ViewModels.Requests.TaiKhoan.Ctv;
 using ChoNongSan.ViewModels.Requests.TaiKhoan.KhachHang;
@@ -29,10 +30,20 @@ namespace ChoNongSan.Api.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllAccount()
+        [HttpGet("{accountID}")]
+        public async Task<IActionResult> GetAccountById(int accountID)
         {
-            return Ok(await _accountService.GetAll());
+            var cat = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.AccountId == accountID && x.IsDelete == false);
+            if (cat == null) return BadRequest(new { message = "Không tìm thấy tài khoản", status = "FAILED" });
+
+            var result = await _accountService.GetAccountById(accountID);
+            return Ok(new { data = result, status = "OK" });
+        }
+
+        [HttpGet("all-account")]
+        public async Task<IActionResult> GetAllAccount([FromQuery]GetPagingCommonRequest request)
+        {
+            return Ok(await _accountService.GetAll(request));
         }
 
         [HttpGet("so-dien-thoai/{phoneNumber}")]
@@ -190,16 +201,6 @@ namespace ChoNongSan.Api.Controllers
             if (user == null) return Ok(new { message = "Email không tồn tại trên hệ thống", status = "FAILED" });
             var result = await _accountService.ResetPassword(request);
             return Ok(new { message = result, status = "OK" });
-        }
-
-        [HttpGet("{accountID}")]
-        public async Task<IActionResult> GetAccountById(int accountID)
-        {
-            var cat = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.AccountId == accountID && x.IsDelete == false);
-            if (cat == null) return BadRequest(new { message = "Không tìm thấy tài khoản", status = "FAILED" });
-
-            var result = await _accountService.GetAccountById(accountID);
-            return Ok(new { data = result, status = "OK" });
         }
 
         //Amin Management CTV

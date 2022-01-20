@@ -31,7 +31,7 @@ namespace ChoNongSan.Api.Controllers
             _context = context;
         }
 
-        [HttpGet("all-post-by-accountId")]
+        [HttpGet("all-post-by-accountId/{accountId}")]
         public async Task<IActionResult> GetAllPostByAccountId(int accountId)
         {
             var user = await _context.Accounts.FindAsync(accountId);
@@ -105,7 +105,8 @@ namespace ChoNongSan.Api.Controllers
             }
 
             var result = await _postService.CreatePost(request);
-            if (result == 0) return BadRequest(new { message = "Tạo tinđăng thất bại", status = "FAILED" });
+            if (result == false)
+                return BadRequest(new { message = "Tạo tinđăng thất bại", status = "FAILED" });
             return Ok(new { message = "Tạo bài đăng thành công. Hãy chờ xét duyệt", status = "OK" });
         }
 
