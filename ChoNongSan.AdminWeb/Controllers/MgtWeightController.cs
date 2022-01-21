@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ChoNongSan.ApiUsedForWeb.ApiService;
-using ChoNongSan.ViewModels.Requests.Common;
-using ChoNongSan.ViewModels.Requests.DanhMuc;
+using ChoNongSan.ViewModels.Requests.DonVi;
 using ChoNongSan.ViewModels.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,32 +14,22 @@ using Newtonsoft.Json.Linq;
 namespace ChoNongSan.AdminWeb.Controllers
 {
     [Authorize]
-    public class MgtCatController : Controller
+    public class MgtWeightController : Controller
     {
-        private readonly ICategoryApi _categoryApi;
+        private readonly IWeightApi _weightApi;
         private readonly IConfiguration _config;
 
-        public MgtCatController(ICategoryApi categoryApi, IConfiguration config)
+        public MgtWeightController(IWeightApi weightApi, IConfiguration config)
         {
-            _categoryApi = categoryApi;
+            _weightApi = weightApi;
             _config = config;
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 2)
+        public async Task<IActionResult> Index()
         {
-            var request = new GetPagingCommonRequest()
-            {
-                Keyword = keyword,
-                PageIndex = pageIndex,
-                PageSize = pageSize
-            };
-            var data = await _categoryApi.GetCatPaging(request);
-            foreach (var cat in data.Items)
-            {
-                cat.Image = _config["ApiUrl"] + cat.Image;
-            }
-            ViewBag.Keyword = keyword;
-            ViewBag.Link = "/MgtCat";
+            var data = await _weightApi.GetListWeight();
+            ViewBag.Keyword = null;
+            ViewBag.Link = "/MgtWeight";
             ViewBag.Obj = data;
             return View(data);
         }
@@ -51,11 +42,11 @@ namespace ChoNongSan.AdminWeb.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create(CreateCatRequest request)
+        public async Task<IActionResult> Create(CreateWeightRequest request)
         {
             if (!ModelState.IsValid)
                 return View(request);
-            var data = await _categoryApi.CreateCat(request);
+            var data = await _weightApi.Create(request);
             var obj = (JObject)JsonConvert.DeserializeObject(data);
             var status = Convert.ToString(obj["status"]);
             var message = Convert.ToString(obj["message"]);
@@ -63,13 +54,13 @@ namespace ChoNongSan.AdminWeb.Controllers
             if (status.Contains("FAILED"))
                 return View();
 
-            return RedirectToAction("Index", "MgtCat");
+            return RedirectToAction("Index", "MgtWeight");
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int categoryId)
+        public async Task<IActionResult> Edit(int weightId)
         {
-            var data = await _categoryApi.GetCatById(categoryId);
+            var data = await _weightApi.GetWeightById(weightId);
             var obj = (JObject)JsonConvert.DeserializeObject(data);
             var status = Convert.ToString(obj["status"]);
             var message = Convert.ToString(obj["message"]);
@@ -77,26 +68,25 @@ namespace ChoNongSan.AdminWeb.Controllers
             if (status.Contains("FAILED"))
             {
                 TempData["ALertMessage"] = message;
-                return RedirectToAction("Index", "MgtCat");
+                return RedirectToAction("Index", "MgtCtv");
             }
 
-            CategoryVm cat = (obj["data"]).ToObject<CategoryVm>();
-            var request = new UpdateCatRequest()
+            var weight = (obj["data"]).ToObject<WeightVm>();
+            var request = new UpdateWeightRequest()
             {
-                CatID = cat.CategoryID,
-                CatName = cat.CateName,
+                WeightId = weight.WeightId,
+                WeightName = weight.WeightName,
             };
-            ViewBag.Img = _config["ApiUrl"] + cat.Image;
             return View(request);
         }
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Edit(UpdateCatRequest request)
+        public async Task<IActionResult> Edit(UpdateWeightRequest request)
         {
             if (!ModelState.IsValid)
                 return View(request);
-            var data = await _categoryApi.EditCat(request);
+            var data = await _weightApi.Update(request);
             var obj = (JObject)JsonConvert.DeserializeObject(data);
             var status = Convert.ToString(obj["status"]);
             var message = Convert.ToString(obj["message"]);
@@ -104,13 +94,13 @@ namespace ChoNongSan.AdminWeb.Controllers
             if (status.Contains("FAILED"))
                 return View();
 
-            return RedirectToAction("Index", "MgtCat");
+            return RedirectToAction("Index", "MgtWeight");
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int categoryId)
+        public async Task<IActionResult> Delete(int weightId)
         {
-            var data = await _categoryApi.GetCatById(categoryId);
+            var data = await _weightApi.GetWeightById(weightId);
             var obj = (JObject)JsonConvert.DeserializeObject(data);
             var status = Convert.ToString(obj["status"]);
             var message = Convert.ToString(obj["message"]);
@@ -118,30 +108,26 @@ namespace ChoNongSan.AdminWeb.Controllers
             if (status.Contains("FAILED"))
             {
                 TempData["ALertMessage"] = message;
-                return RedirectToAction("Index", "MgtCat");
+                return View();
             }
 
-            CategoryVm cat = (obj["data"]).ToObject<CategoryVm>();
-            var request = new UpdateCatRequest()
-            {
-                CatID = cat.CategoryID,
-                CatName = cat.CateName,
-            };
-            return View(request);
+            var weight = (obj["data"]).ToObject<WeightVm>();
+
+            return View(weight);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(UpdateCatRequest request)
+        public async Task<IActionResult> Delete(WeightVm weight)
         {
-            var data = await _categoryApi.DeleteCat(request.CatID);
+            var data = await _weightApi.Delete(weight.WeightId);
             var obj = (JObject)JsonConvert.DeserializeObject(data);
             var status = Convert.ToString(obj["status"]);
             var message = Convert.ToString(obj["message"]);
             TempData["ALertMessage"] = message;
             if (status.Contains("FAILED"))
-                return RedirectToAction("Index", "MgtCat");
+                return View();
 
-            return RedirectToAction("Index", "MgtCat");
+            return RedirectToAction("Index", "MgtWeight");
         }
     }
 }

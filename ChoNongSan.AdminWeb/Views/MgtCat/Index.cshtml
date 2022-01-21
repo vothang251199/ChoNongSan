@@ -44,7 +44,7 @@
                 <td>
                     <img src="@item.Image" class="w-20 h-20 img-thumbnail" />
                 </td>
-                <td>
+                <td class="text-nowrap w-auto">
                     @Html.ActionLink("Sửa", "Edit", new { categoryId = item.CategoryID }) |
                     @*@Html.ActionLink("Chi tiết", "Details", new { categoryId = item.CategoryID }) |*@
                     @Html.ActionLink("Xóa", "Delete", new { categoryId = item.CategoryID })

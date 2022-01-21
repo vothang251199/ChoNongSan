@@ -41,7 +41,7 @@ namespace ChoNongSan.Api.Controllers
         }
 
         [HttpGet("all-account")]
-        public async Task<IActionResult> GetAllAccount([FromQuery]GetPagingCommonRequest request)
+        public async Task<IActionResult> GetAllAccount([FromQuery] GetPagingCommonRequest request)
         {
             return Ok(await _accountService.GetAll(request));
         }
@@ -203,7 +203,7 @@ namespace ChoNongSan.Api.Controllers
             return Ok(new { message = result, status = "OK" });
         }
 
-        //Amin Management CTV
+        //Admin Management CTV
         [HttpPost("them-ctv")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateCTV([FromForm] CreateCTVRequest request)

@@ -74,6 +74,7 @@ namespace ChoNongSan.Application.Admin.ManagementCategories
             {
                 CategoryID = cat.CategoryId,
                 CateName = cat.CateName,
+                Image = cat.Image
             };
             return result;
         }
