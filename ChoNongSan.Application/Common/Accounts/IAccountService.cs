@@ -213,7 +213,7 @@ namespace ChoNongSan.Application.Common.Accounts
             var user = await _context.Accounts.FindAsync(request.AccountID);
 
             user.PhoneNumber = request.PhoneNumber;
-            user.Address = request.Address;
+            user.Address = (string.IsNullOrEmpty(request.Address) ? user.Address : request.Address);
             user.FullName = request.FullName;
             user.Email = request.Email.ToLower();
 

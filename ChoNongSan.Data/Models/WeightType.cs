@@ -14,6 +14,7 @@ namespace ChoNongSan.Data.Models
 
         public int WeightId { get; set; }
         public string WeightName { get; set; }
+        public bool? IsDelete { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }
     }

@@ -1,0 +1,47 @@
+﻿@using ChoNongSan.ViewModels.Responses
+@model List<WeightVm>
+
+@{
+    ViewData["Title"] = "Quản lý đơn vị cân nặng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Quản lý đơn vị cân nặng</h1>
+
+<a class="btn btn-primary" role="button" asp-controller="MgtWeight" asp-action="Create">Thêm mới</a>
+@if (@TempData["ALertMessage"] != null)
+{
+    <div class="alert alert-success" style="text-align:center; margin:30px 0">
+        <h3>@TempData["ALertMessage"]</h3>
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã đơn vị
+            </th>
+            <th>
+                Tên đơn vị
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WeightId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WeightName)
+                </td>
+                <td>
+                    @Html.ActionLink("Cập nhật", "Edit", new { weightId = item.WeightId }) |
+                    @Html.ActionLink("Xóa", "Delete", new { weightId = item.WeightId })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

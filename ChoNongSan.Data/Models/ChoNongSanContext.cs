@@ -213,7 +213,7 @@ namespace ChoNongSan.Data.Models
 
                 entity.Property(e => e.Quality).HasMaxLength(10);
 
-                entity.Property(e => e.Title).HasMaxLength(50);
+                entity.Property(e => e.Title).HasMaxLength(70);
 
                 entity.Property(e => e.WeightId).HasColumnName("WeightID");
 
@@ -285,9 +285,9 @@ namespace ChoNongSan.Data.Models
                 entity.Property(e => e.WeightName).HasMaxLength(20);
             });
 
-            OnModelCreatingPartial(modelBuilder);
+            //OnModelCreatingPartial(modelBuilder);
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        //private partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
