@@ -31,6 +31,7 @@ namespace ChoNongSan.Controllers
         private readonly ICategoryApi _categoryApi;
         private readonly IWeightApi _weightApi;
         private readonly IUserApi _userApi;
+        private const List<IFormFile> lsImg = null;
 
         public QuanLyTinDang(IConfiguration config, IPostApi postApi, IStorageService storageService,
             ICategoryApi categoryApi, IWeightApi weightApi, IUserApi userApi)
@@ -113,10 +114,10 @@ namespace ChoNongSan.Controllers
                 var user = await _userApi.GetUserById(Convert.ToInt32(userId));
                 ViewBag.Phone = user.PhoneNumber;
                 ViewBag.Address = user.Address;
+                ViewBag.LsImg = request.ThumbnailImage;
                 return View(request);
             }
 
-            request.PlatForm = "Web";
             var result = await _postApi.CreatePost(request);
             if (!result)
             {
@@ -171,6 +172,7 @@ namespace ChoNongSan.Controllers
         {
             await _postApi.AddViewCount(postId);
             var model = await _postApi.GetDetail(postId);
+            model.Avatar = _config["ApiUrl"] + model.Avatar;
             for (var i = 0; i < model.ListImage.Count; i++)
             {
                 model.ListImage[i] = _config["ApiUrl"] + model.ListImage[i];

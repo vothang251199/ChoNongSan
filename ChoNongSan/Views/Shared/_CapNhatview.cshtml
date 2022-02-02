@@ -4,7 +4,6 @@
 @model ProfileTabVm
 @{
     var accountID = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
-    var test = Model;
 }
 <style>
     p {
@@ -52,19 +51,19 @@
 
                     <div class=" mt-4">
                         <span style="color:red">*</span><label asp-for="Request.FullName" class="control-label"></label>
-                        <input asp-for="Request.FullName" class="form-control" placeholder="Nhập họ và tên" />
+                        <input id="hoVaTen" asp-for="Request.FullName" class="form-control" placeholder="Nhập họ và tên" />
                         <span asp-validation-for="Request.FullName" class="text-danger"></span>
                     </div>
                     <div class="mt-4">
                         <span style="color:red">*</span><label asp-for="Request.PhoneNumber" class="control-label"></label>
-                        <input asp-for="Request.PhoneNumber" class="form-control" placeholder="Nhập số điện thoại" />
+                        <input id="sdt" asp-for="Request.PhoneNumber" class="form-control" placeholder="Nhập số điện thoại" />
                         <span asp-validation-for="Request.PhoneNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-12 p-0">
                     <div class="single-input mt-4">
                         <span style="color:red">*</span><label asp-for="Request.Email" class="control-label"></label>
-                        <input asp-for="Request.Email" class="form-control" placeholder="Nhập Email" />
+                        <input id="email" asp-for="Request.Email" class="form-control" placeholder="Nhập Email" />
                         <span asp-validation-for="Request.Email" class="text-danger"></span>
                     </div>
 
@@ -74,7 +73,7 @@
                         <span asp-validation-for="Request.Address" class="text-danger"></span>
                     </div>
                     <div class="single-input mt-4 d-flex align-items-center" style="flex-direction:column">
-                        <button id="submit" class="rounded btn btn-custom-size lg-size" type="submit">
+                        <button id="submit" onclick="fcSubmit()" class="rounded btn btn-custom-size lg-size" type="submit">
                             <span>Cập nhật</span>
                         </button>
                     </div>
@@ -86,32 +85,35 @@
 
 <script type="text/javascript">
 
-    //$(document).ready(function () {
-    //    if (document.getElementById('avatar').src != "") {
-    //        document.getElementById('urlImg').value = document.getElementById('avatar').src;
-    //    }
-    //})
+    let sdt = document.getElementById('sdt').value;
+    let hoVaTen = document.getElementById('hoVaTen').value;
+    let email = document.getElementById('email').value;
+    var avatar = document.getElementById('avatar');
+    var input_img = document.getElementById('input_img');
         //load ảnh
     var loadFile = function (event) {
         var lent = event.target.files.length;
         if (lent != 0) {
-            document.getElementById('avatar').src = URL.createObjectURL(event.target.files[0]);
+            avatar.src = URL.createObjectURL(event.target.files[0]);
         }
     };
 
-    @*var giuUrl = function () {
-        document.getElementById('urlImg').value = document.getElementById('avatar').src;
-        var test = document.getElementById('input_img').files;
-        document.getElementById('formFile').files = test;
+    function fcSubmit() {
+        if (sdt != "" && hoVaTen != "" && email != "" && input_img.files.length != 0) {
+            var te = input_img.files[0];
+            const reader = new FileReader();
+            reader.addEventListener("load", function () {
+                var bas = reader.result.split(',')[1];
+                var obImg = { 'lastModified': te.lastModified, 'name': te.name, 'type': te.type, 'base64': bas };
+                sessionStorage.setItem('avatar', JSON.stringify(obImg));
 
-        @{
-            <text>
-                if (Model.Img != null)
-                {
-                    Model.Request.ThumbnailImage = Model.Img;
-                }
-            </text>
+            }, false);
+
+            if (te) {
+                reader.readAsDataURL(te);
+            }
         }
-
-    }*@
+        
+    }
+    
 </script>

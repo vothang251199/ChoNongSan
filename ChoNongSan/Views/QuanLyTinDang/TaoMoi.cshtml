@@ -1,5 +1,6 @@
 ﻿@using ChoNongSan.ViewModels.Requests.TinDang
 @using ChoNongSan.ViewModels.Responses
+@using Microsoft.AspNetCore.Http
 
 @model CreatePostRequest
 
@@ -9,9 +10,10 @@
     var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
     List<CategoryVm> lsCat = ViewBag.CategoryList;
     List<WeightVm> lsWeight = ViewBag.WeightList;
+    List<IFormFile> lsAnh = ViewBag.LsImg;
 }
 
-<div class="container pb-10">
+<div class="container my-10">
     <form asp-action="TaoMoi" method="post" enctype="multipart/form-data">
         <div class="row d-flex">
             <div class="col-lg-6 col-12 mx-auto" style="margin-bottom:30px">
@@ -23,14 +25,18 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="col-md-6" hidden>
                             <div class="checkout-form-list form-group">
-                                <input value="@userId" asp-for="AccountID" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập tên sản phẩm" />
+                                <input value="@userId" asp-for="AccountID" class="form-control rounded" placeholder="Nhập tên sản phẩm" />
                             </div>
                         </div>
-
+                        <div class="col-md-6" hidden>
+                            <div class="checkout-form-list form-group">
+                                <input value="Web" asp-for="PlatForm" class="form-control rounded" placeholder="Nhập tên sản phẩm" />
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <span style="color:red">*</span>@Html.DisplayNameFor(model => model.CategoryID)
-                            <div class="checkout-form-list form-group" style="height:42px">
-                                <select class="myniceselect nice-select wide" id="ddCatId" asp-for="CategoryID">
+                            <div class="checkout-form-list form-group">
+                                <select class="form-control nice-select wide float-none" asp-for="CategoryID">
                                     <option disabled selected value="">Chọn danh mục</option>
                                     @foreach (var item in lsCat)
                                     {
@@ -51,34 +57,34 @@
                         <div class="col-md-12">
                             <div class="checkout-form-list form-group">
                                 @Html.DisplayNameFor(model => model.Description)
-                                <textarea asp-for="Description" style="padding-left: 18px" class="form-control" placeholder="Nhập mô tả"></textarea>
+                                <textarea asp-for="Description" class="form-control" placeholder="Nhập mô tả"></textarea>
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="checkout-form-list form-group" style="height:66px">
+                        <div class="col-md-6  ">
+                            <div class="checkout-form-list form-group">
                                 <span style="color:red">*</span>@Html.DisplayNameFor(model => model.WeightId)
-                                <select class="myniceselect nice-select wide" asp-for="WeightId">
+                                <select asp-for="WeightId" class="form-control nice-select wide float-none">
                                     <option disabled selected value="">Chọn đơn vị</option>
                                     @foreach (var item in lsWeight)
                                     {
                                         <option value="@item.WeightId">@item.WeightName</option>
                                     }
                                 </select>
-                                <span asp-validation-for="WeightId" class="text-danger"></span>
+                                <span asp-validation-for="WeightId" class="w-auto text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="checkout-form-list form-group">
                                 <span style="color:red">*</span>@Html.DisplayNameFor(model => model.WeightNumber)
-                                <input style="padding-left:18px; height:42px" asp-for="WeightNumber" class="form-control" placeholder="Số lượng cần bán?" />
+                                <input min="1" asp-for="WeightNumber" class="form-control" style="height:42px" placeholder="Số lượng cần bán?" />
                                 <span asp-validation-for="WeightNumber" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="checkout-form-list form-group">
                                 <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Price)
-                                <input asp-for="Price" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập giá" />
+                                <input min="1000" type="number" asp-for="Price" class="form-control" style="height:42px" placeholder="Nhập giá" />
                                 <span asp-validation-for="Price" class="text-danger"></span>
                             </div>
                         </div>
@@ -91,9 +97,9 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="checkout-form-list form-group" style="height:66px">
+                            <div class="checkout-form-list form-group">
                                 <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Quality)
-                                <select class="myniceselect nice-select wide" asp-for="Quality">
+                                <select class="form-control nice-select wide float-none" asp-for="Quality">
                                     <option disabled selected value="">Chọn chất lượng</option>
                                     <option value="Tốt">Tốt</option>
                                     <option value="Trung bình">Trung bình</option>
@@ -105,7 +111,7 @@
                         <div class="col-md-6">
                             <div class="checkout-form-list form-group">
                                 <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Expiry)
-                                <input min="1" style="height:42px;padding-left: 18px" asp-for="Expiry" class="form-control" placeholder="Nhập số ngày" />
+                                <input min="1" asp-for="Expiry" class="form-control" style="height:42px" placeholder="Nhập số ngày" />
                                 <span asp-validation-for="Expiry" class="text-danger"></span>
                             </div>
                         </div>
@@ -118,7 +124,7 @@
                             </div>
                         </div>
                         <div class="col-md-3 d-flex align-items-center">
-                            <div class="form-group form-check">
+                            <div class="checkout-form-list form-group">
                                 <label class="form-check-label">
                                     <input class="form-check-input" asp-for="IsDeliver" />
                                     @Html.DisplayNameFor(model => model.IsDeliver)
@@ -138,7 +144,7 @@
                                 <div class="col-md-12 d-flex align-items-center" style="width:100%;margin:30px 0; flex-direction:column">
                                     <span asp-validation-for="ThumbnailImage" class="text-danger text-center" style="margin-bottom:20px"></span>
                                     <div class="checkout-form-list form-group col-10 m-0  custom-file d-flex align-items-center" style="position: relative">
-                                        <input multiple style="display:none; " onchange="loadFile(event)" id="input_img" asp-for="ThumbnailImage" class="form-control" />
+                                        <input value="@lsAnh" type="file" accept=".jpg, .jpeg, .png" multiple asp-for="ThumbnailImage" style="display:none; " onchange="loadFile(event)" id="input_img" />
                                         <input id="btnAddImg" type="button" class="h-100 w-100 p-0 btn btn-link m-auto" onclick="document.getElementById('input_img').click();" style="position: absolute; right: 0; top: 0;left:0;bottom:0;border:3px dashed #ff0000" />
                                         <div class="m-auto d-flex align-items-center" style="flex-direction:column;height:160px">
                                             <img style="margin-top:17%;height: 70px; width: 70px" class="p-0 col-12" src="~/assetsKH/icon/icon-camera-add-removebg.png" />
@@ -146,6 +152,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <input multiple type="file" id="lsImg" style="display:none" />
                                 <div style="margin-top:30px" id="collapseOne" class="collapse show">
                                     <div class="card-body row">
                                         @for (var i = 0; i < 6; i++)
@@ -164,6 +171,7 @@
 
                                         }
                                     </div>
+                                    <img id="testImg" />
                                 </div>
                             </div>
                         </div>
@@ -173,7 +181,7 @@
 
             <div class="col-lg-12 col-12 d-flex">
                 <div class="form-group m-auto rounded" style="background-color: #40AA54">
-                    <button onclick="fcCheckCat()" id="btnSubmit" type="submit" style="font-size:30px; font-family:Roboto;font-style:unset;padding: 4px 30px; color:#ffffff" class="btn btn-link">
+                    <button onclick="fcSubmit()" id="btnSubmit" type="submit" style="font-size:30px; font-family:Roboto;font-style:unset;padding: 4px 30px; color:#ffffff" class="btn btn-link">
                         Tạo
                     </button>
                 </div>
@@ -187,9 +195,13 @@
 
         let counter = 0;
         const arrImg = [];
+        const lsImg = [];
+        var ttt1 = [];
+
+        let tmpImg = document.getElementById('lsImg').files;
         //load ảnh
         var loadFile = function (event) {
-            //var test = event.target.files[0];
+
             var lent = event.target.files.length;
             if (lent != 0) {
                 for (var i = 0; i < lent; i++) {
@@ -210,10 +222,12 @@
                     if (checkImg) {
                         for (var a = 0; a < 6; a++) {
                             if (document.getElementById('demo' + a).getAttribute('src') == "") {
-                                arrImg[arrImg.length] = (event.target.files[i]).lastModified;
+                                arrImg[a] = (event.target.files[i]).lastModified;
+                                lsImg.splice(a, 0, event.target.files[i]);
                                 document.getElementById('demo' + a).src = URL.createObjectURL(event.target.files[i]);
                                 document.getElementById('divImg' + a).removeAttribute('hidden');
                                 counter++;
+                                
                                 break;
                             }
                         }
@@ -238,17 +252,93 @@
             if (counter < 6 && counter >= 0) {
                 document.getElementById("btnAddImg").disabled = false;
             }
-            arrImg.splice(clicked_id, 1);
+            lsImg.splice(clicked_id, 1)
+            //lsImg.forEach((e, i) => e.index = i + 1)
+            arrImg[clicked_id] = 0;
+            
+        };
+
+        function FileListItems(files) {
+            var b = new ClipboardEvent("").clipboardData || new DataTransfer()
+            for (var i = 0, len = files.length; i < len; i++) b.items.add(files[i])
+            return b.files;
+        };
+
+        function fcSubmit() {
+            if (lsImg.length != 0) {
+                document.getElementById('input_img').files = new FileListItems(lsImg);
+            }
+
+            var ttt = [];
+            var listImgFinal = document.getElementById('input_img').files;
+            if (listImgFinal.length != 0) {
+                for (var i = 0; i < listImgFinal.length; i++) {
+                    var te = listImgFinal[i];
+
+                    const reader = new FileReader();
+                    reader.addEventListener("load", function () {
+                        var bas = reader.result.split(',')[1];
+                        ttt1.push(bas);
+                        sessionStorage.setItem('testObject1', JSON.stringify(ttt1));
+                    }, false);
+
+                    if (te) {
+                        reader.readAsDataURL(te);
+                    }
+
+                    var testObject = { 'lastModified': te.lastModified, 'name': te.name, 'type': te.type};
+                    ttt.push(testObject);
+                    sessionStorage.setItem('testObject', JSON.stringify(ttt));
+                }
+                
+            }
         }
 
-        //function fcCheckCat() {
-        //    var e = document.getElementById("ddCatId").value;
-        //    document.getElementById("inCat").value = e;
-        //    var a = document.getElementById("inCat").value;
-        //}
+        function buffSizeImage(base64) {
+            let bin = atob(base64);
+            let length = bin.length;
+
+            let buf = new ArrayBuffer(length);
+            let arr = new Uint8Array(buf);
+            bin.split('').forEach((e, i) => arr[i] = e.charCodeAt(0));
+            return buf;
+        }
 
         $(document).ready(function () {
+            var retrievedObject = sessionStorage.getItem('testObject1');
+            var kq1 = JSON.parse(retrievedObject || "[]");
 
+            var retrievedObject = sessionStorage.getItem('testObject');
+            var kq = JSON.parse(retrievedObject || "[]");
+
+            var nnn = [];
+
+            for (var i = 0; i < kq.length; i++) {
+                var f = new File([buffSizeImage(kq1[i])], kq[i].name, { type: kq[i].type, lastModified: kq[i].lastModified });
+                nnn.push(f);
+            }
+
+            document.getElementById('input_img').files = new FileListItems(nnn);
+
+            var lsxxx = document.getElementById('input_img').files;
+            for (var i = 0; lsxxx.length; i++) {
+                var last = lsxxx[i].lastModified;
+                for (var a = 0; a < 6; a++) {
+                    if (document.getElementById('demo' + a).getAttribute('src') == "") {
+                        arrImg[a] = last;
+                        lsImg[lsImg.length] = lsxxx[i];
+                        document.getElementById('demo' + a).src = URL.createObjectURL(lsxxx[i]);
+                        document.getElementById('divImg' + a).removeAttribute('hidden');
+                        counter++;
+                        break;
+                    }
+                }
+            }
+            
+            if (counter == 6) {
+                document.getElementById("btnAddImg").disabled = true;
+            }
+            
         });
     </script>
 }

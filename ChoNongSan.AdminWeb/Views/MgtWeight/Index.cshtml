@@ -6,8 +6,8 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Quản lý đơn vị cân nặng</h1>
-
+<h1 class="mb-0">Quản lý đơn vị cân nặng</h1>
+<hr class="mt-2 mb-4 border-dark" />
 <a class="btn btn-primary" role="button" asp-controller="MgtWeight" asp-action="Create">Thêm mới</a>
 @if (@TempData["ALertMessage"] != null)
 {

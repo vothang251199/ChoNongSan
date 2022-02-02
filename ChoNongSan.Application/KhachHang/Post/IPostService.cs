@@ -94,13 +94,15 @@ namespace ChoNongSan.Application.KhachHang.Posts
                 Description = post.Description,
                 Quality = post.Quality,
                 IsDeliver = post.IsDeliver,
-                StatusPost = post.StatusPost,
+                StatusPost = (int)post.StatusPost,
                 TimePost = post.PostTime,
                 Lat = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == post.LocationId).Lat,
                 Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == post.LocationId).Lng,
                 ListImage = lsImage,
                 Expiry = post.Expiry,
-                AccountId = post.AccountId
+                AccountId = post.AccountId,
+                Reason = post.Reason,
+                Avatar = _context.Accounts.AsNoTracking().FirstOrDefault(x => x.AccountId == post.AccountId).Avatar,
             };
 
             return viewModel;
@@ -150,7 +152,15 @@ namespace ChoNongSan.Application.KhachHang.Posts
 
         public async Task<PageResult<PostVmTongQuat>> GetAllPostsViewHome(GetPagingCommonRequest request)
         {
-            var lsPost = await _context.Posts.Where(x => x.IsHidden == false && x.StatusPost == 2).ToListAsync();
+            List<Post> lsPost = null;
+            if (request.Roles == 3)
+            {
+                lsPost = await _context.Posts.Where(x => x.IsHidden == false && x.StatusPost == 2).ToListAsync();
+            }
+            else
+            {
+                lsPost = await _context.Posts.Where(x => x.IsHidden == false && x.StatusPost == 0).ToListAsync();
+            }
             if (!String.IsNullOrEmpty(request.Keyword))
             {
                 request.Keyword = request.Keyword.ToLower();
@@ -236,8 +246,8 @@ namespace ChoNongSan.Application.KhachHang.Posts
                     IsHidden = false,
                     PostTime = DateTime.Now,
                     AccountId = (int)request.AccountID,
-                    CategoryId = request.CategoryID,
-                    WeightId = request.WeightId,
+                    CategoryId = (int)request.CategoryID,
+                    WeightId = (int)request.WeightId,
                     Expiry = request.Expiry
                 };
                 PlatformEnum check = PlatformEnum.Web;
@@ -274,7 +284,17 @@ namespace ChoNongSan.Application.KhachHang.Posts
 
                 if (request.ThumbnailImage != null)
                 {
+                    //post.ImagePosts = new List<ImagePost>()
+                    //{
+                    //    new ImagePost()
+                    //    {
+                    //        ImagePath = await this.SaveFile(request.ThumbnailImage),
+                    //        IsDefault = true,
+                    //    }
+                    //};
+
                     var lsImg = new List<ImagePost>();
+
                     for (var i = 0; i < request.ThumbnailImage.Count; i++)
                     {
                         if (i == 0)
@@ -294,6 +314,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
                             });
                         }
                     }
+
                     post.ImagePosts = lsImg;
                 }
                 var user = await _context.Accounts.FindAsync(request.AccountID);

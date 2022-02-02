@@ -16,7 +16,7 @@
 else
 {
     <main class="main-content">
-        <div class="shop-area section-space-y-axis-100">
+        <div class="shop-area section-space-top-55">
             <div class="container">
                 <div class="row">
                     <div class="col-8 mx-auto order-lg-1 order-1">
@@ -25,7 +25,7 @@ else
                                 <div class="product-list-view row">
                                     @foreach (var item in Model.Items)
                                     {
-                                        <div class="col-12 py-6 ">
+                                        <div class="col-12 mb-6 ">
                                             <div class="product-item img-thumbnail">
                                                 <div class="product-img img-zoom-effect">
                                                     <a href="single-product.html">
@@ -35,7 +35,7 @@ else
                                                         <ul>
                                                             <li>
                                                                 <a class="rounded" href="wishlist.html">
-                                                                    <i class="pe-7s-like"></i>
+                                                                    <i class="pe-7s-close"></i>
                                                                 </a>
                                                             </li>
                                                         </ul>
@@ -64,10 +64,10 @@ else
                             </div>
                         </div>
                         <br />
-                        <div class="pagination-area pt-10">
-                            <nav aria-label="Page navigation example">
+                        <div class="pagination-area mb-5">
+                            <div class="d-flex justify-content-center">
                                 @await Component.InvokeAsync("Pager", Model)
-                            </nav>
+                            </div>
                         </div>
                     </div>
                 </div>

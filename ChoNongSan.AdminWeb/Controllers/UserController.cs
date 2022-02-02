@@ -72,7 +72,7 @@ namespace ChoNongSan.AdminWeb.Controllers
             var userPrincipal = this.ValidateToken(token);
             var authProperties = new AuthenticationProperties()
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
                 IsPersistent = true, //lưu tài khoản để ko cần đăng nhập lại
             };
 

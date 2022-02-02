@@ -143,7 +143,8 @@ namespace ChoNongSan.Api.Controllers
         }
 
         //Area Ctv
-        [HttpPut("duyet-bai-dang")]
+        [HttpPut("duyet-tin-dang")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> AcceptPost([FromForm] AcceptPostRequest request)
         {
             if (!ModelState.IsValid)
@@ -151,11 +152,11 @@ namespace ChoNongSan.Api.Controllers
                 return BadRequest(ModelState);
             }
             var post = await _context.Posts.FindAsync(request.PostID);
-            if (post == null) return BadRequest("Bài viết không tồn tại");
+            if (post == null) return BadRequest(new { message = "Bài viết không tồn tại", status = "FAILED" });
 
             var result = await _ctvService.AcceptPost(request);
-            if (result == 0) return BadRequest();
-            return Ok();
+            if (result == 0) return BadRequest(new { message = "Duyệt tin thất bại", status = "FAILED" });
+            return Ok(new { message = "Duyệt tin thành công", status = "OK" });
         }
     }
 }

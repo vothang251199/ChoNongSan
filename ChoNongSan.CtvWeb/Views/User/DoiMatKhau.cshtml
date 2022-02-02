@@ -1,0 +1,44 @@
+﻿@model ChoNongSan.ViewModels.Requests.TaiKhoan.ChangePassRequest
+
+@{
+    ViewData["Title"] = "Đổi mật khẩu";
+    Layout = "~/Views/Shared/_CtvLayout.cshtml";
+}
+
+
+<div class="col-md-6 mx-auto">
+    <h1 class="mb-0">Đổi mật khẩu</h1>
+    <hr class="mt-1 mb-5 border-dark" />
+    @if (@TempData["ALertMessage"] != null)
+    {
+        <div class="alert alert-success" style="text-align:center">
+            <h3>@TempData["ALertMessage"]</h3>
+        </div>
+    }
+    <form asp-action="DoiMatKhau" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group" hidden>
+            <label asp-for="AccountID" class="control-label"></label>
+            <input asp-for="AccountID" class="form-control" value="@ViewBag.Id" />
+            <span asp-validation-for="AccountID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="OldPass" class="control-label"></label>
+            <input asp-for="OldPass" class="form-control" />
+            <span asp-validation-for="OldPass" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NewPass" class="control-label"></label>
+            <input asp-for="NewPass" class="form-control" />
+            <span asp-validation-for="NewPass" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ConfirmNewPass" class="control-label"></label>
+            <input asp-for="ConfirmNewPass" class="form-control" />
+            <span asp-validation-for="ConfirmNewPass" class="text-danger"></span>
+        </div>
+        <div class="form-group ">
+            <input type="submit" value="Cập nhật" class="d-flex mx-auto btn btn-primary" />
+        </div>
+    </form>
+</div>

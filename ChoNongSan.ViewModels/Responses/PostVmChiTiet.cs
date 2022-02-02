@@ -27,6 +27,9 @@ namespace ChoNongSan.ViewModels.Responses
         [Display(Name = "Tên người bán")]
         public string NameAccount { get; set; }
 
+        [Display(Name = "Ảnh đại diện")]
+        public string Avatar { get; set; }
+
         [Display(Name = "Địa chỉ")]
         public string Address { get; set; }
 
@@ -43,7 +46,7 @@ namespace ChoNongSan.ViewModels.Responses
         public string CatName { get; set; }
 
         [Display(Name = "Trạng thái")]
-        public int? StatusPost { get; set; }
+        public int StatusPost { get; set; }
 
         [Display(Name = "Ngày đăng")]
         public DateTime? TimePost { get; set; }
@@ -59,6 +62,9 @@ namespace ChoNongSan.ViewModels.Responses
 
         [Display(Name = "Giao hàng")]
         public bool? IsDeliver { get; set; }
+
+        [Display(Name = "Lý do")]
+        public string Reason { get; set; }
 
         [Display(Name = "Thời hạn sử dụng")]
         public int? Expiry { get; set; }

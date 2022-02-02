@@ -2,13 +2,9 @@
 
 @{
     var accountID = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
-
-    var avatar = User.Claims.Where(x => x.Type == "Avatar")
-        .Select(c => c.Value).SingleOrDefault();
-
+    var avatar = User.Claims.Where(x => x.Type == "Avatar").Select(c => c.Value).SingleOrDefault();
     var userName = User.Identity.Name;
-    if (String.IsNullOrEmpty(avatar)) { avatar = "/assetsKH/images/avatar-null.png"; }
-    if (String.IsNullOrEmpty(userName)) { userName = "Tài khoản"; }
+    if (String.IsNullOrEmpty(userName)) { userName = "Tài khoản"; avatar = "/assetsKH/images/avatar-null.png"; }
 }
 
 <!DOCTYPE html>
@@ -74,7 +70,7 @@
                                         </li>
                                         <li class="dropdown " style="padding-right:3px">
                                             <button class="d-flex align-items-center btn btn-link dropdown-toggle p-0" type="button" id="settingButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <img class="rounded-circle " style="height: 30px; width: 30px; " src="@avatar" />
+                                                <img id="avatar1" class="rounded-circle " style="height: 30px; width: 30px; " src="@avatar" />
 
                                                 <h5 class=" d-none d-lg-block" style=" margin: 0; padding-left: 10px; font-family:  Poppins, sans-serif ">@userName</h5>
                                             </button>
@@ -85,7 +81,7 @@
                                                     <li><a class="dropdown-item" style="height:32px" asp-controller="User" asp-action="Profile">Quản lý tài khoản</a></li>
                                                     <li><a class="dropdown-item" style="height:32px" asp-controller="User" asp-action="SoDuTaiKhoan">Kiểm tra số dư</a></li>
                                                     <li>
-                                                        <a class="dropdown-item" style="height:32px" asp-controller="User" asp-action="Logout">Đăng xuất</a>
+                                                        <a onclick="logOut()" class="dropdown-item" style="height:32px" asp-controller="User" asp-action="Logout">Đăng xuất</a>
                                                     </li>
                                                 }
                                                 else
@@ -486,6 +482,34 @@
 
     <!--Main JS (Common Activation Codes)-->
     <script src="~/assetsKH/js/main.js"></script>
+
+    <script type="text/javascript">
+        function logOut() {
+            sessionStorage.removeItem('avatar');
+            sessionStorage.removeItem('testObject1');
+            sessionStorage.removeItem('testObject');
+        }
+        $(document).ready(function () {
+            var a = sessionStorage.getItem('avatar');
+            if (a != null) {
+                var avatar = JSON.parse(sessionStorage.getItem('avatar'));
+                let bin = atob(avatar.base64);
+                let length = bin.length;
+
+                let buf = new ArrayBuffer(length);
+                let arr = new Uint8Array(buf);
+                bin.split('').forEach((e, i) => arr[i] = e.charCodeAt(0));
+                var f = new File([buf], avatar.name, { type: avatar.type, lastModified: avatar.lastModified });
+                document.getElementById('avatar1').src = URL.createObjectURL(f);;
+            }
+            //else {
+            //    if (document.getElementById('avatar1').src == "") {
+            //        document.getElementById('avatar1').src = "/assetsKH/images/avatar-null.png";
+            //    }
+            //}
+
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

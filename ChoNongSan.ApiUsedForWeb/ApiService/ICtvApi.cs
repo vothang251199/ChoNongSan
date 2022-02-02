@@ -19,6 +19,8 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
         Task<string> GetCtvById(int ctvId);
 
         Task<string> EditCtv(UpdatePassCTVRequest request);
+
+        Task<string> DeleteCtv(int accountId);
     }
 
     public class CtvApi : ICtvApi
@@ -77,6 +79,17 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.ConfirmPassword) ? "" : request.ConfirmPassword), "confirmPassword");
 
             var response = await client.PutAsync($"/api/tai-khoan/doi-mat-khau-ctv/{request.AccountID}", requestContent);
+
+            var data = await response.Content.ReadAsStringAsync();
+            return data;
+        }
+
+        public async Task<string> DeleteCtv(int accountId)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+
+            var response = await client.DeleteAsync($"/api/tai-khoan/xoa-ctv/{accountId}");
 
             var data = await response.Content.ReadAsStringAsync();
             return data;

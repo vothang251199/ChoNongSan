@@ -4,29 +4,37 @@
     ViewData["Title"] = "Xóa danh mục";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";}
 
-<h1>Xóa danh mục</h1>
+<div class="col-md-6 col-12 mx-auto ">
+    <h1 class="mb-0">Xóa danh mục</h1>
+    <hr class="mt-1 mb-5 border-dark" />
+    @if (@TempData["ALertMessage"] != null)
+    {
+        <div class="alert alert-success" style="text-align:center">
+            <h3>@TempData["ALertMessage"]</h3>
+        </div>
+    }
+    <h3 class="my-5">Bạn có muốn xóa danh mục này không?</h3>
 
-<h3>Bạn có chắc chắn muốn xóa danh mục này không?</h3>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CatID)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CatID)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CatName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CatName)
-        </dd>
-    </dl>
-
-    <form asp-action="Delete">
-        <input asp-for="CatID" type="hidden" />
-        <a asp-action="Index" class="btn btn-default" style="margin-right: 20px; ">Quay lại</a> |
-        <input value="Xóa" style="margin-left:20px" type="submit" class="btn btn-danger">
+    <form asp-controller="MgtCat" asp-action="Delete" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label class="control-label font-size-16 font-weight-bold mr-2">@Html.DisplayNameFor(x => x.CatID):</label>
+            @Model.CatID
+            <input hidden value="@Model.CatID" asp-for="CatID"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label font-size-16 font-weight-bold mr-2">@Html.DisplayNameFor(x => x.CatName):</label>
+            @Model.CatName
+        </div>
+        <div class="form-group d-flex align-items-center" style="flex-direction:column">
+            <img id="image" class="img-fluid rounded img-thumbnail" src="@ViewBag.Img" alt="Ảnh danh mục" style="width:200px; height:200px" />
+            <label class="my-4 control-label font-size-16 font-weight-bold">@Html.DisplayNameFor(x => x.Image)</label>
+        </div>
+        <div class="form-group mt-3">
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-default">Quay lại</a>
+                <input type="submit" class="btn btn-danger" value="Xóa" />
+            </div>
+        </div>
     </form>
 </div>

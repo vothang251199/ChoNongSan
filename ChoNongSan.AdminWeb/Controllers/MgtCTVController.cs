@@ -102,5 +102,38 @@ namespace ChoNongSan.AdminWeb.Controllers
 
             return RedirectToAction("Index", "MgtCtv");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int ctvId)
+        {
+            var data = await _ctvApi.GetCtvById(ctvId);
+            var obj = (JObject)JsonConvert.DeserializeObject(data);
+            var status = Convert.ToString(obj["status"]);
+            var message = Convert.ToString(obj["message"]);
+
+            if (status.Contains("FAILED"))
+            {
+                TempData["ALertMessage"] = message;
+                return RedirectToAction("Index", "MgtCtv");
+            }
+
+            CtvVm ctv = (obj["data"]).ToObject<CtvVm>();
+            
+            return View(ctv);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(CtvVm request)
+        {
+            var data = await _ctvApi.DeleteCtv(request.AccountId);
+            var obj = (JObject)JsonConvert.DeserializeObject(data);
+            var status = Convert.ToString(obj["status"]);
+            var message = Convert.ToString(obj["message"]);
+            TempData["ALertMessage"] = message;
+            if (status.Contains("FAILED"))
+                return View(request);
+
+            return RedirectToAction("Index", "MgtCtv");
+        }
     }
 }

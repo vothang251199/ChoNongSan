@@ -32,14 +32,14 @@ namespace ChoNongSan.Controllers
             _config = config;
         }
 
-        public async Task<IActionResult> Index(string keyword, string tabname, int pageIndex = 1, int pageSize = 12)
+        public async Task<IActionResult> Index(string keyword, string tabname, int pageIndex = 1, int pageSize = 9)
         {
             HomeTabVm vm = new HomeTabVm();
 
             GetPagingCommonRequest request = new GetPagingCommonRequest();
 
             request.ById = Convert.ToInt32(tabname);
-
+            request.Roles = 3;
             request.Keyword = keyword;
             request.PageIndex = pageIndex;
             request.PageSize = pageSize;

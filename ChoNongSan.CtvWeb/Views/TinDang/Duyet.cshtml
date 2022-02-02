@@ -1,0 +1,190 @@
+﻿@model ChoNongSan.ViewModels.Responses.PostVmChiTiet
+
+@{
+    ViewData["Title"] = "Duyệt";
+    Layout = "~/Views/Shared/_CtvLayout.cshtml";
+    string gh = "";
+    string date = Model.Expiry + " ngày";
+    string mota = "Không có mô tả";
+    if (Model.IsDeliver == true)
+        gh = "Có";
+    else
+        gh = "Không";
+
+    if (!string.IsNullOrEmpty(Model.Description))
+        mota = Model.Description;
+}
+
+<form asp-action="Duyet" method="post" enctype="multipart/form-data">
+    <div class="row d-flex">
+        <div class="col-lg-6 col-12 mx-auto" style="margin-bottom:30px">
+
+            <div class="checkbox-form " style="margin:auto">
+                <h3 class="mt-0 text-center">Thông tin</h3>
+                <hr />
+                <div class="row ">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-md-6" hidden>
+                        <div class="checkout-form-list form-group">
+                            <input value="@Model.PostID" asp-for="PostID" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="checkout-form-list form-group">
+                            <label class="control-label font-weight-bold font-size-16">Tên người bán: </label>
+                            @Model.NameAccount
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="checkout-form-list form-group">
+                            <label class="control-label font-weight-bold font-size-16">Danh mục: </label>
+                            @Model.CatName
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="checkout-form-list form-group">
+                            <label class="control-label font-weight-bold font-size-16">Khối lượng: </label>
+                            @( Model.WeightNumber + " " + Model.WeightName)
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="checkout-form-list form-group">
+                            <label class="control-label font-weight-bold font-size-16">Giá: </label>
+                            @(Model.Price.Value.ToString("N0") + " VNĐ/ " + Model.WeightName)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="checkout-form-list form-group">
+                            <label class="control-label font-weight-bold font-size-16">Số điện thoại: </label>
+                            @Model.Phone
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="checkout-form-list form-group">
+                            <label class="control-label font-weight-bold font-size-16">Chất lượng: </label>
+                            @Model.Quality
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="checkout-form-list form-group">
+                            <label class="control-label font-weight-bold font-size-16">Thời hạn bảo quản: </label>
+                            @date
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="checkout-form-list form-group">
+                            <label class="control-label font-weight-bold font-size-16">Giao hàng: </label>
+                            @gh
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="checkout-form-list form-group">
+                            <label class="control-label font-weight-bold font-size-16">Địa chỉ: </label>
+                            @Model.Address
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="checkout-form-list form-group">
+                            <label class="control-label font-weight-bold font-size-16">Tiêu đề: </label>
+                            @Model.Title
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="checkout-form-list form-group">
+                            <label class="control-label font-weight-bold font-size-16">Mô tả: </label>
+                            @mota
+                        </div>
+                    </div>
+                    <div class="col-md-12 d-none">
+                        <div class="checkout-form-list form-group">
+                            <input id="statusPost" value="2" asp-for="StatusPost" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 m-b-25 " onchange="checkStatus()">
+                        <span class="text-danger">*</span>
+                        <label class="control-label font-weight-bold font-size-16 mr-5">Trạng thái: </label>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input value="2" id="yes" type="radio" class="form-check-input" name="optradio" checked="checked">Đồng ý
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input value="1" id="no" type="radio" class="form-check-input" name="optradio">Không đồng ý
+                            </label>
+                        </div>
+                    </div>
+                    <div id="divReason" class="col-md-12" style="display:none">
+                        <div class="checkout-form-list form-group">
+                            <span class="text-danger">*</span>
+                            <label class="control-label font-weight-bold font-size-16">Lý do: </label>
+                            <input id="lydo"  value="" asp-for="Reason" class="form-control" placeholder="Nhập lý do từ chối" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-12 " style="margin-bottom:20px">
+            <div class="your-order">
+                <h3 class="text-center mt-0">Ảnh</h3>
+                <hr />
+                <div class="payment-method">
+                    <div class="payment-accordion">
+                        <div id="accordion">
+
+                            <div style="margin-top:30px" id="collapseOne" class="collapse show">
+                                <div class="card-body row">
+                                    @foreach (var i in Model.ListImage)
+                                    {
+                                        <div class="align-items-center img-thumbnail col-6 col-lg-4" style="padding:7px 7px;height:150px">
+                                            <a href="#">
+                                                <img src="@i" style="height:100%; width:100%" />
+                                            </a>
+                                        </div>
+
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-12 d-flex">
+            <div class="form-group m-auto rounded" style="background-color: #40AA54">
+                <button id="btnSubmit" type="submit" style="font-size:30px; font-family:Roboto;font-style:unset;padding: 4px 30px; color:#ffffff" class="btn btn-link">
+                    Gửi
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        function checkStatus() {
+            if (document.getElementById('no').checked) {
+                document.getElementById('divReason').style.display = 'unset';
+                $("#lydo").attr('required', '');
+                document.getElementById('statusPost').value = 1;
+            }
+            else {
+                document.getElementById('divReason').style.display = 'none';
+                $("#lydo").removeAttr('required');
+                document.getElementById('#lydo').required = false;
+            }
+        }
+        $('#btnSubmit').click(function () {
+
+        });
+    </script>
+}

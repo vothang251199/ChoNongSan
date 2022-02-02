@@ -6,7 +6,9 @@
     ViewData["Title"] = "Quản lý CTV";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";}
 
-<h1>Quản lý Cộng tác viên</h1>
+<h1 class="mb-0">Quản lý Cộng tác viên</h1>
+<hr class="mt-2 mb-4 border-dark" />
+
 <a class="btn btn-primary" role="button" asp-controller="MgtCtv" asp-action="Create">Thêm mới</a>
 @if (@TempData["ALertMessage"] != null)
 {
@@ -14,7 +16,7 @@
         <h3>@TempData["ALertMessage"]</h3>
     </div>
 }
-<table class="table">
+<table class="table mt-4">
     <thead>
         <tr>
             <th>
@@ -44,7 +46,6 @@
                 </td>
                 <td>
                     @Html.ActionLink("Đổi mật khẩu", "Edit", new { ctvId = item.AccountId }) |
-                    @*@Html.ActionLink("Chi tiết", "Details", new { categoryId = item.CategoryID }) |*@
                     @Html.ActionLink("Xóa", "Delete", new { ctvId = item.AccountId })
                 </td>
             </tr>

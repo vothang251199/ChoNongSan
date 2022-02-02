@@ -4,41 +4,44 @@
     ViewData["Title"] = "Thêm danh mục";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";}
 
-<h1 style="margin-left:50px">Thêm danh mục</h1>
+<div class="col-md-6 col-12 mx-auto">
+    <h1 class="mb-0">Thêm danh mục</h1>
+    <hr class="mt-1 mb-5 border-dark" />
+    @if (@TempData["ALertMessage"] != null)
+    {
+        <div class="alert alert-success" style="text-align:center">
+            <h3>@TempData["ALertMessage"]</h3>
+        </div>
+    }
+    <form asp-controller="MgtCat" asp-action="Create" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<div class="row" style=" margin-top:30px">
-    <div class="col-md-6" style="margin-left:60px">
-        @if (@TempData["ALertMessage"] != null)
-        {
-            <div class="alert alert-success" style="text-align:center">
-                <h3>@TempData["ALertMessage"]</h3>
-            </div>
-        }
-        <form asp-controller="MgtCat" asp-action="Create" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+        <div class="form-group">
+            <span style="color:red">*</span>
+            <label asp-for="CatName" class="control-label"></label>
+            <input asp-for="CatName" class="form-control" />
+            <span asp-validation-for="CatName" class="text-danger"></span>
+        </div>
+        <div class="form-group d-flex align-items-center" style="flex-direction:column">
+            <img hidden id="image" class="img-fluid rounded img-thumbnail" src="" alt="Ảnh danh mục" style="width:200px; height:200px" />
+            <div class="mt-3">
                 <span style="color:red">*</span>
-                <label asp-for="CatName" class="control-label"></label>
-                <input asp-for="CatName" class="form-control" />
-                <span asp-validation-for="CatName" class="text-danger"></span>
+                <label asp-for="Image" style="margin-right:15px" class="control-label"></label>
+                <input type="button" class=" btn btn-dark px-3 py-2" value="Chọn ảnh" onclick="document.getElementById('input_img').click();" />
             </div>
-            <div class="d-flex align-items-center" style="flex-direction:column">
-                <img hidden id="image" class="img-fluid rounded img-thumbnail" src="" alt="Ảnh danh mục" style="width:200px; height:270px" />
-                <div class="mt-3">
-                    <span style="color:red">*</span>
-                    <label asp-for="Image" style="margin-right:15px" class="control-label"></label>
-                    <input type="button" class=" btn btn-dark px-3 py-2" value="Thêm ảnh" onclick="document.getElementById('input_img').click();" />
-                </div>
 
-                <input id="input_img" onchange="loadFile(event)" asp-for="Image" class="d-none form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
+            <input id="input_img" onchange="loadFile(event)" asp-for="Image" class="d-none form-control" />
+            <span asp-validation-for="Image" class="text-danger"></span>
+        </div>
+        <div class="form-group mt-3">
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-default">Quay lại</a>
+                <input type="submit" value="Tạo" class="btn btn-success" />
             </div>
-            <div class="form-group my-4">
-                <button type="submit" class="d-flex mx-auto btn btn-primary">Tạo</button>
-            </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
+
 @section Scripts{
     <script type="text/javascript">
 

@@ -11,5 +11,7 @@ namespace ChoNongSan.ViewModels.Requests.Common
     {
         public string Keyword { get; set; }
         public int? ById { get; set; }
+
+        public int Roles { get; set; }
     }
 }

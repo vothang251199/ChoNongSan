@@ -4,28 +4,27 @@
     ViewData["Title"] = "Thêm đơn vị";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";}
 
-<h1>Thêm đơn vị</h1>
-<hr />
-<div class="row" style=" margin-top:30px">
-    <div class="col-md-6" style="margin-left:60px">
-        @if (@TempData["ALertMessage"] != null)
-        {
-            <div class="alert alert-success" style="text-align:center">
-                <h3>@TempData["ALertMessage"]</h3>
-            </div>
-        }
-        <form asp-controller="MgtWeight" asp-action="Create" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="WeightName" class="control-label"></label>
-                <input asp-for="WeightName" class="form-control" />
-                <span asp-validation-for="WeightName" class="text-danger"></span>
-            </div>
-
-            <div class="form-group row">
-                <a asp-action="Index" class="btn btn-default" style="margin-right: 20px">Quay lại</a> <h2>|</h2>
-                <input type="submit" value="Tạo" class="btn btn-primary" style="margin-left:20px; width:75px" />
-            </div>
-        </form>
+<div class="col-md-6 col-12 mx-auto">
+    <h1 class="mb-0">Thêm đơn vị</h1>
+    <hr class="mt-1 mb-5 border-dark" />
+    @if (@TempData["ALertMessage"] != null)
+    {
+        <div class="alert alert-success" style="text-align:center">
+            <h3>@TempData["ALertMessage"]</h3>
+        </div>
+    }
+<form asp-controller="MgtWeight" asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="WeightName" class="control-label"></label>
+        <input asp-for="WeightName" class="form-control" />
+        <span asp-validation-for="WeightName" class="text-danger"></span>
     </div>
-</div>
+
+    <div class="form-group mt-3">
+        <div class="d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-default">Quay lại</a>
+            <input type="submit" value="Tạo" class="btn btn-success" />
+        </div>
+    </div>
+</form>

@@ -3,7 +3,7 @@
 @{
     var avatar = User.Claims.Where(x => x.Type == "Avatar")
         .Select(c => c.Value).SingleOrDefault();
-    if (String.IsNullOrEmpty(avatar)) { avatar = "/assetsKH/images/avatar-null.png"; }
+    if (String.IsNullOrEmpty(avatar)) { avatar = "/assetsAdmin/images/avatars/avatar-null.png"; }
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -28,19 +28,28 @@
         <div class="layout">
             <!-- Header START -->
             <div class="header">
-                <div class="logo logo-dark" style="display:flex">
-                    <a href="/MgtCat" style="display:inline; margin:auto">
-                        <img style="height:40px" src="~/assetsAdmin/images/logo/logo-chu-removebg.png" alt="logo" />
+
+                <div class="logo logo-dark my-auto  ">
+                    <a class="" href="javascript:void(0)">
+                        <img style="height:45px" src="~/assetsAdmin/images/logo/logo-chu-removebg.png" alt="Logo" />
+                        <img class="logo-fold mx-auto" style="height:35px" src="~/assetsAdmin/images/logo/logo1.png" />
                     </a>
                 </div>
-
                 <div class="nav-wrap">
                     <ul class="nav-left">
-
-                        <li>
-
-                            <form asp-action="Index" method="get">
-                                <div class="input-affix" style="margin-left:100px; width:500px">
+                        <li class="desktop-toggle m-r-120">
+                            <a href="javascript:void(0);">
+                                <i class="anticon"></i>
+                            </a>
+                        </li>
+                        <li class="mobile-toggle">
+                            <a href="javascript:void(0);">
+                                <i class="anticon"></i>
+                            </a>
+                        </li>
+                        <li class="d-lg-block d-none">
+                            <form class="m-l-150 d-flex" asp-action="Index" method="get">
+                                <div class="input-affix" style=" width:500px">
                                     <i class="prefix-icon anticon anticon-search"></i>
                                     <input name="keyword" value="@ViewBag.Keyword" type="text" class="form-control" placeholder="Tìm kiếm">
                                     <button class="btn btn-primary m-r-5" style="margin-left:20px" type="submit">Tìm</button>
@@ -50,6 +59,11 @@
                                     }
                                 </div>
                             </form>
+                        </li>
+                        <li class="d-lg-none">
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#search-drawer">
+                                <i class="anticon anticon-search"></i>
+                            </a>
                         </li>
                     </ul>
                     <ul class="nav-right">
@@ -85,7 +99,7 @@
                                 <a asp-controller="User" asp-action="DoiMatKhau" class="dropdown-item d-block p-h-15 p-v-10">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
-                                            <i class="anticon opacity-04 font-size-16 anticon-project"></i>
+                                            <i class="anticon opacity-04 font-size-16 anticon-sync"></i>
                                             <span class="m-l-10">Đổi mật khẩu</span>
                                         </div>
                                         <i class="anticon font-size-10 anticon-right"></i>
@@ -114,19 +128,53 @@
 
                 <!-- Content Wrapper START -->
                 <div class="main-content">
-                    @RenderBody()
+
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    @RenderBody()
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- Content Wrapper END -->
                 <!-- Footer START -->
                 <footer class="footer">
                     <div class="footer-content">
-                        <p class="m-b-0">Bản quyền © 2021. Phát triển bởi VVT</p>
+                        <span class="d-flex mx-auto m-b-0 align-items-center">Bản quyền © 2021. Phát triển bởi <i class="mx-1 fa fa-heart text-danger"></i> VVT</span>
                     </div>
                 </footer>
                 <!-- Footer END -->
             </div>
             <!-- Page Container END -->
             <!-- Search Start-->
+            <div class="modal modal-left fade search" id="search-drawer">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header justify-content-between align-items-center">
+                            <h5 class="modal-title">Tìm kiếm</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body scrollable">
+                            <form asp-action="Index">
+                                <div class="input-affix">
+                                    <i class="prefix-icon anticon anticon-search"></i>
+                                    <input name="keyword" value="@ViewBag.Keyword" type="text" class="form-control" placeholder="Nhập tìm kiếm">
+                                </div>
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-primary d-flex mx-auto">
+                                        Tìm
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Search End-->
             <!-- Quick View START -->
             <!-- Quick View END -->
@@ -142,7 +190,6 @@
     <script src="~/assetsAdmin/es6/pages/dashboard-e-commerce.js"></script>
     <!-- Core JS -->
     <script src="~/assetsAdmin/js/app.min.js"></script>
-    @await Component.InvokeAsync("Notyf");
     @await RenderSectionAsync("Scripts", required: false);
 </body>
 </html>

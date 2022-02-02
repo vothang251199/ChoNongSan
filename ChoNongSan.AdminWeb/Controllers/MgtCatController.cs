@@ -24,7 +24,7 @@ namespace ChoNongSan.AdminWeb.Controllers
             _config = config;
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 2)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 3)
         {
             var request = new GetPagingCommonRequest()
             {
@@ -127,6 +127,7 @@ namespace ChoNongSan.AdminWeb.Controllers
                 CatID = cat.CategoryID,
                 CatName = cat.CateName,
             };
+            ViewBag.Img = _config["ApiUrl"] + cat.Image;
             return View(request);
         }
 

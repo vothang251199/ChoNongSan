@@ -1,0 +1,41 @@
+﻿@model ChoNongSan.ViewModels.Responses.CtvVm
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="col-md-6 col-12 mx-auto ">
+    <h1 class="mb-0">Chỉnh sửa danh mục</h1>
+    <hr class="mt-1 mb-5 border-dark" />
+    @if (@TempData["ALertMessage"] != null)
+    {
+        <div class="alert alert-success" style="text-align:center">
+            <h3>@TempData["ALertMessage"]</h3>
+        </div>
+    }
+    <h3 class="my-5">Bạn có muốn xóa Cộng tác viên này không?</h3>
+
+    <form asp-controller="MgtCTV" asp-action="Delete" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input hidden value="@Model.AccountId" asp-for="AccountId" />
+        <div class="form-group">
+            <label class="control-label font-size-16 font-weight-bold mr-2">@Html.DisplayNameFor(x => x.UserName):</label>
+            @Model.UserName
+        </div>
+        <div class="form-group">
+            <label class="control-label font-size-16 font-weight-bold mr-2">@Html.DisplayNameFor(x => x.Email):</label>
+            @Model.Email
+        </div>
+        <div class="form-group">
+            <label class="control-label font-size-16 font-weight-bold mr-2">@Html.DisplayNameFor(x => x.Phone):</label>
+            @Model.Phone
+        </div>
+        <div class="form-group mt-3">
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-default">Quay lại</a>
+                <input type="submit" class="btn btn-danger" value="Xóa" />
+            </div>
+        </div>
+    </form>
+</div>

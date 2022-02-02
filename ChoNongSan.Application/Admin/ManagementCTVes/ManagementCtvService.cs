@@ -26,11 +26,13 @@ namespace ChoNongSan.Application.Admin.ManagementCTVes
 
             var user = new Account()
             {
-                UserName = request.UserName.ToLower(),
+                UserName = request.UserName,
+                FullName = request.UserName,
                 Password = (request.Password + salt.Trim()).ToMD5(),
                 KeySecurity = salt,
                 IsDelete = false,
                 CreateDate = DateTime.Now,
+                Avatar = "/user-content/avatar-null.png",
                 RolesId = 2,
             };
 
@@ -85,7 +87,7 @@ namespace ChoNongSan.Application.Admin.ManagementCTVes
             var user = await _context.Accounts.FindAsync(request.AccountID);
 
             user.Password = (request.Password + salt.Trim()).ToMD5();
-            //user.ConfirmPassword = (request.ConfirmPassword + salt.Trim()).ToMD5();
+            user.KeySecurity = salt;
 
             _context.Accounts.Update(user);
             return await _context.SaveChangesAsync();

@@ -22,14 +22,14 @@ namespace ChoNongSan.ViewModels.Requests.TinDang
 
         [Display(Name = "Khối lượng")]
         [Required(ErrorMessage = "Vui lòng nhập Khối lượng")]
-        public int WeightNumber { get; set; }
+        public int? WeightNumber { get; set; }
 
         [Display(Name = "Giá")]
         [Required(ErrorMessage = "Vui lòng nhập Giá")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         [Display(Name = "Chất lượng")]
-        [Required(ErrorMessage = "Vui lòng chọn chọn Chất lượng")]
+        [Required(ErrorMessage = "Vui lòng chọn chất lượng")]
         public string Quality { get; set; }
 
         [Display(Name = "Địa chỉ")]
@@ -43,6 +43,7 @@ namespace ChoNongSan.ViewModels.Requests.TinDang
 
         [Display(Name = "Thời hạn bảo quản")]
         [Required(ErrorMessage = "Vui lòng nhập Số ngày")]
+        //[Range(1, Int32.MaxValue, ErrorMessage ="Giá trị nhập vào phải >= 1")]
         public int? Expiry { get; set; }
 
         [Display(Name = "Giao hàng")]
@@ -52,11 +53,11 @@ namespace ChoNongSan.ViewModels.Requests.TinDang
 
         [Display(Name = "Danh mục")]
         [Required(ErrorMessage = "Vui lòng chọn Danh mục")]
-        public int CategoryID { get; set; }
+        public int? CategoryID { get; set; }
 
         [Display(Name = "Đơn vị")]
         [Required(ErrorMessage = "Vui lòng chọn Đơn vị")]
-        public int WeightId { get; set; }
+        public int? WeightId { get; set; }
 
         [Display(Name = "Lat")]
         public string Lat { get; set; }

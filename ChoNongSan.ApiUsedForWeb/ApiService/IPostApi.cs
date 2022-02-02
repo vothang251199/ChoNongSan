@@ -1,5 +1,6 @@
 ﻿using ChoNongSan.ViewModels.Common;
 using ChoNongSan.ViewModels.Requests.Common;
+using ChoNongSan.ViewModels.Requests.CTV;
 using ChoNongSan.ViewModels.Requests.TinDang;
 using ChoNongSan.ViewModels.Responses;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +35,8 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
         Task<PostVmChiTiet> GetDetail(int postId);
 
         Task AddViewCount(int postId);
+
+        Task<string> DuyetTin(AcceptPostRequest request);
     }
 
     public class PostApi : IPostApi
@@ -91,7 +94,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             }
 
             requestContent.Add(new StringContent(request.CategoryID.ToString()), "categoryID");
-            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.PlatForm) ? "Web" : request.PlatForm), "device");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.PlatForm) ? "Web" : request.PlatForm), "platForm");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Title) ? "" : request.Title), "title");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Description) ? "" : request.Description), "description");
             requestContent.Add(new StringContent(string.IsNullOrEmpty(request.PhoneNumber) ? "" : request.PhoneNumber), "phoneNumber");
@@ -147,7 +150,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_config["ApiUrl"]);
             var response = await client.GetAsync($"/api/tin-dang/tin-dang-xem-chung?Keyword=" +
-                $"{request.Keyword}&ById={request.ById}&PageIndex={request.PageIndex}&PageSize={request.PageSize}");
+                $"{request.Keyword}&ById={request.ById}&Roles={request.Roles}&PageIndex={request.PageIndex}&PageSize={request.PageSize}");
             var body = await response.Content.ReadAsStringAsync();
             var lsPost = JsonConvert.DeserializeObject<PageResult<PostVmTongQuat>>(body);
             return lsPost;
@@ -171,6 +174,21 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
             var body = await response.Content.ReadAsStringAsync();
             List<PostVmTongQuat> lsPost = JsonConvert.DeserializeObject<List<PostVmTongQuat>>(body);
             return lsPost;
+        }
+
+        public async Task<string> DuyetTin(AcceptPostRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["ApiUrl"]);
+
+            var requestContent = new MultipartFormDataContent();
+            requestContent.Add(new StringContent(request.PostID.ToString()), "postID");
+            requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Reason) ? "" : request.Reason), "reason");
+            requestContent.Add(new StringContent(request.StatustPost.ToString()), "statustPost");
+
+            var response = await client.PutAsync("/api/tin-dang/duyet-tin-dang", requestContent);
+            var result = await response.Content.ReadAsStringAsync();
+            return result;
         }
     }
 }

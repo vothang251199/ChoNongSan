@@ -28,7 +28,7 @@ else
                     </div>
                 </div>
                 <div class="product-content align-self-center">
-                    <a class="product-name pb-2" href="single-product.html">Dried Lemon Green</a>
+                    <a class="product-name pb-2" href="single-product.html">@item.Description</a>
                     <div class="price-box pb-1">
                         <span class="new-price text-danger">@(item.Price.Value.ToString("N0") +" VNĐ")</span>
                     </div>
@@ -44,7 +44,7 @@ else
                     <p class="short-desc mb-0">
                         @item.TimePost.Value.ToString("hh:mm dd/MM/yyyy")
                     </p>
-                    
+
                 </div>
                 <button class="p-0 btn btn-link align-self-end mb-2 me-2" style="flex-direction:column">
                     <img  style=" height:35px" src="~/assetsKH/icon/btn-an-tin.png" />

@@ -243,5 +243,17 @@ namespace ChoNongSan.Api.Controllers
 
             return Ok(new { message = "Đổi mật khẩu thành công", status = "OK" });
         }
+
+        [HttpDelete("xoa-ctv/{accountId}")]
+        public async Task<IActionResult> DeleteCategory(int accountId)
+        {
+            var cat = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsDelete == false);
+            if (cat == null) return BadRequest(new { message = "Không tìm thấy CTV", status = "FAILED" });
+
+            var result = await _accountService.Delete(accountId);
+            if (!result)
+                return BadRequest(new { message = "Xóa CTV thất bại", status = "FAILED" });
+            return Ok(new { message = "Xóa CTV thành công", status = "OK" });
+        }
     }
 }
