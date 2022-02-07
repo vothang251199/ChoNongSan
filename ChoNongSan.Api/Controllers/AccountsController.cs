@@ -68,8 +68,8 @@ namespace ChoNongSan.Api.Controllers
 			{
 				return BadRequest(ModelState);
 			}
-			var user = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.UserName.Contains(request.LoginName.ToLower())
-				|| x.PhoneNumber.Contains(request.LoginName) || x.Email.Contains(request.LoginName.ToLower()));
+			var user = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.UserName.ToLower().Equals(request.LoginName.ToLower())
+				|| x.PhoneNumber.Equals(request.LoginName) || x.Email.ToLower().Equals(request.LoginName.ToLower()));
 
 			if (user == null) return BadRequest(new { message = "Thông tin đăng nhập không chính xác", status = "FAILED" });
 			if (user.IsDelete == true) return BadRequest(new { message = "Tài khoản đã bị khóa", status = "FAILED" });

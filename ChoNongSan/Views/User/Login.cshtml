@@ -1,36 +1,36 @@
 ﻿@model ChoNongSan.ViewModels.Requests.TaiKhoan.LoginRequest
 
 @{
-    ViewData["Title"] = "Đăng nhập";
-    Layout = "~/Views/Shared/_LoginRegisterLayout.cshtml";
+	ViewData["Title"] = "Đăng nhập";
+	Layout = "~/Views/Shared/_LoginRegisterLayout.cshtml";
 }
 
 <form asp-action="Login" method="post" style="margin: 50px 0 110px 0">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="login-form">
-        <h3>Đăng nhập</h3>
-        <div class="row" style="margin-top:30px">
-            <div class="form-group">
-                <label asp-for="LoginName" class="control-label"></label>
-                <input asp-for="LoginName" class="form-control" />
-                <span asp-validation-for="LoginName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="login-form">
+		<h3>Đăng nhập</h3>
+		<div class="row" style="margin-top:30px">
+			<div class="form-group">
+				<label asp-for="LoginName" class="control-label"></label>
+				<input asp-for="LoginName" class="form-control" placeholder="" />
+				<span asp-validation-for="LoginName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
 				<div class="d-flex justify-content-between">
 					<label asp-for="Password" class="control-label"></label>
 					<a style="color:#40AA54; font-size:14px" href="/User/ForgotPassword">Quên mật khẩu</a>
 				</div>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="col-12 d-flex mt-4 align-items-center justify-content-between" style="height: 50px">
+				<input asp-for="Password" class="form-control" />
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			<div class="col-12 d-flex mt-4 align-items-center justify-content-between" style="height: 50px">
 
-                <span class="font-size-13 text-muted pt-2" >
-                    Bạn chưa có tài khoản?
-                    <a class="small" asp-controller="User" asp-action="Register"> <span style="font-size:16px; color: #40AA54">Đăng ký</span></a>
-                </span>
-                <button type="submit" class="btn btn-custom-size lg-size btn-success btn-white-hover rounded">Đăng nhập</button>
-            </div>
-        </div>
-    </div>
+				<span class="font-size-13 text-muted">
+					Bạn chưa có tài khoản?
+					<a class="small" asp-controller="User" asp-action="Register"> <span style="font-size:16px; color: #40AA54">Đăng ký</span></a>
+				</span>
+				<button type="submit" class="btn btn-custom-size lg-size btn-success btn-white-hover rounded">Đăng nhập</button>
+			</div>
+		</div>
+	</div>
 </form>

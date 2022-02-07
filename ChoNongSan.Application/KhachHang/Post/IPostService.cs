@@ -111,6 +111,12 @@ namespace ChoNongSan.Application.KhachHang.Posts
 		public async Task<PageResult<PostVmTongQuat>> GetAllByStatusPaging(int accountId, GetPagingCommonRequest request)
 		{
 			var lsPost = await _context.Posts.Where(x => x.AccountId == accountId).ToListAsync();
+			var pageResult = new PageResult<PostVmTongQuat>();
+			pageResult.Stt0 = lsPost.Where(x => x.StatusPost == 0).ToList().Count;
+			pageResult.Stt1 = lsPost.Where(x => x.StatusPost == 1).ToList().Count;
+			pageResult.Stt2 = lsPost.Where(x => x.StatusPost == 2).ToList().Count;
+			pageResult.Stt3 = lsPost.Where(x => x.StatusPost == 3).ToList().Count;
+
 			if ((request.ById) != null)
 			{
 				lsPost = lsPost.Where(x => x.StatusPost == (request.ById)).ToList();
@@ -140,13 +146,11 @@ namespace ChoNongSan.Application.KhachHang.Posts
 					Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,
 				}).ToList();
 
-			var pageResult = new PageResult<PostVmTongQuat>()
-			{
-				TotalRecords = totalRow,
-				Items = data,
-				PageIndex = request.PageIndex,
-				PageSize = request.PageSize
-			};
+			pageResult.TotalRecords = totalRow;
+			pageResult.Items = data;
+			pageResult.PageIndex = request.PageIndex;
+			pageResult.PageSize = request.PageSize;
+
 			return pageResult;
 		}
 

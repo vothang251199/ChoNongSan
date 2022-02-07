@@ -45,7 +45,7 @@ namespace ChoNongSan.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Index(PostTabVm vm, int pageIndex = 1, int pageSize = 2)
+		public async Task<IActionResult> Index(PostTabVm vm, int pageIndex = 1, int pageSize = 5)
 		{
 			if (vm == null)
 			{
@@ -54,6 +54,27 @@ namespace ChoNongSan.Controllers
 					ActiveTab = Tab.HienThi,
 				};
 			}
+
+			if(vm.ActiveTab == Tab.HienThi)
+			{
+				vm.byId = 2;
+			}
+
+			var request = new GetPagingCommonRequest()
+			{
+				ById = vm.byId,
+				PageIndex = pageIndex,
+				PageSize = pageSize,
+			};
+
+			var accountId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+
+			var data = await _postApi.GetAllByStatusPaging(Convert.ToInt32(accountId), request);
+			foreach (var i in data.Items)
+			{
+				i.ImageDefault = _config["ApiUrl"] + i.ImageDefault;
+			}
+			vm.Data = data;
 			vm.pageIndex = pageIndex;
 			vm.pageSize = pageSize;
 
@@ -67,22 +88,27 @@ namespace ChoNongSan.Controllers
 			{
 				case "HienThi":
 					vm.ActiveTab = Tab.HienThi;
+					vm.byId = 2;
 					break;
 
 				case "DoiDuyet":
 					vm.ActiveTab = Tab.DoiDuyet;
+					vm.byId = 0;
 					break;
 
 				case "TuChoi":
 					vm.ActiveTab = Tab.TuChoi;
+					vm.byId = 1;
 					break;
 
 				case "DaAn":
 					vm.ActiveTab = Tab.DaAn;
+					vm.byId = 3;
 					break;
 
 				default:
 					vm.ActiveTab = Tab.HienThi;
+					vm.byId = 2;
 					break;
 			}
 			return RedirectToAction(nameof(QuanLyTinDang.Index), vm);

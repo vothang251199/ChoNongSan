@@ -1,4 +1,5 @@
-﻿@using ChoNongSan.ViewModels.Common
+﻿@using System.Globalization;
+@using ChoNongSan.ViewModels.Common
 @using ChoNongSan.ViewModels.Responses
 
 @model PageResult<PostVmTongQuat>
@@ -7,18 +8,18 @@
 <hr />
 @if (Model.TotalRecords == 0)
 {
-    <div style="display:flex" class="meta">
-        <h3 style="margin:auto">
-            <strong style="color:red">Không có tin nào trong mục này</strong>
-        </h3>
-    </div>
+	<div style="display:flex" class="meta">
+		<h3 style="margin:auto">
+			<strong style="color:red">Không có tin nào trong mục này</strong>
+		</h3>
+	</div>
 }
 else
 {
-    @foreach (var item in Model.Items)
-    {
-        <div class="col-12 pt-6">
-            <div class="product-item">
+	@foreach (var item in Model.Items)
+	{
+		<div class="col-12 pt-6">
+			<div class="product-item">
 				<div class="product-img img-zoom-effect my-auto position-relative" style="width: 235px;">
 					<a class="d-flex" asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@item.PostID">
 						<img class="img-full img-thumbnail rounded " style=" height:240px" src="@item.ImageDefault" alt="Product Images">
@@ -33,7 +34,7 @@ else
 					</div>
 					<span class="product-name pb-2">@item.Description</span>
 					<div class="price-box pb-1">
-						<span class="new-price text-danger">@(item.Price.Value.ToString("N0") +" VNĐ")</span>
+						<strong class="new-price font-weight-bold" style="color: #d0021b; ">@(item.Price.Value.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"))) / @item.WeightName</strong>
 					</div>
 					<div class="rating-box pb-2">
 						<ul>
@@ -49,16 +50,16 @@ else
 					</p>
 
 				</div>
-                <button class="p-0 btn btn-link align-self-end mb-2 me-2" style="flex-direction:column">
-                    <img  style=" height:35px" src="~/assetsKH/icon/btn-an-tin.png" />
-                </button>
-            </div>
-        </div>
-    }
+				<button class="p-0 btn btn-link align-self-end mb-2 me-2" style="flex-direction:column">
+					<img style=" height:35px" src="~/assetsKH/icon/btn-an-tin.png" />
+				</button>
+			</div>
+		</div>
+	}
 }
 
 <div style="display: flex" class="mt-6">
-    <div style="margin:auto">
-        @await Component.InvokeAsync("Pager", Model)
-    </div>
+	<div style="margin:auto">
+		@await Component.InvokeAsync("Pager", Model)
+	</div>
 </div>

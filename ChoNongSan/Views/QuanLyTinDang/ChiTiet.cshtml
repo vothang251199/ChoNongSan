@@ -114,7 +114,7 @@
 									</div>
 									<div class="col-auto d-flex align-items-center ms-2">
 										<span class="title pe-2 font-size-16" style="font-weight:bold">Giá:</span>
-										<span class="new-price text-danger text-wrap">@(Model.Price.Value.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"))) /@(Model.WeightName)</span>
+										<strong class="new-price font-weight-bold" style="color: #d0021b; ">@(Model.Price.Value.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"))) / @Model.WeightName</strong>
 									</div>
 								</div>
 
