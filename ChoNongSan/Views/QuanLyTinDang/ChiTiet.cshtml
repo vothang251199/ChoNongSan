@@ -1,173 +1,170 @@
-﻿@model ChoNongSan.ViewModels.Responses.PostVmChiTiet
+﻿@using System.Globalization;
+
+@model ChoNongSan.ViewModels.Responses.PostVmChiTiet
 
 @{
-    ViewData["Title"] = "Chi tiết";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var id = ViewBag.AccountId;
+	ViewData["Title"] = "Chi tiết";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var id = ViewBag.AccountId;
 }
 <style>
 
-    .single-product-content .wishlist-btn-wrap .btn:hover {
-        background-color: #40AA54
-    }
+	.single-product-content .wishlist-btn-wrap .btn:hover {
+		background-color: #40AA54
+	}
 </style>
 <main class="main-content">
-    <div class="single-product-area section-space-y-axis-100 ">
-        <div class="container">
-            <input hidden value="@id" id="AccountId" />
-            <div class="row">
-                <div class="slider-area col-lg-6">
+	<div class="single-product-area section-space-y-axis-100 ">
+		<div class="container">
+			<input hidden value="@id" id="AccountId" />
+			<div class="row">
+				<div class="slider-area col-lg-6">
 
-                    <!-- Main Slider -->
-                    <div class="swiper-container main-slider swiper-arrow with-bg_white d-flex align-items-center">
-                        @if (Model.ListImage.Count == 1)
-                        {
-                            <div class="swiper-slide">
-                                <img class="img-fluid rounded img-thumbnail" src="@Model.ListImage[0]" alt="Inner Image">
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="swiper-wrapper d-flex align-items-center">
-                                @foreach (var img in Model.ListImage)
-                                {
-                                    <div class="swiper-slide ">
-                                        <img class="img-fluid rounded img-thumbnail " src="@img" alt="Inner Image">
-                                    </div>
+					<!-- Main Slider -->
+					<div class="swiper-container main-slider swiper-arrow with-bg_white d-flex align-items-center">
+						@if (Model.ListImage.Count == 1)
+						{
+							<div class="swiper-slide" style="height:370px;width:555px">
+								<img class="img-fluid rounded img-thumbnail" style="height:100%" src="@Model.ListImage[0]" alt="Inner Image">
+							</div>
+						}
+						else
+						{
+							<div class="swiper-wrapper d-flex align-items-center">
+								@foreach (var img in Model.ListImage)
+								{
+									<div class="swiper-slide " style="height:370px;width:555px">
+										<img class="img-fluid rounded img-thumbnail d-flex mx-auto" style="height:100%" src="@img" alt="Inner Image">
+									</div>
 
-                                    <!-- Add Arrows -->
-                                    <div class="swiper-button-next"></div>
-                                    <div class="swiper-button-prev"></div>
+									<!-- Add Arrows -->
+									<div class="swiper-button-next"></div>
+									<div class="swiper-button-prev"></div>
 
-                                }
-                            </div>
-                            <!-- Add Pagination -->
-                            <div class="  swiper-pagination "></div>
-                        }
-                    </div>
-                </div>
+								}
+							</div>
+							<!-- Add Pagination -->
+							<div class="  swiper-pagination "></div>
+						}
+					</div>
+				</div>
 
-                <div class="col-lg-6 my-auto">
-                    <div class="product-thumb-with-content row">
-                        <div class="col-12 order-lg-1 order-2 pt-10 pt-lg-0 mx-auto">
-                            <div class="single-product-content ">
-                                <div class="price-box d-flex align-items-center justify-content-between ">
-                                    <div class="d-inline-flex align-items-center">
-                                        <img style="width:50px;padding:1px" class="me-2 rounded-circle img-thumbnail" src="@Model.Avatar" />
-                                        <div class="d-flex align-content-center" style="flex-direction:column">
-                                            <b class="new-price font-weight-bold">@Model.NameAccount</b>
-                                            <div class="d-flex align-items-center">
-                                                <i class="me-2 bi bi-telephone"></i>
-                                                <p class="mb-0">@Model.Phone</p>
-                                            </div>
-                                        </div>
+				<div class="col-lg-6 my-auto">
+					<div class="product-thumb-with-content row">
+						<div class="col-12 order-lg-1 order-2 pt-10 pt-lg-0 mx-auto">
+							<div class="single-product-content ">
+								<div class="price-box d-flex align-items-center justify-content-between ">
+									<div class="d-inline-flex align-items-center">
+										<img style="width:50px;height:50px;padding:1px" class="me-2 rounded-circle img-thumbnail" src="@Model.Avatar" />
+										<div class="d-flex align-content-center" style="flex-direction:column">
+											<b class="new-price font-weight-bold">@Model.NameAccount</b>
+											<div class="d-flex align-items-center">
+												<i class="me-2 bi bi-telephone"></i>
+												<p class="mb-0">@Model.Phone</p>
+											</div>
+										</div>
+									</div>
+									<div class="w-auto d-flex me-lg-5 ms-2">
+										<a name="@Model.PostID" href="javascript:void(0)" id="btnAddLove" style="padding:12px" class=" d-flex align-items-center border-danger btn btn-link rounded">
+											<i style="color:red" class="pe-7s-like"></i>
+										</a>
+									</div>
+								</div>
 
-                                    </div>
-                                    <div class="w-auto d-flex me-lg-5 ms-2">
-                                        <a name="@Model.PostID" href="javascript:void(0)" id="btnAddLove" style="padding:12px" class=" d-flex align-items-center border-danger btn btn-link rounded">
-                                            <i style="color:red" class="pe-7s-like"></i>
-                                        </a>
-                                    </div>
-                                </div>
+								<div class="my-3 price-box d-flex align-items-center justify-content-between">
+									<div class="d-flex align-items-center">
+										<span class="title me-lg-2 me-1 font-size-16" style="font-weight:bold">Tiêu đề:</span>
+										<span class="font-weight-lighter title my-auto" style="font-family:Arial,sans-serif">@Model.Title</span>
+									</div>
 
-                                <div class="my-3 price-box d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <span class="title me-lg-2 me-1 font-size-16" style="font-weight:bold">Tiêu đề:</span>
-                                        <span class="font-weight-lighter title my-auto" style="font-family:Arial,sans-serif">@Model.Title</span>
-                                    </div>
+									<div class="d-block">
+										<div class="review-status">
+											<p class="short-desc mb-0">(1 Đánh giá)</p>
+										</div>
+										<div class="rating-box">
+											<ul class="justify-content-lg-between">
+												<li><i class="pe-7s-star"></i></li>
+												<li><i class="pe-7s-star"></i></li>
+												<li><i class="pe-7s-star"></i></li>
+												<li><i class="pe-7s-star"></i></li>
+												<li><i class="pe-7s-star"></i></li>
+											</ul>
+										</div>
+									</div>
+								</div>
 
-                                    <div class="d-block">
-                                        <div class="review-status">
-                                            <p class="short-desc mb-0">(1 Đánh giá)</p>
-                                        </div>
-                                        <div class="rating-box">
-                                            <ul class="justify-content-lg-between">
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                                <li><i class="pe-7s-star"></i></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+								<div class="d-flex align-items-center justify-content-between">
+									<div class="d-flex align-items-center">
+										<span class="title pe-2 font-size-16" style="font-weight:bold">Mô tả:</span>
+										@if (string.IsNullOrEmpty(Model.Description))
+										{
+											<p class="short-desc my-2">Người bán không nhập mô tả</p>
+										}
+										else
+										{
+											<p class="short-desc my-2">@(Model.Description)</p>
+										}
+									</div>
+								</div>
 
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <span class="title pe-2 font-size-16" style="font-weight:bold">Mô tả:</span>
-                                        @if (string.IsNullOrEmpty(Model.Description))
-                                        {
-                                            <p class="short-desc my-2">Người bán không nhập mô tả</p>
-                                        }
-                                        else { 
-                                            <p class="short-desc my-2">@(Model.Description)</p>
-                                        }
+								<div class="row-cols-1 d-flex align-items-center justify-content-between my-2">
+									<div class="col-auto d-flex align-items-center">
+										<span class="title pe-lg-2 font-size-16" style="font-weight:bold">Khối lượng:</span>
+										<span class="new-price text-dark">@(Model.WeightNumber)/@(Model.WeightName)</span>
+									</div>
+									<div class="col-auto d-flex align-items-center ms-2">
+										<span class="title pe-2 font-size-16" style="font-weight:bold">Giá:</span>
+										<span class="new-price text-danger text-wrap">@(Model.Price.Value.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"))) /@(Model.WeightName)</span>
+									</div>
+								</div>
 
-                                    </div>
-
-                                </div>
-
-                                <div class="row-cols-1 d-flex align-items-center justify-content-between my-2">
-                                    <div class="col-auto d-flex align-items-center">
-                                        <span class="title pe-lg-2 font-size-16" style="font-weight:bold">Khối lượng:</span>
-                                        <span class="new-price text-dark">@(Model.WeightNumber)/@(Model.WeightName)</span>
-                                    </div>
-                                    <div class="col-auto d-flex align-items-center ms-2">
-                                        <span class="title pe-2 font-size-16" style="font-weight:bold">Giá:</span>
-                                        <span class="new-price text-danger text-wrap">@(Model.Price.Value.ToString("N0") + " VNĐ") /@(Model.WeightName)</span>
-                                    </div>
-                                </div>
-
-                                <div class="mb-2 d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center ">
-                                        <span class="title pe-lg-2 " style="font-weight:bold">Danh mục :</span>
-                                        <p class="mb-0">@Model.CatName</p>
-                                    </div>
-                                    <div class="d-flex align-items-center ms-2">
-                                        <i class="me-2 bi bi-calendar3"></i>
-                                        <p class="mb-0">@(Model.TimePost.Value.ToString("HH:mm dd/MM/yyyy"))</p>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="me-2 bi bi-geo-alt-fill"></i>
-                                    <p class="m-0">@Model.Address</p>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <div class="d-flex align-items-center">
-                                        <img style="height:30px" class="me-lg-2 me-1" src="~/assetsKH/icon/icon-giao-hang.png" />
-                                        @if (Model.IsDeliver == true)
-                                        {
-                                            <p class="m-0">Có</p>
-                                        }
-                                        else
-                                        {
-                                            <p class="m-0">Không</p>
-                                        }
-                                    </div>
-                                    <div class="d-flex align-items-center me-5">
-                                        <img class="mx-lg-2 ms-1" style="height:30px" src="~/assetsKH/icon/icon-chatluong-removebg.png" />
-                                        <p class="m-0">@Model.Quality</p>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <span class="title me-lg-2 me-1" style="font-weight:bold">Hạn bảo quản:</span>
-                                        <p class="m-0">@(Model.Expiry) ngày</p>
-                                    </div>
-                                </div>
-
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+								<div class="mb-2 d-flex align-items-center justify-content-between">
+									<div class="d-flex align-items-center ">
+										<span class="title pe-lg-2 " style="font-weight:bold">Danh mục :</span>
+										<p class="mb-0">@Model.CatName</p>
+									</div>
+									<div class="d-flex align-items-center ms-2">
+										<i class="me-2 bi bi-calendar3"></i>
+										<p class="mb-0">@(Model.TimePost.Value.ToString("HH:mm dd/MM/yyyy"))</p>
+									</div>
+								</div>
+								<div class="d-flex align-items-center mb-2">
+									<i class="me-2 bi bi-geo-alt-fill"></i>
+									<p class="m-0">@Model.Address</p>
+								</div>
+								<div class="d-flex align-items-center justify-content-between mb-2">
+									<div class="d-flex align-items-center">
+										<img style="height:30px" class="me-lg-2 me-1" src="~/assetsKH/icon/icon-giao-hang.png" />
+										@if (Model.IsDeliver == true)
+										{
+											<p class="m-0">Có</p>
+										}
+										else
+										{
+											<p class="m-0">Không</p>
+										}
+									</div>
+									<div class="d-flex align-items-center me-5">
+										<img class="mx-lg-2 ms-1" style="height:30px" src="~/assetsKH/icon/icon-chatluong-removebg.png" />
+										<p class="m-0">@Model.Quality</p>
+									</div>
+									<div class="d-flex align-items-center">
+										<span class="title me-lg-2 me-1" style="font-weight:bold">Hạn bảo quản:</span>
+										<p class="m-0">@(Model.Expiry) ngày</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </main>
 
 @section Scripts{
 
-    <script type="text/javascript">
+	<script type="text/javascript">
 
         $(function () {
             $('#btnAddLove').click(function () {
@@ -191,5 +188,5 @@
 
             });
         });
-    </script>
+	</script>
 }

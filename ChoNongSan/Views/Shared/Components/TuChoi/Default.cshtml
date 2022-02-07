@@ -19,16 +19,16 @@ else
     {
         <div class="col-12 pt-6">
             <div class="product-item">
-                <div class="product-img img-zoom-effect my-auto position-relative" style="width: 235px;">
-                    <a href="single-product.html">
-                        <img class="img-full img-thumbnail rounded " style=" height:240px" src="@item.ImageDefault" alt="Product Images">
-                    </a>
-                    <div class="position-absolute d-flex align-items-center" style="flex-direction:column;color:white;width:35px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
-                        <p class="my-0" style="color:white;font-weight:lighter">@item.NumImg</p>
-                    </div>
-                </div>
+				<div class="product-img img-zoom-effect my-auto position-relative" style="width: 235px;">
+					<a class="d-flex" asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@item.PostID">
+						<img class="img-full img-thumbnail rounded " style=" height:240px" src="@item.ImageDefault" alt="Product Images">
+					</a>
+					<div class="position-absolute d-flex align-items-center" style="flex-direction:column;color:white;width:35px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
+						<p class="my-0" style="color:white;font-weight:lighter">@item.NumImg</p>
+					</div>
+				</div>
                 <div class="product-content align-self-center">
-                    <a class="product-name pb-2" href="single-product.html">@item.Description</a>
+                    <span class="product-name pb-2" >@item.Description</span>
                     <div class="price-box pb-1">
                         <span class="new-price">@(item.Price.Value.ToString("N0") +" VNĐ")</span>
                     </div>

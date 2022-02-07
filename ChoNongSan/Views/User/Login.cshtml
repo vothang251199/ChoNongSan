@@ -16,17 +16,20 @@
                 <span asp-validation-for="LoginName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
+				<div class="d-flex justify-content-between">
+					<label asp-for="Password" class="control-label"></label>
+					<a style="color:#40AA54; font-size:14px" href="/User/ForgotPassword">Quên mật khẩu</a>
+				</div>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="col-12" style="display: flex; height: 50px; margin-top:20px">
+            <div class="col-12 d-flex mt-4 align-items-center justify-content-between" style="height: 50px">
 
-                <span class="font-size-13 text-muted" style="padding-top:10px;">
+                <span class="font-size-13 text-muted pt-2" >
                     Bạn chưa có tài khoản?
-                    <a class="small" asp-controller="User" asp-action="Register"> <span style="color: #40AA54">Đăng ký</span></a>
+                    <a class="small" asp-controller="User" asp-action="Register"> <span style="font-size:16px; color: #40AA54">Đăng ký</span></a>
                 </span>
-                <button style="margin:auto; margin-left:90px" type="submit" class="btn btn-custom-size lg-size btn-success btn-white-hover rounded-5">Đăng nhập</button>
+                <button type="submit" class="btn btn-custom-size lg-size btn-success btn-white-hover rounded">Đăng nhập</button>
             </div>
         </div>
     </div>

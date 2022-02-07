@@ -6,482 +6,458 @@
 @model HomeTabVm
 
 @{
-    ViewData["Title"] = "Trang chủ";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var id = ViewBag.AccountId;
-    decimal maxPrice = (decimal) Model.Data.Items.Max(p => p.Price);
+	ViewData["Title"] = "Trang chủ";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var id = ViewBag.AccountId;
+	//decimal maxPrice = (decimal)Model.Data.Items.Max(p => p.Price);
+	//decimal minPrice = (decimal)Model.Data.Items.Min(p => p.Price);
 }
 
 <style>
 
-    .product-list-item .product-add-action ul li a {
-        background-color: #40AA54;
-    }
+	.product-list-item .product-add-action ul li a {
+		background-color: #40AA54;
+	}
 
-    .pe-7s-like:before {
-        color: white;
-    }
+	.pe-7s-like:before {
+		color: white;
+	}
 
-    .product-add-action ul li a {
-        background-color: #40AA54;
-    }
+	.product-add-action ul li a {
+		background-color: #40AA54;
+	}
 
-        .product-add-action ul li a:hover {
-            background-color: black;
-        }
+		.product-add-action ul li a:hover {
+			background-color: black;
+		}
 
-    .product-tab-nav li a.active {
-        color: #40AA54;
-        font-weight: bold;
-    }
+	.product-tab-nav li a.active {
+		color: #40AA54;
+		font-weight: bold;
+	}
 
-        .product-tab-nav li a.active div {
-            border: 3px solid #40AA54;
-            box-shadow: 0 2px 5px;
-        }
+		.product-tab-nav li a.active div {
+			border: 3px solid #40AA54;
+			box-shadow: 0 2px 5px;
+		}
 
-    .product-tab-nav li a:hover {
-        color: black;
-        font-weight: bold;
-    }
+	.product-tab-nav li a:hover {
+		color: black;
+		font-weight: bold;
+	}
 
-    .product-tab-nav li a div {
-        border: 1px solid #808080;
-    }
+	.product-tab-nav li a div {
+		border: 1px solid #808080;
+	}
 
-    a.product-name:hover {
-        color: #40AA54;
-    }
+	a.product-name:hover {
+		color: #40AA54;
+	}
 
-    a.font-weight-bold:hover {
-        color: #40AA54;
-    }
+	a.font-weight-bold:hover {
+		color: #40AA54;
+	}
 
-    div.blog-content:hover h5.title.mb-4 a {
-        color: #40AA54;
-    }
+	div.blog-item:hover h5.title.mb-4 a {
+		color: #40AA54;
+	}
 
-    div.blog-content:hover div.button-wrap a.btn-custom-size {
-        background-color: #40AA54;
-        color: white;
-    }
+	div.blog-item:hover div.button-wrap a.btn-custom-size {
+		background-color: #40AA54;
+		color: white;
+	}
 
-    div #dropstatus div.nice-select {
-        margin-bottom: 35px !important;
-    }
+	div #dropstatus div.nice-select {
+		margin-bottom: 35px !important;
+	}
+
+	div #dropstatus1 div.nice-select {
+		margin-bottom: 0 !important;
+		border: 0 !important;
+	}
+
+	.price-filter .ui-slider-range {
+		background-color: #40AA54;
+	}
 </style>
 
-
 <main class="main-content">
-    <input hidden value="@id" id="AccountId" />
-    <input hidden id="maxPrice" value="@maxPrice" />
-    <div class="shop-area section-space-y-axis-100">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <ul class="nav product-tab-nav pb-10" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a href="/Home/Index?tabname=0" class="@(Model.ActiveTab == 0 ? "active" : string.Empty)">
-                                <div class="product-tab-icon rounded img-thumbnail  p-0" style=" background-color: #e3f0de; margin-bottom: 15px">
-                                    <img style="margin:15px;height:66px; width:66px" src="~/assetsKH/images/icon-all-raucuqua-removebg.png" />
-                                </div>
-                                <label>Tất cả</label>
-                            </a>
-                        </li>
-                        @foreach (var i in Model.ListCat)
-                        {
-                            <li class="nav-item" role="presentation">
-                                <a href="/Home/Index?tabname=@i.CategoryID" class="@(Model.ActiveTab == i.CategoryID ? "active" : string.Empty)">
-                                    <div class="product-tab-icon rounded img-thumbnail  p-0" style=" background-color: #e3f0de; margin-bottom: 15px ">
-                                        <img style="margin:15px;height:66px; width:66px" src="@i.Image" alt="Product Icon">
-                                    </div>
-                                    <label>@i.CateName</label>
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                </div>
+	<input hidden value="@id" id="AccountId" />
+	<div class="shop-area section-space-y-axis-100">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<ul class="nav product-tab-nav pb-10" id="myTab" role="tablist">
+						<li class="nav-item" role="presentation">
+							<a href="/Home/Index?tabname=0" class="@(Model.ActiveTab == 0 ? "active" : string.Empty)">
+								<div class="product-tab-icon rounded img-thumbnail  p-0" style=" background-color: #e3f0de; margin-bottom: 15px">
+									<img style="margin:15px;height:66px; width:66px" src="~/assetsKH/images/icon-all-raucuqua-removebg.png" />
+								</div>
+								<label>Tất cả</label>
+							</a>
+						</li>
+						@foreach (var i in Model.ListCat)
+						{
+							<li class="nav-item" role="presentation">
+								<a href="/Home/Index?tabname=@i.CategoryID" class="@(Model.ActiveTab == i.CategoryID ? "active" : string.Empty)">
+									<div class="product-tab-icon rounded img-thumbnail  p-0" style=" background-color: #e3f0de; margin-bottom: 15px ">
+										<img style="margin:15px;height:66px; width:66px" src="@i.Image" alt="Product Icon">
+									</div>
+									<label>@i.CateName</label>
+								</a>
+							</li>
+						}
+					</ul>
+				</div>
 
-                <div class="col-lg-3 order-2 pt-10 pt-lg-0">
-                    <div class="sidebar-area">
-                        <div class="widgets-searchbox mb-9">
-                            <form id="widgets-searchbox" action="#">
-                                <input class="input-field" type="text" placeholder="Tìm kiếm">
-                                <button class="widgets-searchbox-btn" type="submit">
-                                    <i class="pe-7s-search"></i>
-                                </button>
-                            </form>
-                        </div>
-                        <div class="widgets-area mb-9">
-                            <h1 class="title mb-5 text-center">Lọc</h1>
-                            <h2 class="widgets-title mb-5">Trạng thái tin</h2>
-                            <div class="widgets-item" id="dropstatus">
-                                <select class="nice-select wide">
-                                    <option value="Mặc định">Mặc định</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="widgets-area widgets-filter mb-9">
-                            <h2 class="widgets-title mb-5">Mức giá</h2>
-                            <div class="price-filter">
-                                <div id="slider-range"></div>
-                                <div class="price-slider-amount">
-                                    <div class="label-input position-relative">
-                                        <label>Giá : </label>
-                                        <input class="w-auto" type="text" id="amount" name="price" placeholder="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="widgets-area widgets-filter mb-9">
-                            <div class="price-filter">
-                                <div class="price-slider-amount ">
-                                    <button class="d-flex m-auto btn btn-primary btn-secondary-hover">Lọc</button>
+				<div class="col-lg-3 order-2 pt-10 pt-lg-0">
+					<div class="sidebar-area">
+						<div class="widgets-searchbox mb-9">
+							<form id="widgets-searchbox" asp-controller="Home" asp-action="Index" method="get">
+								<input name="keyword" asp-for="keyword" value="@ViewBag.Keyword" class="input-field" style="height:66px" type="text" placeholder="Tìm kiếm">
+								<button class="widgets-searchbox-btn" type="submit">
+									<i class="pe-7s-search"></i>
+								</button>
+							</form>
+						</div>
+						<form asp-action="Index" method="post">
+							<input hidden id="keyword" asp-for="keyword" />
+							@{ ViewBag.LsCat = Model.ListCat;}
+							<div class="widgets-area mb-9">
+								<h1 class="title mb-5 text-center" style="font-family: Arial, sans-serif">Lọc tin</h1>
+								<h2 class="widgets-title mb-5">Danh mục</h2>
+								<div class="widgets-item" id="dropstatus">
+									<select id="CatId" class="nice-select wide" asp-for="RequestFilterPost.CategoryId">
+										<option value="0">Tất cả</option>
+										@foreach (var item in Model.ListCat)
+										{
+											<option value="@item.CategoryID">@item.CateName</option>
+										}
+									</select>
+								</div>
+							</div>
+							<div class="widgets-area mb-9">
+								<h2 class="widgets-title mb-5">Trạng thái tin</h2>
+								<div class="widgets-item" id="dropstatus">
+									<select id="SortPost" class="nice-select wide" asp-for="RequestFilterPost.SortPost">
+										<option value="MacDinh">Mặc định</option>
+										<option value="TinMoi">Tin mới trước</option>
+										<option value="TinCu">Tin cũ trước</option>
+										<option value="GiaCao">Giá cao trước</option>
+										<option value="GiaThap">Giá thấp trước</option>
+									</select>
+								</div>
+							</div>
+							<div class="widgets-area widgets-filter mb-9">
+								<h2 class="widgets-title mb-5">Mức giá</h2>
+								<div class="price-filter">
+									<div id="slider-range"></div>
+									<div class="price-slider-amount">
+										<div class="label-input position-relative">
+											<label>Giá : </label>
+											<input class="w-auto" type="text" id="amount" name="price" placeholder="" />
+											<input hidden id="minPrice" value="1000" asp-for="RequestFilterPost.MinPrice" />
+											<input hidden id="maxPrice" value="@Model.Data.MaxPrice" asp-for="RequestFilterPost.MaxPrice" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="widgets-area mb-9">
+								<h2 class="widgets-title mb-5">Chất lượng</h2>
+								<div class="widgets-item" id="dropstatus">
+									<select id="Quality" class="nice-select wide" asp-for="RequestFilterPost.Quality">
+										<option value="TatCa">Tất cả</option>
+										<option value="Tốt">Tốt</option>
+										<option value="Trung bình">Trung bình</option>
+										<option value="Thấp">Thấp</option>
+									</select>
+								</div>
+							</div>
+							<div class="widgets-area mb-9">
+								<h2 class="widgets-title mb-5">Giao hàng</h2>
+								<div class="widgets-item" id="dropstatus">
+									<select id="IsDeliver" class="nice-select wide" asp-for="RequestFilterPost.IsDeliver">
+										<option value="TatCa">Tất cả</option>
+										<option value="Co">Có</option>
+										<option value="Khong">Không</option>
+									</select>
+								</div>
+							</div>
+							<div class="widgets-area mb-9">
+								<div class="price-filter">
+									<button onclick="smFilter()" type="submit" style="background-color:#40AA54" class="d-flex m-auto btn btn-primary btn-secondary-hover">Lọc</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-9 order-1">
-                    <div class="product-topbar">
-                        <ul>
-                            <li class="product-view-wrap">
-                                <ul class="nav" role="tablist">
-                                    <li class="grid-view" role="presentation">
-                                        <a class="active" id="grid-view-tab" data-bs-toggle="tab" href="#grid-view" role="tab" aria-selected="true">
-                                            <i class="fa fa-th"></i>
-                                        </a>
-                                    </li>
-                                    <li class="list-view" role="presentation">
-                                        <a id="list-view-tab" data-bs-toggle="tab" href="#list-view" role="tab" aria-selected="true">
-                                            <i class="fa fa-th-list"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="page-count">
-                                <span>@Model.Data.TotalRecords</span> Tin đăng được tìm thấy
-                            </li>
-                            <li class="short">
-                                <select class="nice-select wide rounded-0">
-                                    <option value="1">Sắp xếp theo mặc định</option>
-                                    <option value="2">Sắp xếp theo Giá cao</option>
-                                    <option value="3">Sắp xếp theo Giá thấp</option>
-                                </select>
-                            </li>
-                        </ul>
-                    </div>
+				<div class="col-lg-9 order-1">
 
-                    <div class="tab-content text-charcoal pt-8">
-                        <div class="tab-pane fade show active" id="grid-view" role="tabpanel" aria-labelledby="grid-view-tab">
-                            <div class="product-grid-view row">
-                                @foreach (var item in Model.Data.Items)
-                                {
-                                    item.ImageDefault = ViewBag.ApiUrl + item.ImageDefault;
-                                    <div class="col-lg-4 col-sm-6 pb-6 mb-sm-0">
-                                        <div class="product-item">
-                                            <div class="product-img img-zoom-effect">
-                                                <a asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@item.PostID" style="display:flex">
-                                                    <img style="margin:auto;width:262px; height:291px" class="img-thumbnail img-full" src="@item.ImageDefault" alt="">
-                                                </a>
-                                                <div class="position-absolute d-flex align-items-center" style="flex-direction:column;width:35px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
-                                                    <p class="my-0" style="font-weight: lighter; color: white;">@item.NumImg</p>
-                                                </div>
-                                                <div class="product-add-action">
-                                                    <ul>
-                                                        <li>
-                                                            <a name="@item.PostID" href="javascript:void(0)" class="btnAddLove rounded">
-                                                                <img style="width:25px; padding-bottom:7px" src="~/assetsKH/icon/icon-them-yeu-thich-removebg.png" />
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content">
-                                                <div class="price-box pb-1">
-                                                    <i class="bi bi-pencil-square" style="margin-right:10px"></i>
-                                                    <a class=" font-weight-bold" href="javascript:void(0)">@item.Title</a>
-                                                </div>
-                                                <div class="price-box pb-1">
-                                                    <strong class="new-price font-weight-bold" style="color: #d0021b; ">@(item.Price.Value.ToString("C", CultureInfo.GetCultureInfo("vi-vn")))</strong>
-                                                </div>
-                                                <div class="price-box pb-1">
-                                                    <span class="new-price">@(item.TimePost.Value.ToString("HH:mm dd/MM/yyyy"))</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
+					<div class="d-flex mx-2 justify-content-between row align-items-center" style="border: 1px solid #dee2e6">
+						<div class="d-flex align-items-center col-12 col-lg-auto w-auto mx-auto mx-lg-0 ms-lg-2 my-2 my-lg-0">
+							<ul class="nav" role="tablist">
+								<li class="grid-view me-lg-2 me-3" role="presentation">
+									<a class="active" id="grid-view-tab" data-bs-toggle="tab" href="#grid-view" role="tab" aria-selected="true">
+										<i class="fa fa-th"></i>
+									</a>
+								</li>
+								<li class="list-view" role="presentation">
+									<a id="list-view-tab" data-bs-toggle="tab" href="#list-view" role="tab" aria-selected="true">
+										<i class="fa fa-th-list"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="d-flex align-items-center col-12 col-lg-auto mx-auto w-auto mb-2 mb-lg-0 py-lg-4">
+							<span><span style="color: #40aa54; font-weight:bold; font-size:18px">@Model.Data.TotalRecords</span> Tin đăng được tìm thấy</span>
+						</div>
+						<div class="d-flex align-items-center col-12 col-lg-auto justify-content-center">
+							<div class="widgets-item" id="dropstatus1">
+								<form asp-controller="Home" asp-action="Index" method="post" onchange="document.getElementById('btnSort').click();">
+									<select class="nice-select" asp-for="RequestFilterPost.SortPost">
+										<option value="MacDinh">Sắp xếp theo mặc định</option>
+										<option value="TinMoi">Sắp xếp theo tin mới</option>
+										<option value="TinCu">Sắp xếp theo tin cũ</option>
+										<option value="GiaCao">Sắp xếp theo giá cao</option>
+										<option value="GiaThap">Sắp xếp theo giá thấp</option>
+									</select>
+									<input type="submit" hidden id="btnSort" />
+								</form>
+							</div>
+						</div>
+					</div>
 
-                        <div class="tab-pane fade" id="list-view" role="tabpanel" aria-labelledby="list-view-tab">
-                            <div class="product-list-view row">
-                                @foreach (var item in Model.Data.Items)
-                                {
+					<div class="tab-content text-charcoal pt-8">
+						<div class="tab-pane fade show active" id="grid-view" role="tabpanel" aria-labelledby="grid-view-tab">
+							<div class="product-grid-view row">
+								@foreach (var item in Model.Data.Items)
+								{
+									<div class="col-lg-4 col-sm-6 pb-6 mb-sm-0">
+										<div class="product-item">
+											<div class="product-img img-zoom-effect position-relative">
+												<a class="d-flex" asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@item.PostID">
+													<img style="margin:auto;width:262px; height:291px" class="img-thumbnail img-full" src="@item.ImageDefault" alt="">
+												</a>
+												<div class="position-absolute d-flex align-items-center" style="flex-direction:column;width:35px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
+													<p class="my-0" style="font-weight: lighter; color: white">@item.NumImg</p>
+												</div>
+												<div class="py-0 position-absolute d-flex align-items-center rounded img-thumbnail" style="border: 2px solid #dee2e6; top: 5px; right: 5px ">
+													<img style="height: 18px" class="me-1" src="~/assetsKH/icon/eye.png" />
+													<p class="my-0" style=" color: #40aa54;">@item.ViewCount</p>
+												</div>
+												<div class="product-add-action">
+													<ul>
+														<li>
+															<a name="@item.PostID" href="javascript:void(0)" class="btnAddLove rounded">
+																<img style="width:25px; padding-bottom:7px" src="~/assetsKH/icon/icon-them-yeu-thich-removebg.png" />
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+											<div class="product-content">
+												<div class="price-box pb-1 d-flex align-items-center justify-content-center">
+													<i class="bi bi-pencil-square" style="margin-right:10px"></i>
+													<a class=" font-weight-bold overflow-hidden" style="white-space: nowrap; text-overflow: ellipsis" asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@item.PostID">@item.Title</a>
+												</div>
+												<div class="price-box pb-1">
+													<strong class="new-price font-weight-bold" style="color: #d0021b; ">@(item.Price.Value.ToString("C0", CultureInfo.GetCultureInfo("vi-VN")))</strong>
+												</div>
+												<div class="price-box pb-1">
+													<span class="new-price">@(item.TimePost.Value.ToString("HH:mm dd/MM/yyyy"))</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								}
+							</div>
+						</div>
 
-                                    <div class="col-12 pt-6">
-                                        <div class="product-item">
-                                            <div class="product-img img-zoom-effect position-relative">
+						<div class="tab-pane fade" id="list-view" role="tabpanel" aria-labelledby="list-view-tab">
+							<div class="product-list-view row">
+								@foreach (var item in Model.Data.Items)
+								{
+									<div class="col-12 pt-6">
+										<div class="product-item position-relative">
+											<div class="py-0 position-absolute d-flex align-items-center rounded img-thumbnail" style="border: 2px solid #dee2e6; top: 10px; right: 10px ">
+												<img style="height: 18px" class="me-1" src="~/assetsKH/icon/eye.png" />
+												<p class="my-0" style=" color: #40aa54;">@item.ViewCount</p>
+											</div>
+											<div class="product-img img-zoom-effect position-relative">
+												<a asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@item.PostID" style="display:flex">
+													<img style="margin:auto;width:212px; height:235px" class="img-thumbnail img-full" src="@item.ImageDefault" alt="">
+												</a>
+												<div class="position-absolute d-flex align-items-center" style="flex-direction:column;width:35px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
+													<p class="my-0" style="font-weight: lighter; color: white;">@item.NumImg</p>
+												</div>
 
-                                                <a asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@item.PostID" style="display:flex">
-                                                    <img style="margin:auto;width:212px; height:235px" class="img-thumbnail img-full" src="@item.ImageDefault" alt="">
-                                                </a>
-                                                <div class="position-absolute d-flex align-items-center" style="flex-direction:column;width:35px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
-                                                    <p class="my-0" style="font-weight: lighter; color: white;">@item.NumImg</p>
-                                                </div>
-                                                <div class="product-add-action">
-                                                    <ul>
-                                                        <li>
-                                                            <a name="@item.PostID" href="javascript:void(0)" class="btnAddLove rounded">
-                                                                <img style="width:25px; padding-bottom:7px" src="~/assetsKH/icon/icon-them-yeu-thich-removebg.png" />
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content align-self-center">
-                                                <div class="price-box pb-1">
-                                                    <i class="bi bi-pencil-square" style="margin-right:10px"></i>
-                                                    <a class=" font-weight-bold" href="javascript:void(0)">@item.Title</a>
-                                                </div>
-                                                <div class="price-box pb-1">
-                                                    <strong class="new-price font-weight-bold" style="color: #d0021b; ">@(item.Price.Value.ToString("C", CultureInfo.GetCultureInfo("vi-vn")))</strong>
-                                                </div>
-                                                <div class="price-box pb-1">
-                                                    <span class="new-price">@(item.TimePost.Value.ToString("HH:mm dd/MM/yyyy"))</span>
-                                                </div>
+												<div class="product-add-action">
+													<ul>
+														<li>
+															<a name="@item.PostID" href="javascript:void(0)" class="btnAddLove rounded">
+																<img style="width:25px; padding-bottom:7px" src="~/assetsKH/icon/icon-them-yeu-thich-removebg.png" />
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+											<div class="product-content align-self-center">
+												<div class="price-box pb-1">
+													<i class="bi bi-pencil-square" style="margin-right:10px"></i>
+													<a class=" font-weight-bold" asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@item.PostID">@item.Title</a>
+												</div>
+												<div class="price-box pb-1">
+													<strong class="new-price font-weight-bold" style="color: #d0021b; ">@(item.Price.Value.ToString("C0", CultureInfo.GetCultureInfo("vi-VN")))</strong>
+												</div>
+												<div class="price-box pb-1">
+													<span class="new-price">@(item.TimePost.Value.ToString("HH:mm dd/MM/yyyy"))</span>
+												</div>
 
-                                                <p class="short-desc mb-0">@item.Address</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
+												<p class="short-desc mb-0">@item.Address</p>
+											</div>
+										</div>
+									</div>
+								}
+							</div>
+						</div>
+					</div>
 
-                    <div class="d-flex pt-10">
-                        <div class="m-auto">
-                            @await Component.InvokeAsync("Pager", Model.Data)
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
+					<div class="d-flex pt-10">
+						<div class="m-auto">
+							@await Component.InvokeAsync("Pager", Model.Data)
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </main>
-
-<div class="product-area section-space-top-100">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <ul class="nav product-tab-nav pb-10" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a href="/Home/Index?tabname=0" class="@(Model.ActiveTab == 0 ? "active" : string.Empty)">
-                            <div class="product-tab-icon rounded img-thumbnail  p-0" style=" background-color: #e3f0de; margin-bottom: 15px">
-                                <img style="margin:15px;height:66px; width:66px" src="~/assetsKH/images/icon-all-raucuqua-removebg.png" />
-                            </div>
-                            <label>Tất cả</label>
-                        </a>
-                    </li>
-                    @foreach (var i in Model.ListCat)
-                    {
-                        <li class="nav-item" role="presentation">
-                            <a href="/Home/Index?tabname=@i.CategoryID" class="@(Model.ActiveTab == i.CategoryID ? "active" : string.Empty)">
-                                <div class="product-tab-icon rounded img-thumbnail  p-0" style=" background-color: #e3f0de; margin-bottom: 15px ">
-                                    <img style="margin:15px;height:66px; width:66px" src="@i.Image" alt="Product Icon">
-                                </div>
-                                <label>@i.CateName</label>
-                            </a>
-                        </li>
-                    }
-                </ul>
-
-                <div class="tab-content " id="myTabContent">
-                    <div class="tab-pane fade show active" id="all-items" role="tabpanel" aria-labelledby="all-items-tab">
-                        <div class="product-item-wrap row">
-                            @if (Model.Data.Items.Count == 0)
-                            {
-                                <h2 class="text-center my-5" style="color:#d0021b; font-family: Playfair Display, serif"> Danh mục này chưa có tin đăng.</h2>
-                            }
-                            else
-                            {
-                                @foreach (var item in Model.Data.Items)
-                                {
-                                    <div class="col-xl-3 col-lg-4 col-sm-6 pt-6 pt-sm-0 ">
-                                        <div class="product-item">
-                                            <div class="product-img img-zoom-effect position-relative">
-                                                <a asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@item.PostID" style="display:flex">
-                                                    <img style="margin:auto;width:262px; height:291px" class="img-thumbnail img-full" src="@item.ImageDefault" alt="">
-                                                </a>
-                                                <div class="position-absolute d-flex align-items-center" style="flex-direction:column;color:white;width:35px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
-                                                    <p class="my-0" style="font-weight:lighter">@item.NumImg</p>
-                                                </div>
-                                                <div class="product-add-action">
-                                                    <ul>
-                                                        <li>
-                                                            <a name="@item.PostID" href="javascript:void(0)" class="btnAddLove rounded">
-                                                                <i class="pe-7s-like"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content">
-                                                <div class="price-box pb-1">
-                                                    <i class="bi bi-pencil-square" style="margin-right:10px"></i>
-                                                    <a class=" font-weight-bold" href="javascript:void(0)">@item.Title</a>
-                                                </div>
-                                                <div class="price-box pb-1">
-                                                    <strong class="new-price font-weight-bold" style="color: #d0021b; ">@(item.Price.Value.ToString("N0") + " VNĐ" )</strong>
-                                                </div>
-                                                <div class="price-box pb-1">
-                                                    <span class="new-price">@(item.TimePost.Value.ToString("HH:mm dd/MM/yyyy"))</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            }
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <br />
-                <div style="display: flex;">
-                    <div style="margin:auto">
-                        @await Component.InvokeAsync("Pager", Model.Data)
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!--tin có nhiều lượt xem Begin-->
 <div class="product-area section-space-top-55">
-    <div class="container">
-        <div class="section-title text-center pb-55">
-            @*<span class="sub-title text-primary">Tin có nhiều lượt xem</span>*@
-            <h2 class="title mb-0">Tin có nhiều lượt xem</h2>
-            <hr />
-        </div>
-        <div class="row">
-            <div class="col-lg-12 row mx-0">
-                @foreach (var p in Model.ListManyViews)
-                {
-                    <div class="swiper-slide col-12 col-lg-4 px-0 mx-0 h-auto">
-                        <div class="product-list-item">
-                            <div class="product-img img-zoom-effect position-relative">
-
-                                <a href="single-product.html" style="width:110px ">
-                                    <img style="height: 121px" class="img-full rounded img-thumbnail" src="@p.ImageDefault" alt="Product Images">
-                                </a>
-                                <div class="position-absolute d-flex align-items-center" style="flex-direction:column;color:white;width:30px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
-                                    <p class="my-0" style="font-weight:lighter">@p.NumImg</p>
-                                </div>
-                            </div>
-                            <div class="product-content" style="padding-left:10px">
-                                <div class="price-box pb-1">
-                                    <i class="bi bi-pencil-square" style="margin-right:10px"></i>
-                                    <a class=" font-weight-bold" href="javascript:void(0)">@p.Title</a>
-                                </div>
-                                <div class="price-box pb-1">
-                                    <i style="color: #dc9a0e; margin-right:10px" class="bi bi-tags-fill"></i>
-                                    <span class="new-price text-danger overflow-hidden" style="white-space:nowrap; text-overflow:ellipsis">@(p.Price.Value.ToString("N0") +" VNĐ")</span>
-                                </div>
-                                <div class="rating-box">
-                                    <div class="rating-box d-flex align-items-center">
-                                        <i class="bi bi-geo-alt-fill" style="color:black; margin-right:10px"></i>
-                                        <p class="m-0 overflow-hidden" style="white-space: nowrap; text-overflow: ellipsis">@p.Address</p>
-                                    </div>
-                                    <div class="product-add-action">
-                                        <ul>
-                                            <li>
-                                                <a name="@p.PostID" href="javascript:void(0)" class="btnAddLove rounded">
-                                                    <i class="pe-7s-like"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-                <!-- Add Arrows -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<div class="section-title text-center pb-55">
+			@*<span class="sub-title text-primary">Tin có nhiều lượt xem</span>*@
+			<h2 class="title mb-0">Tin có nhiều lượt xem</h2>
+			<hr />
+		</div>
+		<div class="row">
+			<div class="col-lg-12 row mx-0">
+				@foreach (var p in Model.ListManyViews)
+				{
+					<div class="swiper-slide col-12 col-lg-4 px-0 mx-0 h-auto">
+						<div class="product-list-item">
+							<div class="py-0 position-absolute d-flex align-items-center rounded img-thumbnail" style="border: 2px solid #dee2e6; top: 10px; right: 10px ">
+								<img style="height: 18px" class="me-1" src="~/assetsKH/icon/eye.png" />
+								<p class="my-0" style=" color: #40aa54;">@p.ViewCount</p>
+							</div>
+							<div class="product-img img-zoom-effect position-relative">
+								<a class="d-flex" asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@p.PostID" style="width:110px ">
+									<img style="height: 121px" class="img-full rounded img-thumbnail" src="@p.ImageDefault" alt="Product Images">
+								</a>
+								<div class="position-absolute d-flex align-items-center" style="flex-direction:column;color:white;width:30px;height:25px;top:0; left:0" data-bg-image="/assetsKH/icon/number-image.svg">
+									<p class="my-0" style="font-weight:lighter">@p.NumImg</p>
+								</div>
+							</div>
+							<div class="product-content" style="padding-left:10px">
+								<div class="price-box pb-1">
+									<i class="bi bi-pencil-square" style="margin-right:10px"></i>
+									<a class=" font-weight-bold" asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@p.PostID">@p.Title</a>
+								</div>
+								<div class="price-box pb-1">
+									<i style="color: #dc9a0e; margin-right:10px" class="bi bi-tags-fill"></i>
+									<span class="new-price text-danger overflow-hidden" style="white-space:nowrap; text-overflow:ellipsis">@(p.Price.Value.ToString("N0") +" VNĐ")</span>
+								</div>
+								<div class="rating-box">
+									<div class="rating-box d-flex align-items-center">
+										<i class="bi bi-geo-alt-fill" style="color:black; margin-right:10px"></i>
+										<p class="m-0 overflow-hidden" style="white-space: nowrap; text-overflow: ellipsis">@p.Address</p>
+									</div>
+									<div class="product-add-action">
+										<ul>
+											<li>
+												<a name="@p.PostID" href="javascript:void(0)" class="btnAddLove rounded">
+													<i class="pe-7s-like"></i>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+				<!-- Add Arrows -->
+				<div class="swiper-button-next"></div>
+				<div class="swiper-button-prev"></div>
+			</div>
+		</div>
+	</div>
 </div>
 <!--tin có nhiều lượt xem End-->
 <!--tin mới nhất Begin-->
 <div class="blog-area section-space-y-axis-100">
-    <div class="container">
-        <div class="section-title text-center pb-55">
-            @*<span class="sub-title text-primary">Các</span>*@
-            <h2 class="title mb-0">Tin mới</h2>
-            <hr />
-        </div>
-        <div class="row">
-            <div class="col-lg-12 row mx-0">
+	<div class="container">
+		<div class="section-title text-center pb-55">
+			@*<span class="sub-title text-primary">Các</span>*@
+			<h2 class="title mb-0">Tin mới</h2>
+			<hr />
+		</div>
+		<div class="row">
+			<div class="col-lg-12 row mx-0">
 
-                @foreach (var p in Model.ListPostNew)
-                {
-                    <div class="swiper-slide col-12 col-lg-4 px-0 mx-0 h-auto">
-                        <div class="blog-item">
-                            <div class="blog-img img-zoom-effect">
-                                <a href="javascript:void(0)" style="width:360px">
-                                    <img class="img-full rounded img-thumbnail" style="height:306px" src="@p.ImageDefault" alt="">
-                                </a>
-                            </div>
-                            <div class="blog-content">
-                                <div class="blog-meta text-dim-gray pb-3">
-                                    <ul>
-                                        <li class="date"><i class="fa fa-calendar-o me-2"></i>@(p.TimePost.Value.ToString("HH:mm dd/MM/yyyy"))</li>
-                                        <li>
-                                            <span class="comments me-3">
-                                                <a href="javascript:void(0)">2 Bình luận</a>
-                                            </span>
-                                            @*<span class="link-share">
-                                                    <a href="javascript:void(0)">Chia sẻ</a>
-                                                </span>*@
-                                        </li>
-                                    </ul>
-                                </div>
-                                <h5 class="title mb-4">
-                                    <a href="blog-detail-left-sidebar.html">@p.Title</a>
-                                </h5>
-                                <p class="short-desc mb-5">@p.Description.</p>
-                                <div class="button-wrap">
-                                    <a class="btn btn-custom-size btn-dark btn-lg rounded-0" href="blog-detail-left-sidebar.html">Chi tiết</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+				@foreach (var p in Model.ListPostNew)
+				{
+					<div class="swiper-slide col-12 col-lg-4 px-0 mx-0 h-auto">
+						<div class="blog-item">
+							<div class="blog-img img-zoom-effect">
+								<a class="d-flex" asp-controller="QuanLyTinDang" asp-action="ChiTiet" asp-route-postId="@p.PostID" style="width:360px">
+									<img class="img-full rounded img-thumbnail" style="height:306px" src="@p.ImageDefault" alt="">
+								</a>
+							</div>
+							<div class="blog-content">
+								<div class="blog-meta text-dim-gray pb-3">
+									<ul>
+										<li class="date"><i class="fa fa-calendar-o me-2"></i>@(p.TimePost.Value.ToString("HH:mm dd/MM/yyyy"))</li>
+										<li>
+											<span class="comments me-3">
+												<a href="javascript:void(0)">2 Đánh giá</a>
+											</span>
+											@*<span class="link-share">
+													<a href="javascript:void(0)">Chia sẻ</a>
+												</span>*@
+										</li>
+									</ul>
+								</div>
+								<h5 class="title mb-4">
+									<a href="blog-detail-left-sidebar.html">@p.Title</a>
+								</h5>
+								<p class="short-desc mb-5 overflow-hidden" style="white-space:nowrap; text-overflow:ellipsis">@p.Description.</p>
+								<div class="button-wrap">
+									<a class="btn btn-custom-size btn-dark btn-lg rounded-0" href="blog-detail-left-sidebar.html">Chi tiết</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
 
-                <!-- Add Arrows -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-        </div>
-    </div>
+				<!-- Add Arrows -->
+				<div class="swiper-button-next"></div>
+				<div class="swiper-button-prev"></div>
+			</div>
+		</div>
+	</div>
 </div>
 <!--tin mới nhất End-->
 
 @section Scripts{
 
-    @*<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>*@
+	@*<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>*@
 
-    <script type="text/javascript">
+	<script type="text/javascript">
         const formatter = new Intl.NumberFormat('vi-VN', {
             style: 'currency',
             currency: 'VND',
@@ -490,8 +466,12 @@
 
         $(document).ready(function () {
             $('#amount').val(formatter.format(1000) + " - " + formatter.format($('#maxPrice').val()));
-            
-        })
+			//$('#minPrice').val() = 1000;
+		})
+
+		function smFilter() {
+			document.getElementsById("keyword").value = document.getElementsByName("keyword").value;
+		}
 
         $(function () {
             $('#slider-range').slider({
@@ -501,15 +481,16 @@
                 max: $('#maxPrice').val(),
                 values: [1000, $('#maxPrice').val()],
                 slide: function (event, ui) {
-                    //document.getElementById('amount').step = 1000;
                     $('#amount').val(formatter.format(ui.values[0]) + " - " + formatter.format(ui.values[1]));
-                    var min = ui.values[0];
-                    var max = ui.values[1];
-                }
+					document.getElementById("minPrice").value = ui.values[0];
+					document.getElementById("maxPrice").value = ui.values[1];
+				},
+
             })
         });
 
-        $(function () {
+		$(function () {
+
             $('.btnAddLove').click(function () {
                 var a = $(this).attr('name');
                 const id = $('#AccountId').val();
@@ -531,5 +512,5 @@
 
             });
         });
-    </script>
+	</script>
 }

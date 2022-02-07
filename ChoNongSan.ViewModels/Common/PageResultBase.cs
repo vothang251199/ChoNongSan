@@ -8,6 +8,7 @@ namespace ChoNongSan.ViewModels.Common
 {
     public class PageResultBase
     {
+        public decimal MaxPrice { get; set; }
         public int PageIndex { get; set; }
 
         public int PageSize { get; set; }

@@ -22,170 +22,169 @@ using System.Threading.Tasks;
 
 namespace ChoNongSan.Controllers
 {
-    [Authorize]
-    public class QuanLyTinDang : Controller
-    {
-        private readonly IConfiguration _config;
-        private readonly IPostApi _postApi;
-        private readonly IStorageService _storageService;
-        private readonly ICategoryApi _categoryApi;
-        private readonly IWeightApi _weightApi;
-        private readonly IUserApi _userApi;
-        private const List<IFormFile> lsImg = null;
+	[Authorize]
+	public class QuanLyTinDang : Controller
+	{
+		private readonly IConfiguration _config;
+		private readonly IPostApi _postApi;
+		private readonly IStorageService _storageService;
+		private readonly ICategoryApi _categoryApi;
+		private readonly IWeightApi _weightApi;
+		private readonly IUserApi _userApi;
+		private const List<IFormFile> lsImg = null;
 
-        public QuanLyTinDang(IConfiguration config, IPostApi postApi, IStorageService storageService,
-            ICategoryApi categoryApi, IWeightApi weightApi, IUserApi userApi)
-        {
-            _userApi = userApi;
-            _weightApi = weightApi;
-            _categoryApi = categoryApi;
-            _storageService = storageService;
-            _config = config;
-            _postApi = postApi;
-        }
+		public QuanLyTinDang(IConfiguration config, IPostApi postApi, IStorageService storageService,
+			ICategoryApi categoryApi, IWeightApi weightApi, IUserApi userApi)
+		{
+			_userApi = userApi;
+			_weightApi = weightApi;
+			_categoryApi = categoryApi;
+			_storageService = storageService;
+			_config = config;
+			_postApi = postApi;
+		}
 
-        [HttpGet]
-        public IActionResult Index(PostTabVm vm, int pageIndex = 1, int pageSize = 2)
-        {
-            if (vm == null)
-            {
-                vm = new PostTabVm
-                {
-                    ActiveTab = Tab.HienThi,
-                };
-            }
-            vm.pageIndex = pageIndex;
-            vm.pageSize = pageSize;
+		[HttpGet]
+		public IActionResult Index(PostTabVm vm, int pageIndex = 1, int pageSize = 2)
+		{
+			if (vm == null)
+			{
+				vm = new PostTabVm
+				{
+					ActiveTab = Tab.HienThi,
+				};
+			}
+			vm.pageIndex = pageIndex;
+			vm.pageSize = pageSize;
 
-            return View(vm);
-        }
+			return View(vm);
+		}
 
-        public IActionResult SwitchTabs(string tabname)
-        {
-            var vm = new PostTabVm();
-            switch (tabname)
-            {
-                case "HienThi":
-                    vm.ActiveTab = Tab.HienThi;
-                    break;
+		public IActionResult SwitchTabs(string tabname)
+		{
+			var vm = new PostTabVm();
+			switch (tabname)
+			{
+				case "HienThi":
+					vm.ActiveTab = Tab.HienThi;
+					break;
 
-                case "DoiDuyet":
-                    vm.ActiveTab = Tab.DoiDuyet;
-                    break;
+				case "DoiDuyet":
+					vm.ActiveTab = Tab.DoiDuyet;
+					break;
 
-                case "TuChoi":
-                    vm.ActiveTab = Tab.TuChoi;
-                    break;
+				case "TuChoi":
+					vm.ActiveTab = Tab.TuChoi;
+					break;
 
-                case "DaAn":
-                    vm.ActiveTab = Tab.DaAn;
-                    break;
+				case "DaAn":
+					vm.ActiveTab = Tab.DaAn;
+					break;
 
-                default:
-                    vm.ActiveTab = Tab.HienThi;
-                    break;
-            }
-            return RedirectToAction(nameof(QuanLyTinDang.Index), vm);
-        }
+				default:
+					vm.ActiveTab = Tab.HienThi;
+					break;
+			}
+			return RedirectToAction(nameof(QuanLyTinDang.Index), vm);
+		}
 
-        [HttpGet]
-        public async Task<IActionResult> TaoMoi()
-        {
-            ViewBag.CategoryList = await _categoryApi.GetListCat();
-            ViewBag.WeightList = await _weightApi.GetListWeight();
+		[HttpGet]
+		public async Task<IActionResult> TaoMoi()
+		{
+			ViewBag.CategoryList = await _categoryApi.GetListCat();
+			ViewBag.WeightList = await _weightApi.GetListWeight();
 
-            var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
-            var user = await _userApi.GetUserById(Convert.ToInt32(userId));
-            ViewBag.Phone = user.PhoneNumber;
-            ViewBag.Address = user.Address;
+			var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+			var user = await _userApi.GetUserById(Convert.ToInt32(userId));
+			ViewBag.Phone = user.PhoneNumber;
+			ViewBag.Address = user.Address;
 
-            return View();
-        }
+			return View();
+		}
 
-        [HttpPost]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> TaoMoi(CreatePostRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewBag.CategoryList = await _categoryApi.GetListCat();
-                ViewBag.WeightList = await _weightApi.GetListWeight();
-                var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
-                var user = await _userApi.GetUserById(Convert.ToInt32(userId));
-                ViewBag.Phone = user.PhoneNumber;
-                ViewBag.Address = user.Address;
-                ViewBag.LsImg = request.ThumbnailImage;
-                return View(request);
-            }
+		[HttpPost]
+		[Consumes("multipart/form-data")]
+		public async Task<IActionResult> TaoMoi(CreatePostRequest request)
+		{
+			if (!ModelState.IsValid)
+			{
+				ViewBag.CategoryList = await _categoryApi.GetListCat();
+				ViewBag.WeightList = await _weightApi.GetListWeight();
+				var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+				var user = await _userApi.GetUserById(Convert.ToInt32(userId));
+				ViewBag.Phone = user.PhoneNumber;
+				ViewBag.Address = user.Address;
+				ViewBag.LsImg = request.ThumbnailImage;
+				return View(request);
+			}
 
-            var result = await _postApi.CreatePost(request);
-            if (!result)
-            {
-                TempData["ALertMessage"] = "Đăng tin không thành công";
-                return View();
-            }
-            TempData["ALertMessage"] = "Đăng tin thành công, chờ hệ thống xét duyệt";
-            var vm = new PostTabVm
-            {
-                ActiveTab = Tab.DoiDuyet
-            };
+			var result = await _postApi.CreatePost(request);
+			if (!result)
+			{
+				TempData["ALertMessage"] = "Đăng tin không thành công";
+				return View();
+			}
+			TempData["ALertMessage"] = "Đăng tin thành công, chờ hệ thống xét duyệt";
+			var vm = new PostTabVm
+			{
+				ActiveTab = Tab.DoiDuyet
+			};
 
-            return RedirectToAction(nameof(QuanLyTinDang.Index), vm);
-        }
+			return RedirectToAction(nameof(QuanLyTinDang.Index), vm);
+		}
 
-        [HttpGet]
-        public async Task<IActionResult> YeuThich(int pageIndex = 1, int pageSize = 4)
-        {
-            var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
-            GetPagingCommonRequest request = new GetPagingCommonRequest();
+		[HttpGet]
+		public async Task<IActionResult> YeuThich(int pageIndex = 1, int pageSize = 4)
+		{
+			var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+			GetPagingCommonRequest request = new GetPagingCommonRequest();
 
-            request.ById = Convert.ToInt32(userId);
-            request.PageIndex = pageIndex;
-            request.PageSize = pageSize;
+			request.ById = Convert.ToInt32(userId);
+			request.PageIndex = pageIndex;
+			request.PageSize = pageSize;
 
-            var result = await _postApi.GetAllLoveByAccountId(request);
-            var obj = (JObject)JsonConvert.DeserializeObject(result);
-            var status = Convert.ToString(obj["status"]);
-            var model = obj["data"].ToObject<PageResult<PostVmTongQuat>>();
-            foreach (var i in model.Items)
-            {
-                i.ImageDefault = _config["ApiUrl"] + i.ImageDefault;
-            }
-            return View(model);
-        }
+			var result = await _postApi.GetAllLoveByAccountId(request);
+			var obj = (JObject)JsonConvert.DeserializeObject(result);
+			var status = Convert.ToString(obj["status"]);
+			var model = obj["data"].ToObject<PageResult<PostVmTongQuat>>();
+			foreach (var i in model.Items)
+			{
+				i.ImageDefault = _config["ApiUrl"] + i.ImageDefault;
+			}
+			return View(model);
+		}
 
-        public async Task<IActionResult> AddlovePost([FromBody] string postId)
-        {
-            var accountId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
-            var request = new LoveRequest()
-            {
-                accountId = Convert.ToInt32(accountId),
-                postId = Convert.ToInt32(postId)
-            };
-            var data = await _postApi.AddPostLove(request);
+		public async Task<IActionResult> AddlovePost([FromBody] string postId)
+		{
+			var accountId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+			var request = new LoveRequest()
+			{
+				accountId = Convert.ToInt32(accountId),
+				postId = Convert.ToInt32(postId)
+			};
+			var data = await _postApi.AddPostLove(request);
 
-            return Json(data);
-        }
+			return Json(data);
+		}
 
-        [HttpGet]
-        public async Task<IActionResult> ChiTiet(int postId)
-        {
-            await _postApi.AddViewCount(postId);
-            var model = await _postApi.GetDetail(postId);
-            model.Avatar = _config["ApiUrl"] + model.Avatar;
-            for (var i = 0; i < model.ListImage.Count; i++)
-            {
-                model.ListImage[i] = _config["ApiUrl"] + model.ListImage[i];
-            }
+		[HttpGet]
+		public async Task<IActionResult> ChiTiet(int postId)
+		{
+			var model = await _postApi.GetDetail(postId);
+			model.Avatar = _config["ApiUrl"] + model.Avatar;
+			for (var i = 0; i < model.ListImage.Count; i++)
+			{
+				model.ListImage[i] = _config["ApiUrl"] + model.ListImage[i];
+			}
 
-            var a = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
-            if (string.IsNullOrEmpty(a))
-                ViewBag.AccountId = 0;
-            else
-                ViewBag.AccountId = a;
+			var a = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+			if (string.IsNullOrEmpty(a))
+				ViewBag.AccountId = 0;
+			else
+				ViewBag.AccountId = a;
 
-            ViewBag.HiddenLayOut = 1;
-            return View(model);
-        }
-    }
+			ViewBag.HiddenLayOut = 1;
+			return View(model);
+		}
+	}
 }
