@@ -48,6 +48,8 @@ namespace ChoNongSan.Application.KhachHang.Posts
 
 		Task<List<PostVmTongQuat>> GetListPostForApp();
 
+		Task<List<PostVmTongQuat>> GetListPostBySearch(string keyword);
+
 		Task<PageResult<PostVmTongQuat>> GetAllPostsViewHome(GetPagingCommonRequest request);
 
 		Task<string> AddLovePost(LoveRequest request);
@@ -276,6 +278,8 @@ namespace ChoNongSan.Application.KhachHang.Posts
 			{
 				PostID = x.PostId,
 				Title = x.Title,
+				NumImg = _context.ImagePosts.AsNoTracking().Where(p => p.PostId == x.PostId).ToList().Count,
+				CategoryName = _context.Categories.AsNoTracking().FirstOrDefault(p => p.CategoryId == p.CategoryId).CateName,
 				ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.PostId == x.PostId && p.IsDefault == true).ImagePath,
 				ViewCount = x.ViewCount,
 				StatusPost = x.StatusPost,
@@ -284,6 +288,40 @@ namespace ChoNongSan.Application.KhachHang.Posts
 				NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.AccountId).FullName,
 				Price = x.Price,
 				WeightNumber = x.WeightNumber,
+				Address = x.Address,
+				WeightName = _context.WeightTypes.AsNoTracking().FirstOrDefault(p => p.WeightId == x.WeightId).WeightName,
+				Lat = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lat,
+				Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,
+			}).ToList();
+			return data;
+		}
+
+		public async Task<List<PostVmTongQuat>> GetListPostBySearch(string keyword)
+		{
+			var lsPost = await _context.Posts.AsNoTracking().Where(x => x.StatusPost == 2).ToListAsync();
+			if (!string.IsNullOrEmpty(keyword))
+			{
+				lsPost = (from p in lsPost
+						  where _context.Categories.AsNoTracking().FirstOrDefault(x => x.CategoryId == p.CategoryId).CateName.ToLower().Contains(keyword.ToLower())
+							|| p.Title.ToLower().Contains(keyword.ToLower())
+						  select p
+						  ).ToList();
+			}
+			var data = lsPost.Select(x => new PostVmTongQuat()
+			{
+				PostID = x.PostId,
+				Title = x.Title,
+				ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.PostId == x.PostId && p.IsDefault == true).ImagePath,
+				ViewCount = x.ViewCount,
+				StatusPost = x.StatusPost,
+				Description = x.Description,
+				TimePost = x.PostTime,
+				NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.AccountId).FullName,
+				Price = x.Price,
+				WeightNumber = x.WeightNumber,
+				CategoryName = _context.Categories.AsNoTracking().FirstOrDefault(p => p.CategoryId == x.CategoryId).CateName,
+				NumImg = _context.ImagePosts.AsNoTracking().Where(p => p.PostId == x.PostId).ToList().Count,
+				Address = x.Address,
 				WeightName = _context.WeightTypes.AsNoTracking().FirstOrDefault(p => p.WeightId == x.WeightId).WeightName,
 				Lat = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lat,
 				Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,

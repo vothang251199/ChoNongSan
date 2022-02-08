@@ -70,6 +70,12 @@ namespace ChoNongSan.Api.Controllers
 			return Ok(new { data = await _postService.GetAllLoveByAccountId(request), status = "OK" });
 		}
 
+		[HttpGet("tim-kiem-tin/{keyword}")]
+		public async Task<IActionResult> GetListPostForApp(string keyword)
+		{
+			return Ok(await _postService.GetListPostBySearch(keyword));
+		}
+
 		[HttpGet("tat-ca-tin-dang-cho-app")]
 		public async Task<IActionResult> GetListPostForApp()
 		{
