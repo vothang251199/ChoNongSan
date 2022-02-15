@@ -39,13 +39,13 @@ namespace ChoNongSan.Controllers
 			HomeTabVm vm = new();
 
 			vm.keyword = keyword;
-			var request = new GetPagingCommonRequest
+			var request = new FilterPostRequest
 			{
 				ById = Convert.ToInt32(tabname),
 				Roles = 3,
 				Keyword = keyword,
 				PageIndex = pageIndex,
-				PageSize = pageSize
+				PageSize = pageSize,
 			};
 
 			var data = await _postApi.GetPostPaging(request);
@@ -93,14 +93,19 @@ namespace ChoNongSan.Controllers
 		public async Task<IActionResult> Index(HomeTabVm vm)
 		{
 			ViewBag.Keyword = vm.keyword;
-			var rq = new GetPagingCommonRequest
+			var rq = new FilterPostRequest
 			{
 				ById = 0,
 				Roles = 3,
 				Keyword = "",
 				PageIndex = 1,
 				PageSize = 9,
-				RequestFilterPost = vm.RequestFilterPost
+				CategoryId = vm.RequestFilterPost.CategoryId,
+				IsDeliver = vm.RequestFilterPost.IsDeliver,
+				MaxPrice = vm.RequestFilterPost.MaxPrice,
+				MinPrice = vm.RequestFilterPost.MinPrice,
+				Quality = vm.RequestFilterPost.Quality,
+				SortPost = vm.RequestFilterPost.SortPost
 			};
 
 			var data = await _postApi.GetPostPaging(rq);

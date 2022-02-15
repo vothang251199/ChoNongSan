@@ -50,7 +50,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
 
 		Task<List<PostVmTongQuat>> GetListPostBySearch(string keyword);
 
-		Task<PageResult<PostVmTongQuat>> GetAllPostsViewHome(GetPagingCommonRequest request);
+		Task<PageResult<PostVmTongQuat>> GetAllPostsViewHome(FilterPostRequest request);
 
 		Task<string> AddLovePost(LoveRequest request);
 
@@ -156,7 +156,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
 			return pageResult;
 		}
 
-		public async Task<PageResult<PostVmTongQuat>> GetAllPostsViewHome(GetPagingCommonRequest request)
+		public async Task<PageResult<PostVmTongQuat>> GetAllPostsViewHome(FilterPostRequest request)
 		{
 			List<Post> lsPost = null;
 			var pageResult = new PageResult<PostVmTongQuat>();
@@ -173,7 +173,10 @@ namespace ChoNongSan.Application.KhachHang.Posts
 			if (!String.IsNullOrEmpty(request.Keyword))
 			{
 				request.Keyword = request.Keyword.ToLower();
-				lsPost = lsPost.Where(x => x.Address.ToLower().Contains(request.Keyword) || x.Title.ToLower().Contains(request.Keyword)).ToList();
+				lsPost = lsPost.Where(x => x.Address.ToLower().Contains(request.Keyword) ||
+					x.Title.ToLower().Contains(request.Keyword) ||
+					_context.Categories.FirstOrDefault(y => y.CategoryId == x.CategoryId).CateName.ToLower().Contains(request.Keyword)
+					).ToList();
 			}
 
 			if (request.ById != null && request.ById != 0)
@@ -181,60 +184,60 @@ namespace ChoNongSan.Application.KhachHang.Posts
 				lsPost = lsPost.Where(x => x.CategoryId == request.ById).ToList();
 			}
 
-			if (request.RequestFilterPost != null)
+			if (request != null)
 			{
-				if (request.RequestFilterPost.CategoryId != 0)
+				if (request.CategoryId != 0)
 				{
-					lsPost = lsPost.Where(x => x.CategoryId == request.RequestFilterPost.CategoryId).ToList();
+					lsPost = lsPost.Where(x => x.CategoryId == request.CategoryId).ToList();
 				}
 
-				if (!string.IsNullOrEmpty(request.RequestFilterPost.SortPost))
+				if (!string.IsNullOrEmpty(request.SortPost))
 				{
 					//if (request.RequestFilterPost.SortPost.Contains("MacDinh")) thì cứ để y như vậy
 
-					if (request.RequestFilterPost.SortPost.Contains("TinMoi"))
+					if (request.SortPost.Contains("TinMoi"))
 						lsPost = (from p in lsPost
 								  orderby p.PostTime descending
 								  select p
 								  ).ToList();
-					else if (request.RequestFilterPost.SortPost.Contains("TinCu"))
+					else if (request.SortPost.Contains("TinCu"))
 						lsPost = (from p in lsPost
 								  orderby p.PostTime ascending
 								  select p
 								  ).ToList();
-					else if (request.RequestFilterPost.SortPost.Contains("GiaCao"))
+					else if (request.SortPost.Contains("GiaCao"))
 						lsPost = (from p in lsPost
 								  orderby p.Price descending
 								  select p
 								  ).ToList();
-					else if (request.RequestFilterPost.SortPost.Contains("GiaThap"))
+					else if (request.SortPost.Contains("GiaThap"))
 						lsPost = (from p in lsPost
 								  orderby p.Price ascending
 								  select p
 								  ).ToList();
 				}
 
-				request.RequestFilterPost.Quality = request.RequestFilterPost.Quality == null ? "TatCa" : request.RequestFilterPost.Quality;
-				request.RequestFilterPost.IsDeliver = request.RequestFilterPost.IsDeliver == null ? "TatCa" : request.RequestFilterPost.IsDeliver;
+				request.Quality = request.Quality == null ? "TatCa" : request.Quality;
+				request.IsDeliver = request.IsDeliver == null ? "TatCa" : request.IsDeliver;
 
-				if (!request.RequestFilterPost.Quality.Contains("TatCa"))
+				if (!request.Quality.Contains("TatCa"))
 				{
 					lsPost = (from p in lsPost
-							  where p.Quality.Contains(request.RequestFilterPost.Quality)
+							  where p.Quality.Contains(request.Quality)
 							  select p).ToList();
 				}
 
-				if (!request.RequestFilterPost.IsDeliver.Contains("TatCa") && request.RequestFilterPost.IsDeliver != null)
+				if (!request.IsDeliver.Contains("TatCa") && request.IsDeliver != null)
 				{
 					lsPost = (from p in lsPost
-							  where p.IsDeliver == (request.RequestFilterPost.IsDeliver.Contains("Co") ? true : false)
+							  where p.IsDeliver == (request.IsDeliver.Contains("Co") ? true : false)
 							  select p).ToList();
 				}
-				if (request.RequestFilterPost.MinPrice != 0 && request.RequestFilterPost.MaxPrice != 0)
+				if (request.MinPrice != 0 && request.MaxPrice != 0)
 				{
 					lsPost = (from p in lsPost
-							  where p.Price >= request.RequestFilterPost.MinPrice
-								&& p.Price <= request.RequestFilterPost.MaxPrice
+							  where p.Price >= request.MinPrice
+								&& p.Price <= request.MaxPrice
 							  select p).ToList();
 				}
 			}
@@ -358,8 +361,56 @@ namespace ChoNongSan.Application.KhachHang.Posts
 
 				if (PlatformEnum.Web == check)
 				{
-					if (!string.IsNullOrEmpty(request.Address))
+					if (!string.IsNullOrEmpty(request.Address) && request.Province != 0 && request.District != 0 && request.SubDistrict != 0)
 					{
+						//lấy ra tên Tỉnh, Huyện, Xã
+						string urlAdd = $"https://provinces.open-api.vn/api/?depth=3";
+						string tinh = "";
+						string huyen = "";
+						string xa = "";
+						using (var webClient = new System.Net.WebClient())
+						{
+							var json = webClient.DownloadString(urlAdd);
+
+							var dataTinh = (JArray)JsonConvert.DeserializeObject(json);
+							foreach (var province in dataTinh)
+							{
+								var codePro = Convert.ToInt32(province.Children<JProperty>().FirstOrDefault(x => x.Name == "code").Value);
+								if (codePro == request.Province)
+								{
+									tinh = Convert.ToString(province.Children<JProperty>().FirstOrDefault(x => x.Name == "name").Value);
+
+									var dtHuyen = (JArray)JsonConvert.DeserializeObject(Convert.ToString(province["districts"]));
+									foreach (var district in dtHuyen)
+									{
+										var codeDis = Convert.ToInt32(district.Children<JProperty>().FirstOrDefault(p => p.Name == "code").Value);
+										if (codeDis == request.District)
+										{
+											huyen = Convert.ToString(district.Children<JProperty>().FirstOrDefault(p => p.Name == "name").Value);
+
+											var dtxa = (JArray)JsonConvert.DeserializeObject(Convert.ToString(district["wards"]));
+											foreach (var subdistrict in dtxa)
+											{
+												var codeSubDis = Convert.ToInt32(subdistrict.Children<JProperty>().FirstOrDefault(p => p.Name == "code").Value);
+												if (codeSubDis == request.SubDistrict)
+												{
+													xa = Convert.ToString(subdistrict.Children<JProperty>().FirstOrDefault(p => p.Name == "name").Value);
+													break;
+												}
+											}
+											break;
+										}
+									}
+									break;
+								}
+							}
+						}
+
+						if (!string.IsNullOrEmpty(xa) && !string.IsNullOrEmpty(huyen) && !string.IsNullOrEmpty(tinh))
+						{
+							request.Address = request.Address + ", " + xa + ", " + huyen + ", " + tinh;
+						}
+
 						string url = $"https://api.map4d.vn/sdk/autosuggest?text={request.Address}&Key=acaa76a4fa1828592ffb38d431b75aea";
 						using (var webClient = new System.Net.WebClient())
 						{

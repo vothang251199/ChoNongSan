@@ -9,8 +9,10 @@ namespace ChoNongSan.Data.Models
     {
         public Account()
         {
-            HistoryMoneys = new HashSet<HistoryMoney>();
+            HistoryMoneyAccounts = new HashSet<HistoryMoney>();
+            HistoryMoneyWhoAddMoneyNavigations = new HashSet<HistoryMoney>();
             Loves = new HashSet<Love>();
+            Meets = new HashSet<Meet>();
             Posts = new HashSet<Post>();
             Reviews = new HashSet<Review>();
         }
@@ -31,8 +33,10 @@ namespace ChoNongSan.Data.Models
         public int RolesId { get; set; }
 
         public virtual Role Roles { get; set; }
-        public virtual ICollection<HistoryMoney> HistoryMoneys { get; set; }
+        public virtual ICollection<HistoryMoney> HistoryMoneyAccounts { get; set; }
+        public virtual ICollection<HistoryMoney> HistoryMoneyWhoAddMoneyNavigations { get; set; }
         public virtual ICollection<Love> Loves { get; set; }
+        public virtual ICollection<Meet> Meets { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿using ChoNongSan.ApiUsedForWeb.ApiService;
 using ChoNongSan.ApiUsedForWeb.ViewModels;
+using ChoNongSan.ViewModels.Requests.Common;
 using ChoNongSan.ViewModels.Requests.TaiKhoan;
 using ChoNongSan.ViewModels.Requests.TaiKhoan.KhachHang;
 using Microsoft.AspNetCore.Authentication;
@@ -329,8 +330,31 @@ namespace ChoNongSan.Controllers
 
 		[Authorize]
 		[HttpGet]
-		public IActionResult SoDuTaiKhoan()
+		public async Task<IActionResult> SoDuTaiKhoan()
 		{
+			var UserId = Convert.ToInt32(User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault());
+			var user = await _userApi.GetUserById(UserId);
+			ViewBag.SoDu = user.Money;
+			return View();
+		}
+
+		[Authorize]
+		[HttpGet]
+		public async Task<IActionResult> LichSuNapTien(int pageIndex = 1, int pageSize = 5)
+		{
+			
+
+			var UserId = Convert.ToInt32(User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault());
+
+			var request = new GetPagingCommonRequest()
+			{
+				ById = UserId,
+				PageIndex = pageIndex,
+				PageSize = pageSize
+			};
+
+			var user = await _userApi.GetUserById(UserId);
+			ViewBag.SoDu = user.Money;
 			return View();
 		}
 	}

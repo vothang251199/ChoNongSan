@@ -83,7 +83,7 @@ namespace ChoNongSan.Api.Controllers
 		}
 
 		[HttpPost("tin-dang-xem-chung")]
-		public async Task<IActionResult> GetAllPostsViewHomePaging([FromBody] GetPagingCommonRequest request)
+		public async Task<IActionResult> GetAllPostsViewHomePaging([FromBody] FilterPostRequest request)
 		{
 			return Ok(await _postService.GetAllPostsViewHome(request));
 		}

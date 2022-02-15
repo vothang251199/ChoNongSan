@@ -18,7 +18,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 {
 	public interface IPostApi
 	{
-		Task<PageResult<PostVmTongQuat>> GetPostPaging(GetPagingCommonRequest request);
+		Task<PageResult<PostVmTongQuat>> GetPostPaging(FilterPostRequest request);
 
 		Task<PageResult<PostVmTongQuat>> GetAllByStatusPaging(int accountId, GetPagingCommonRequest request);
 
@@ -35,6 +35,10 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 		Task<PostVmChiTiet> GetDetail(int postId);
 
 		Task<string> DuyetTin(AcceptPostRequest request);
+
+		Task<List<AddressVm>> GetListDistrict(int codePorvince);
+
+		Task<List<AddressVm>> GetListSubDistrict(int codePor, int codeDis);
 	}
 
 	public class PostApi : IPostApi
@@ -89,6 +93,9 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 			requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Description) ? "" : request.Description), "description");
 			requestContent.Add(new StringContent(string.IsNullOrEmpty(request.PhoneNumber) ? "" : request.PhoneNumber), "phoneNumber");
 			requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Address) ? "" : request.Address), "address");
+			requestContent.Add(new StringContent(request.SubDistrict.ToString()), "subDistrict");
+			requestContent.Add(new StringContent(request.District.ToString()), "district");
+			requestContent.Add(new StringContent(request.Province.ToString()), "province");
 			requestContent.Add(new StringContent(request.Price.ToString()), "price");
 			requestContent.Add(new StringContent(request.WeightId.ToString()), "weightId");
 			requestContent.Add(new StringContent(request.WeightNumber.ToString()), "weightNumber");
@@ -135,7 +142,27 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 			return model;
 		}
 
-		public async Task<PageResult<PostVmTongQuat>> GetPostPaging(GetPagingCommonRequest request)
+		public async Task<List<AddressVm>> GetListDistrict(int codePorvince)
+		{
+			var client = _httpClientFactory.CreateClient();
+			client.BaseAddress = new Uri(_config["ApiUrl"]);
+			var response = await client.GetAsync($"/api/address/lay-tat-ca-huyen/{codePorvince}");
+			var body = await response.Content.ReadAsStringAsync();
+			var obj = JsonConvert.DeserializeObject<List<AddressVm>>(body);
+			return obj;
+		}
+
+		public async Task<List<AddressVm>> GetListSubDistrict(int codePor, int codeDis)
+		{
+			var client = _httpClientFactory.CreateClient();
+			client.BaseAddress = new Uri(_config["ApiUrl"]);
+			var response = await client.GetAsync($"/api/address/lay-tat-ca-xa/{codePor}/{codeDis}");
+			var body = await response.Content.ReadAsStringAsync();
+			var obj = JsonConvert.DeserializeObject<List<AddressVm>>(body);
+			return obj;
+		}
+
+		public async Task<PageResult<PostVmTongQuat>> GetPostPaging(FilterPostRequest request)
 		{
 			var json = JsonConvert.SerializeObject(request);
 			var httpContnet = new StringContent(json, Encoding.UTF8, "application/json");

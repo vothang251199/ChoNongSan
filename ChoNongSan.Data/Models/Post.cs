@@ -11,6 +11,7 @@ namespace ChoNongSan.Data.Models
         {
             ImagePosts = new HashSet<ImagePost>();
             Loves = new HashSet<Love>();
+            Meets = new HashSet<Meet>();
             Reviews = new HashSet<Review>();
         }
 
@@ -41,6 +42,7 @@ namespace ChoNongSan.Data.Models
         public virtual WeightType Weight { get; set; }
         public virtual ICollection<ImagePost> ImagePosts { get; set; }
         public virtual ICollection<Love> Loves { get; set; }
+        public virtual ICollection<Meet> Meets { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
     }
 }

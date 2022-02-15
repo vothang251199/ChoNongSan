@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChoNongSan.ViewModels.Requests.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChoNongSan.ViewModels.Requests.TinDang
 {
-	public class FilterPostRequest
+	public class FilterPostRequest : GetPagingCommonRequest
 	{
 		public decimal MinPrice { get; set; }
 		public decimal MaxPrice { get; set; }

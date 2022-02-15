@@ -5,340 +5,499 @@
 @model CreatePostRequest
 
 @{
-    ViewData["Title"] = "Tạo tin đăng";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
-    List<CategoryVm> lsCat = ViewBag.CategoryList;
-    List<WeightVm> lsWeight = ViewBag.WeightList;
-    List<IFormFile> lsAnh = ViewBag.LsImg;
+	ViewData["Title"] = "Tạo tin đăng";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+	List<CategoryVm> lsCat = ViewBag.CategoryList;
+	List<WeightVm> lsWeight = ViewBag.WeightList;
+	List<AddressVm> LsDistrict = ViewBag.LsDistrict;
+	List<AddressVm> LsSubDistrict = ViewBag.LsSubDistrict;
+	List<IFormFile> lsAnh = ViewBag.LsImg;
 }
 
 <div class="container my-10">
-    <form asp-action="TaoMoi" method="post" enctype="multipart/form-data">
-        <div class="row d-flex">
-            <div class="col-lg-6 col-12 mx-auto" style="margin-bottom:30px">
+	<input hidden value="@ViewBag.ApiUrl" id="ApiUrl" />
+	<form asp-action="TaoMoi" method="post" enctype="multipart/form-data">
+		<div class="row d-flex">
+			<div class="col-lg-6 col-12 mx-auto" style="margin-bottom:30px">
 
-                <div class="checkbox-form " style="margin:auto">
-                    <h3 style="padding-top:30px">Tạo tin đăng mới</h3>
-                    <div class="row ">
+				<div class="checkbox-form " style="margin:auto">
+					<h3 style="padding-top:30px">Tạo tin đăng mới</h3>
+					<div class="row ">
 
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="col-md-6" hidden>
-                            <div class="checkout-form-list form-group">
-                                <input value="@userId" asp-for="AccountID" class="form-control rounded" placeholder="Nhập tên sản phẩm" />
-                            </div>
-                        </div>
-                        <div class="col-md-6" hidden>
-                            <div class="checkout-form-list form-group">
-                                <input value="Web" asp-for="PlatForm" class="form-control rounded" placeholder="Nhập tên sản phẩm" />
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <span style="color:red">*</span>@Html.DisplayNameFor(model => model.CategoryID)
-                            <div class="checkout-form-list form-group">
-                                <select class="form-control nice-select wide float-none" asp-for="CategoryID">
-                                    <option disabled selected value="">Chọn danh mục</option>
-                                    @foreach (var item in lsCat)
-                                    {
-                                        <option value="@item.CategoryID">@item.CateName</option>
-                                    }
-                                </select>
-                                <span asp-validation-for="CategoryID" class="text-danger"></span>
-                            </div>
-                        </div>
+						<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+						<div class="col-md-6" hidden>
+							<div class="checkout-form-list form-group">
+								<input value="@userId" asp-for="AccountID" class="form-control rounded" placeholder="Nhập tên sản phẩm" />
+							</div>
+						</div>
+						<div class="col-md-6" hidden>
+							<div class="checkout-form-list form-group">
+								<input value="Web" asp-for="PlatForm" class="form-control rounded" placeholder="Nhập tên sản phẩm" />
+							</div>
+						</div>
+						<div class="col-md-12">
+							<span style="color:red">*</span>@Html.DisplayNameFor(model => model.CategoryID)
+							<div class="checkout-form-list form-group cat">
+								<select id="Category" class="form-control nice-select wide float-none" asp-for="CategoryID">
+									<option disabled selected value="">Chọn danh mục</option>
+									@foreach (var item in lsCat)
+									{
+										<option value="@item.CategoryID">@item.CateName</option>
+									}
+								</select>
+								<span id="spCat" asp-validation-for="CategoryID" class="text-danger"></span>
+							</div>
+						</div>
 
-                        <div class="col-md-12">
-                            <div class="checkout-form-list form-group">
-                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Title)
-                                <input asp-for="Title" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập tiêu đề" />
-                                <span asp-validation-for="Title" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="checkout-form-list form-group">
-                                @Html.DisplayNameFor(model => model.Description)
-                                <textarea asp-for="Description" class="form-control" placeholder="Nhập mô tả"></textarea>
-                                <span asp-validation-for="Description" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6  ">
-                            <div class="checkout-form-list form-group">
-                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.WeightId)
-                                <select asp-for="WeightId" class="form-control nice-select wide float-none">
-                                    <option disabled selected value="">Chọn đơn vị</option>
-                                    @foreach (var item in lsWeight)
-                                    {
-                                        <option value="@item.WeightId">@item.WeightName</option>
-                                    }
-                                </select>
-                                <span asp-validation-for="WeightId" class="w-auto text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="checkout-form-list form-group">
-                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.WeightNumber)
-                                <input min="1" asp-for="WeightNumber" class="form-control" style="height:42px" placeholder="Số lượng cần bán?" />
-                                <span asp-validation-for="WeightNumber" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="checkout-form-list form-group">
-                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Price)
-                                <input min="1000" type="number" asp-for="Price" class="form-control" style="height:42px" placeholder="Nhập giá" />
-                                <span asp-validation-for="Price" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="checkout-form-list form-group">
-                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.PhoneNumber)
-                                <input value="@ViewBag.Phone" asp-for="PhoneNumber" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập số điệ thoại" />
-                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                            </div>
-                        </div>
+						<div class="col-md-12">
+							<div class="checkout-form-list form-group">
+								<span style="color:red">*</span>@Html.DisplayNameFor(model => model.Title)
+								<input id="Title" asp-for="Title" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập tiêu đề" />
+								<span id="spTieuDe" asp-validation-for="Title" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="checkout-form-list form-group">
+								@Html.DisplayNameFor(model => model.Description)
+								<textarea asp-for="Description" class="form-control" placeholder="Nhập mô tả"></textarea>
+								<span asp-validation-for="Description" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6  ">
+							<div class="checkout-form-list form-group weightid">
+								<span style="color:red">*</span>@Html.DisplayNameFor(model => model.WeightId)
+								<select id="WeightId" asp-for="WeightId" class="form-control nice-select wide float-none">
+									<option disabled selected value="">Chọn đơn vị</option>
+									@foreach (var item in lsWeight)
+									{
+										<option value="@item.WeightId">@item.WeightName</option>
+									}
+								</select>
+								<span id="spWeightId" asp-validation-for="WeightId" class="w-auto text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="checkout-form-list form-group">
+								<span style="color:red">*</span>@Html.DisplayNameFor(model => model.WeightNumber)
+								<input id="WeightNumber" min="1" asp-for="WeightNumber" class="form-control" style="height:42px" placeholder="Số lượng cần bán?" />
+								<span id="spSoKi" asp-validation-for="WeightNumber" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="checkout-form-list form-group">
+								<span style="color:red">*</span>@Html.DisplayNameFor(model => model.Price)
+								<input id="Price" min="1000" type="number" asp-for="Price" class="form-control" style="height:42px" placeholder="Nhập giá" />
+								<span id="spGia" asp-validation-for="Price" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="checkout-form-list form-group">
+								<span style="color:red">*</span>@Html.DisplayNameFor(model => model.PhoneNumber)
+								<input id="PhoneNumber" value="@ViewBag.Phone" asp-for="PhoneNumber" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập số điệ thoại" />
+								<span id="spPhone" asp-validation-for="PhoneNumber" class="text-danger"></span>
+							</div>
+						</div>
 
-                        <div class="col-md-6">
-                            <div class="checkout-form-list form-group">
-                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Quality)
-                                <select class="form-control nice-select wide float-none" asp-for="Quality">
-                                    <option disabled selected value="">Chọn chất lượng</option>
-                                    <option value="Tốt">Tốt</option>
-                                    <option value="Trung bình">Trung bình</option>
-                                    <option value="Thấp">Thấp</option>
-                                </select>
-                                <span asp-validation-for="Quality" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="checkout-form-list form-group">
-                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Expiry)
-                                <input min="1" asp-for="Expiry" class="form-control" style="height:42px" placeholder="Nhập số ngày" />
-                                <span asp-validation-for="Expiry" class="text-danger"></span>
-                            </div>
-                        </div>
+						<div class="col-md-6">
+							<div class="checkout-form-list form-group quality">
+								<span style="color:red">*</span>@Html.DisplayNameFor(model => model.Quality)
+								<select id="Quality" class="form-control nice-select wide float-none" asp-for="Quality">
+									<option disabled selected value="">Chọn chất lượng</option>
+									<option value="Tốt">Tốt</option>
+									<option value="Trung bình">Trung bình</option>
+									<option value="Thấp">Thấp</option>
+								</select>
+								<span id="spQuality" asp-validation-for="Quality" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="checkout-form-list form-group">
+								<span style="color:red">*</span>@Html.DisplayNameFor(model => model.Expiry)
+								<input id="Expiry" min="1" asp-for="Expiry" class="form-control" style="height:42px" placeholder="Nhập số ngày" />
+								<span id="spExpiry" asp-validation-for="Expiry" class="text-danger"></span>
+							</div>
+						</div>
 
-                        <div class="col-md-12">
-                            <div class="checkout-form-list form-group">
-                                <span style="color:red">*</span>@Html.DisplayNameFor(model => model.Address)
-                                <input value="@ViewBag.Address" asp-for="Address" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập địa chỉ" />
-                                <span asp-validation-for="Address" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-3 d-flex align-items-center">
-                            <div class="checkout-form-list form-group">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" asp-for="IsDeliver" />
-                                    @Html.DisplayNameFor(model => model.IsDeliver)
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+						<div class="col-md-6">
+							<input id="txtProvince" style="display:none" asp-for="Province" />
+							<div class="checkout-form-list form-group province">
+								<span style="color:red">*</span>@Html.DisplayNameFor(model => model.Province)
+								<select id="Province" class="form-control nice-select wide float-none" asp-for="Province">
+									<option disabled selected value="">Chọn Tỉnh/ Thành phố</option>
+									<option value="48">thành phố Đà Nẵng</option>
+									<option value="49">tỉnh Quảng Nam</option>
+								</select>
+								<span id="spProvince" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<input id="txtDistrict" style="display:none" asp-for="District" />
+							<div class="checkout-form-list form-group district">
+								<span style="color:red">*</span>@Html.DisplayNameFor(model => model.District)
+								<select id="District" class="form-control nice-select wide float-none" asp-for="District">
+									<option disabled selected value="">Chọn Quận/ Huyện</option>
+									@if (LsDistrict != null)
+									{
+										foreach (var item in LsDistrict)
+										{
+											<option value="@item.Code">@item.Name</option>
+										}
 
-            <div class="col-lg-6 col-12 " style="margin-bottom:20px">
-                <div class="your-order">
-                    <h3 class="text-center">Thêm ảnh cho sản phẩm</h3>
-                    <div class="payment-method">
-                        <div class="payment-accordion">
-                            <div id="accordion">
-                                <div class="col-md-12 d-flex align-items-center" style="width:100%;margin:30px 0; flex-direction:column">
-                                    <span asp-validation-for="ThumbnailImage" class="text-danger text-center" style="margin-bottom:20px"></span>
-                                    <div class="checkout-form-list form-group col-10 m-0  custom-file d-flex align-items-center" style="position: relative">
-                                        <input value="@lsAnh" type="file" accept=".jpg, .jpeg, .png" multiple asp-for="ThumbnailImage" style="display:none; " onchange="loadFile(event)" id="input_img" />
-                                        <input id="btnAddImg" type="button" class="h-100 w-100 p-0 btn btn-link m-auto" onclick="document.getElementById('input_img').click();" style="position: absolute; right: 0; top: 0;left:0;bottom:0;border:3px dashed #ff0000" />
-                                        <div class="m-auto d-flex align-items-center" style="flex-direction:column;height:160px">
-                                            <img style="margin-top:17%;height: 70px; width: 70px" class="p-0 col-12" src="~/assetsKH/icon/icon-camera-add-removebg.png" />
-                                            <h6 style="font-family: Roboto; margin-top:10px" class="col-12 text-center">Chọn từ 01 đến 06 ảnh</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input multiple type="file" id="lsImg" style="display:none" />
-                                <div style="margin-top:30px" id="collapseOne" class="collapse show">
-                                    <div class="card-body row">
-                                        @for (var i = 0; i < 6; i++)
-                                        {
-                                            var imgId = "demo" + i;
-                                            var idDiv = "divImg" + i;
-                                            var idColse = "closeImg" + i;
-                                            <div id="@idDiv" hidden="hidden" class="align-items-center img-thumbnail col-6 col-lg-4" style="padding:0 7px;height:150px;display:flex; position: relative">
-                                                <a href="javascript:void(0)" class="h-100 d-flex mx-auto">
-                                                    <img id="@imgId" class="h-100 py-3" src="" />
-                                                </a>
-                                                <button type="reset" id="@i" class="btn btn-link p-0" style="position: absolute;right:8px; top:0" onclick="closeImg(this.id)">
-                                                    <img class="rounded" style="width:15px; height:15px" src="~/assetsKH/icon/img-close.jpg" />
-                                                </button>
-                                            </div>
+									}
+								</select>
 
-                                        }
-                                    </div>
-                                    <img id="testImg" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+								<span id="spDistrict" class="text-danger"></span>
+							</div>
+						</div>
 
-            <div class="col-lg-12 col-12 d-flex">
-                <div class="form-group m-auto rounded" style="background-color: #40AA54">
-                    <button onclick="fcSubmit()" id="btnSubmit" type="submit" style="font-size:30px; font-family:Roboto;font-style:unset;padding: 4px 30px; color:#ffffff" class="btn btn-link">
-                        Tạo
-                    </button>
-                </div>
-            </div>
-        </div>
-    </form>
+						<div class="col-md-12">
+							<input id="txtSubDistrict" style="display:none" asp-for="SubDistrict" />
+							<div class="checkout-form-list form-group subdistrict">
+								<span style="color:red">*</span>@Html.DisplayNameFor(model => model.SubDistrict)
+								<select id="SubDistrict" class="form-control nice-select wide float-none" asp-for="SubDistrict">
+									<option disabled selected value="">Chọn Xã/ Phường</option>
+									@if (LsSubDistrict != null)
+									{
+										foreach (var item in LsSubDistrict)
+										{
+											<option value="@item.Code">@item.Name</option>
+										}
+
+									}
+								</select>
+
+								<span id="spSubDistrict" class="text-danger"></span>
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="checkout-form-list form-group">
+								<span style="color:red">*</span>Số nhà và Tên đường/ Thôn
+								<input id="Address" asp-for="Address" style="padding-left: 18px" class="form-control rounded" placeholder="Nhập Số nhà và Tên đường/ hoặc Tên thôn" />
+								<span id="spAdd" asp-validation-for="Address" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-3 d-flex align-items-center">
+							<div class="checkout-form-list form-group">
+								<label class="form-check-label">
+									<input class="form-check-input" asp-for="IsDeliver" />
+									@Html.DisplayNameFor(model => model.IsDeliver)
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-6 col-12 " style="margin-bottom:20px">
+				<div class="your-order">
+					<h3 class="text-center">Thêm ảnh cho sản phẩm</h3>
+					<div class="payment-method">
+						<div class="payment-accordion">
+							<div id="accordion">
+								<div class="col-md-12 d-flex align-items-center" style="width:100%;margin:30px 0; flex-direction:column">
+									<span asp-validation-for="ThumbnailImage" class="text-danger text-center" style="margin-bottom:20px"></span>
+									<div class="checkout-form-list form-group col-10 m-0  custom-file d-flex align-items-center" style="position: relative">
+										<input value="@lsAnh" type="file" accept=".jpg, .jpeg, .png" multiple asp-for="ThumbnailImage" style="display:none; " onchange="loadFile(event)" id="input_img" />
+										<input id="btnAddImg" type="button" class="h-100 w-100 p-0 btn btn-link m-auto" onclick="document.getElementById('input_img').click();" style="position: absolute; right: 0; top: 0;left:0;bottom:0;border:3px dashed #ff0000" />
+										<div class="m-auto d-flex align-items-center" style="flex-direction:column;height:160px">
+											<img style="margin-top:17%;height: 70px; width: 70px" class="p-0 col-12" src="~/assetsKH/icon/icon-camera-add-removebg.png" />
+											<h6 style="font-family: Roboto; margin-top:10px" class="col-12 text-center">Chọn từ 01 đến 06 ảnh</h6>
+										</div>
+									</div>
+								</div>
+								<input multiple type="file" id="lsImg" style="display:none" />
+								<div style="margin-top:30px" id="collapseOne" class="collapse show">
+									<div class="card-body row">
+										@for (var i = 0; i < 6; i++)
+										{
+											var imgId = "demo" + i;
+											var idDiv = "divImg" + i;
+											var idColse = "closeImg" + i;
+											<div id="@idDiv" hidden="hidden" class="align-items-center img-thumbnail col-6 col-lg-4" style="padding:0 7px;height:150px;display:flex; position: relative">
+												<a href="javascript:void(0)" class="h-100 d-flex mx-auto">
+													<img id="@imgId" class="h-100 py-3" src="" />
+												</a>
+												<button type="reset" id="@i" class="btn btn-link p-0" style="position: absolute;right:8px; top:0" onclick="closeImg(this.id)">
+													<img class="rounded" style="width:15px; height:15px" src="~/assetsKH/icon/img-close.jpg" />
+												</button>
+											</div>
+
+										}
+									</div>
+									<img id="testImg" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-12 col-12 d-flex">
+				<div class="form-group m-auto rounded" style="background-color: #40AA54">
+					<button id="btnSubmit" type="button" style="font-size:30px; font-family:Roboto;font-style:unset;padding: 4px 30px; color:#ffffff" class="btn btn-link">
+						Tạo
+					</button>
+				</div>
+			</div>
+		</div>
+	</form>
 </div>
 
 @section Scripts{
-    <script type="text/javascript">
+	@*<script src="~/lib/datatables.min.js"></script>*@
+	<script type="text/javascript">
 
-        let counter = 0;
-        const arrImg = [];
-        const lsImg = [];
-        var ttt1 = [];
+		let counter = 0;
+		const arrImg = [];
+		const lsImg = [];
+		var ttt1 = [];
 
-        let tmpImg = document.getElementById('lsImg').files;
-        //load ảnh
-        var loadFile = function (event) {
+		let tmpImg = document.getElementById('lsImg').files;
+		//load ảnh
+		var loadFile = function (event) {
 
-            var lent = event.target.files.length;
-            if (lent != 0) {
-                for (var i = 0; i < lent; i++) {
-                    var checkImg = true;
-                    if (arrImg.length != 0) {
-                        for (var x = 0; x < arrImg.length; x++) {
-                            if (arrImg[x] == event.target.files[i].lastModified)   //Kiểm tra ảnh đã được thêm hay chưa
-                            {
-                                checkImg = false;
-                                break;
-                            }
-                        }
-                    } else {
-                        checkImg = true;
-                    }
+			var lent = event.target.files.length;
+			if (lent != 0) {
+				for (var i = 0; i < lent; i++) {
+					var checkImg = true;
+					if (arrImg.length != 0) {
+						for (var x = 0; x < arrImg.length; x++) {
+							if (arrImg[x] == event.target.files[i].lastModified)   //Kiểm tra ảnh đã được thêm hay chưa
+							{
+								checkImg = false;
+								break;
+							}
+						}
+					} else {
+						checkImg = true;
+					}
 
-                    //gán url vào src của img
-                    if (checkImg) {
-                        for (var a = 0; a < 6; a++) {
-                            if (document.getElementById('demo' + a).getAttribute('src') == "") {
-                                arrImg[a] = (event.target.files[i]).lastModified;
-                                lsImg.splice(a, 0, event.target.files[i]);
-                                document.getElementById('demo' + a).src = URL.createObjectURL(event.target.files[i]);
-                                document.getElementById('divImg' + a).removeAttribute('hidden');
-                                counter++;
-                                
-                                break;
-                            }
-                        }
-                    }
+					//gán url vào src của img
+					if (checkImg) {
+						for (var a = 0; a < 6; a++) {
+							if (document.getElementById('demo' + a).getAttribute('src') == "") {
+								arrImg[a] = (event.target.files[i]).lastModified;
+								lsImg.splice(a, 0, event.target.files[i]);
+								document.getElementById('demo' + a).src = URL.createObjectURL(event.target.files[i]);
+								document.getElementById('divImg' + a).removeAttribute('hidden');
+								counter++;
 
-                    //vô hiệu hóa nút open file thêm ảnh
-                    if (counter == 6) {
-                        document.getElementById("btnAddImg").disabled = true;
-                    }
-                }
-            }
-        };
+								break;
+							}
+						}
+					}
 
-        //xóa ảnh
+					//vô hiệu hóa nút open file thêm ảnh
+					if (counter == 6) {
+						document.getElementById("btnAddImg").disabled = true;
+					}
+				}
+			}
+		};
 
-        function closeImg(clicked_id) {
-            var imgId = "demo" + clicked_id;
-            var idDiv = "divImg" + clicked_id;
-            document.getElementById(imgId).setAttribute('src', "");
-            document.getElementById(idDiv).setAttribute('hidden', "hidden");
-            counter--;
-            if (counter < 6 && counter >= 0) {
-                document.getElementById("btnAddImg").disabled = false;
-            }
-            lsImg.splice(clicked_id, 1)
-            //lsImg.forEach((e, i) => e.index = i + 1)
-            arrImg[clicked_id] = 0;
-            
-        };
+		//xóa ảnh
 
-        function FileListItems(files) {
-            var b = new ClipboardEvent("").clipboardData || new DataTransfer()
-            for (var i = 0, len = files.length; i < len; i++) b.items.add(files[i])
-            return b.files;
-        };
+		function closeImg(clicked_id) {
+			var imgId = "demo" + clicked_id;
+			var idDiv = "divImg" + clicked_id;
+			document.getElementById(imgId).setAttribute('src', "");
+			document.getElementById(idDiv).setAttribute('hidden', "hidden");
+			counter--;
+			if (counter < 6 && counter >= 0) {
+				document.getElementById("btnAddImg").disabled = false;
+			}
+			lsImg.splice(clicked_id, 1)
+			//lsImg.forEach((e, i) => e.index = i + 1)
+			arrImg[clicked_id] = 0;
 
-        function fcSubmit() {
-            if (lsImg.length != 0) {
-                document.getElementById('input_img').files = new FileListItems(lsImg);
-            }
+		};
 
-            var ttt = [];
-            var listImgFinal = document.getElementById('input_img').files;
-            if (listImgFinal.length != 0) {
-                for (var i = 0; i < listImgFinal.length; i++) {
-                    var te = listImgFinal[i];
+		function FileListItems(files) {
+			var b = new ClipboardEvent("").clipboardData || new DataTransfer()
+			for (var i = 0, len = files.length; i < len; i++) b.items.add(files[i])
+			return b.files;
+		};
 
-                    const reader = new FileReader();
-                    reader.addEventListener("load", function () {
-                        var bas = reader.result.split(',')[1];
-                        ttt1.push(bas);
-                        sessionStorage.setItem('testObject1', JSON.stringify(ttt1));
-                    }, false);
+		function buffSizeImage(base64) {
+			let bin = atob(base64);
+			let length = bin.length;
 
-                    if (te) {
-                        reader.readAsDataURL(te);
-                    }
+			let buf = new ArrayBuffer(length);
+			let arr = new Uint8Array(buf);
+			bin.split('').forEach((e, i) => arr[i] = e.charCodeAt(0));
+			return buf;
+		}
 
-                    var testObject = { 'lastModified': te.lastModified, 'name': te.name, 'type': te.type};
-                    ttt.push(testObject);
-                    sessionStorage.setItem('testObject', JSON.stringify(ttt));
-                }
-                
-            }
-        }
+		//$(function () {
 
-        function buffSizeImage(base64) {
-            let bin = atob(base64);
-            let length = bin.length;
+		//});
 
-            let buf = new ArrayBuffer(length);
-            let arr = new Uint8Array(buf);
-            bin.split('').forEach((e, i) => arr[i] = e.charCodeAt(0));
-            return buf;
-        }
+		let province = document.getElementById("txtProvince");
+		let district = document.getElementById("txtDistrict");
+		let subdistrict = document.getElementById("txtSubDistrict");
 
-        $(document).ready(function () {
-            var retrievedObject = sessionStorage.getItem('testObject1');
-            var kq1 = JSON.parse(retrievedObject || "[]");
+		$(document).ready(function () {
+			
+			$('#btnSubmit').click(function (e) {
+				//Kiểm tra dữ liệu trong input tỉnh, huyện, xã
+				province.value = document.getElementById("Province").value;
+				district.value = document.getElementById("District").value;
+				subdistrict.value = document.getElementById("SubDistrict").value;
+				
+				if (province.value == "" || district.value == "" || subdistrict.value == "" ) {
+					
+					if (subdistrict.value == "") {
+						document.getElementById("spSubDistrict").innerHTML = "Vui lòng chọn Xã/Phường";
+						document.querySelector('.subdistrict div.nice-select').focus();
+					}
+					if (district.value == "") {
+						document.getElementById("spDistrict").innerHTML = "Vui lòng chọn Quận/Huyện";
+						document.querySelector('.district div.nice-select').focus();
+					}
+					if (province.value == "") {
+						document.getElementById("spProvince").innerHTML = "Vui lòng chọn Tỉnh/Thành phố";
+						document.querySelector('.province div.nice-select').focus();
+					}
 
-            var retrievedObject = sessionStorage.getItem('testObject');
-            var kq = JSON.parse(retrievedObject || "[]");
+					return;
+				}
 
-            var nnn = [];
+				//Lưu trữ ảnh đã chọn vào session storage
+				if (lsImg.length != 0) {
+					document.getElementById('input_img').files = new FileListItems(lsImg);
+				}
 
-            for (var i = 0; i < kq.length; i++) {
-                var f = new File([buffSizeImage(kq1[i])], kq[i].name, { type: kq[i].type, lastModified: kq[i].lastModified });
-                nnn.push(f);
-            }
+				var ttt = [];
+				var listImgFinal = document.getElementById('input_img').files;
+				if (listImgFinal.length != 0) {
+					for (var i = 0; i < listImgFinal.length; i++) {
+						var te = listImgFinal[i];
 
-            document.getElementById('input_img').files = new FileListItems(nnn);
+						const reader = new FileReader();
+						reader.addEventListener("load", function () {
+							var bas = reader.result.split(',')[1];
+							ttt1.push(bas);
+							sessionStorage.setItem('testObject1', JSON.stringify(ttt1));
+						}, false);
 
-            var lsxxx = document.getElementById('input_img').files;
-            for (var i = 0; lsxxx.length; i++) {
-                var last = lsxxx[i].lastModified;
-                for (var a = 0; a < 6; a++) {
-                    if (document.getElementById('demo' + a).getAttribute('src') == "") {
-                        arrImg[a] = last;
-                        lsImg[lsImg.length] = lsxxx[i];
-                        document.getElementById('demo' + a).src = URL.createObjectURL(lsxxx[i]);
-                        document.getElementById('divImg' + a).removeAttribute('hidden');
-                        counter++;
-                        break;
-                    }
-                }
-            }
-            
-            if (counter == 6) {
-                document.getElementById("btnAddImg").disabled = true;
-            }
-            
-        });
-    </script>
+						if (te) {
+							reader.readAsDataURL(te);
+						}
+
+						var testObject = { 'lastModified': te.lastModified, 'name': te.name, 'type': te.type };
+						ttt.push(testObject);
+						sessionStorage.setItem('testObject', JSON.stringify(ttt));
+					}
+
+				}
+
+				//Đổi type cho btn thành submit để truyền data qua controller
+				document.getElementById("btnSubmit").type = 'submit';
+			});
+
+			//Load data into select District
+			$("#Province").change(function () {
+				var id = $("#Province").val();
+				document.getElementById("spProvince").innerHTML = "";
+				if (id != "" && id != undefined) {
+					if (id != province.value) { //Nếu chọn tỉnh khác với value hiển thị trong selectbox thì mới thực hiện
+						province.value = id;
+						$.ajax({
+						type: 'post',
+						url: '@Url.Action("GetListDistrict", "QuanLyTinDang")',
+						contentType: "application/json",
+						data: JSON.stringify(id),
+						dataType: "json",
+						success: function (result) {
+
+							var children = document.querySelector('.district div.nice-select ul.list');
+							document.querySelector('.district div.nice-select span.current').innerHTML = 'Chọn Quận/Huyện';
+							var children1 = document.querySelector('.district select.form-control');
+							children.innerHTML = '<li data-value="" class="option selected disabled focus">Chọn Quận/Huyện</li>';
+							children1.innerHTML = '<option disabled="" selected="" value="">Chọn Quận/Huyện</option>';
+							$.each(result, function (k, val) {
+								children1.innerHTML += '<option value="'+ val.code+'">'+ val.name+'</option>';
+								children.innerHTML += '<li data-value="'+ val.code +'" class="option">'+ val.name +'</li>';
+
+							});
+						}
+					});
+					}
+
+				}
+			});
+
+			//Load data into select SubDistrict
+			$("#District").change(function () {
+				var codePro = $("#Province").val();
+				var codeDis = $("#District").val();
+				document.getElementById("spDistrict").innerHTML = "";
+				if (codeDis != "" && codeDis != undefined) {
+					if (codeDis != district.value) { //Nếu chọn huyện khác với value hiển thị trong selectbox thì mới thực hiện
+						district.value = codeDis;
+
+						$.ajax({
+						type: 'get',
+						url: '@Url.Action("GetListSubDistrict", "QuanLyTinDang")',
+						contentType: "application/json",
+						data: { 'codePro': codePro, 'codeDis': codeDis },
+						dataType: "json",
+						success: function (result) {
+
+							var children = document.querySelector('.subdistrict div.nice-select ul.list');
+							document.querySelector('.subdistrict div.nice-select span.current').innerHTML = 'Chọn Xã/Phường';
+							var children1 = document.querySelector('.subdistrict select.form-control');
+							children.innerHTML = '<li data-value="" class="option selected disabled focus">Chọn Xã/Phường</li>';
+							children1.innerHTML = '<option disabled="" selected="" value="">Chọn Xã/Phường</option>';
+							$.each(result, function (k, val) {
+								children1.innerHTML += '<option value="'+ val.code+'">'+ val.name+'</option>';
+								children.innerHTML += '<li data-value="'+ val.code +'" class="option">'+ val.name +'</li>';
+
+							});
+						}
+					});
+					}
+
+				}
+			});
+
+			//Load ảnh đã lưu trong sessionStorage ra
+			var retrievedObject = sessionStorage.getItem('testObject1');
+			var kq1 = JSON.parse(retrievedObject || "[]");
+
+			var retrievedObject = sessionStorage.getItem('testObject');
+			var kq = JSON.parse(retrievedObject || "[]");
+
+			var nnn = [];
+
+			for (var i = 0; i < kq.length; i++) {
+				var f = new File([buffSizeImage(kq1[i])], kq[i].name, { type: kq[i].type, lastModified: kq[i].lastModified });
+				nnn.push(f);
+			}
+
+			document.getElementById('input_img').files = new FileListItems(nnn);
+
+			var lsxxx = document.getElementById('input_img').files;
+			for (var i = 0; lsxxx.length; i++) {
+				var last = lsxxx[i].lastModified;
+				for (var a = 0; a < 6; a++) {
+					if (document.getElementById('demo' + a).getAttribute('src') == "") {
+						arrImg[a] = last;
+						lsImg[lsImg.length] = lsxxx[i];
+						document.getElementById('demo' + a).src = URL.createObjectURL(lsxxx[i]);
+						document.getElementById('divImg' + a).removeAttribute('hidden');
+						counter++;
+						break;
+					}
+				}
+			}
+
+			if (counter == 6) {
+				document.getElementById("btnAddImg").disabled = true;
+			}
+
+		});
+	</script>
 }

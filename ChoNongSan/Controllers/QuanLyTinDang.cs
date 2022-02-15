@@ -4,6 +4,7 @@ using ChoNongSan.Application.Common.Files;
 using ChoNongSan.ViewModels.Common;
 using ChoNongSan.ViewModels.Requests;
 using ChoNongSan.ViewModels.Requests.Common;
+using ChoNongSan.ViewModels.Requests.LichHen;
 using ChoNongSan.ViewModels.Requests.TinDang;
 using ChoNongSan.ViewModels.Responses;
 using Microsoft.AspNetCore.Authorization;
@@ -31,10 +32,11 @@ namespace ChoNongSan.Controllers
 		private readonly ICategoryApi _categoryApi;
 		private readonly IWeightApi _weightApi;
 		private readonly IUserApi _userApi;
+		private readonly IMeetApi _meetApi;
 		private const List<IFormFile> lsImg = null;
 
 		public QuanLyTinDang(IConfiguration config, IPostApi postApi, IStorageService storageService,
-			ICategoryApi categoryApi, IWeightApi weightApi, IUserApi userApi)
+			ICategoryApi categoryApi, IWeightApi weightApi, IUserApi userApi, IMeetApi meetApi)
 		{
 			_userApi = userApi;
 			_weightApi = weightApi;
@@ -42,6 +44,7 @@ namespace ChoNongSan.Controllers
 			_storageService = storageService;
 			_config = config;
 			_postApi = postApi;
+			_meetApi = meetApi;
 		}
 
 		[HttpGet]
@@ -55,7 +58,7 @@ namespace ChoNongSan.Controllers
 				};
 			}
 
-			if(vm.ActiveTab == Tab.HienThi)
+			if (vm.ActiveTab == Tab.HienThi)
 			{
 				vm.byId = 2;
 			}
@@ -117,13 +120,13 @@ namespace ChoNongSan.Controllers
 		[HttpGet]
 		public async Task<IActionResult> TaoMoi()
 		{
+			ViewBag.ApiUrl = _config["ApiUrl"];
 			ViewBag.CategoryList = await _categoryApi.GetListCat();
 			ViewBag.WeightList = await _weightApi.GetListWeight();
 
 			var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
 			var user = await _userApi.GetUserById(Convert.ToInt32(userId));
 			ViewBag.Phone = user.PhoneNumber;
-			ViewBag.Address = user.Address;
 
 			return View();
 		}
@@ -139,8 +142,10 @@ namespace ChoNongSan.Controllers
 				var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
 				var user = await _userApi.GetUserById(Convert.ToInt32(userId));
 				ViewBag.Phone = user.PhoneNumber;
-				ViewBag.Address = user.Address;
 				ViewBag.LsImg = request.ThumbnailImage;
+				ViewBag.ApiUrl = _config["ApiUrl"];
+				ViewBag.LsDistrict = await _postApi.GetListDistrict(Convert.ToInt32(request.Province));
+				ViewBag.LsSubDistrict = await _postApi.GetListSubDistrict(Convert.ToInt32(request.Province), Convert.ToInt32(request.District));
 				return View(request);
 			}
 
@@ -180,6 +185,7 @@ namespace ChoNongSan.Controllers
 			return View(model);
 		}
 
+		[HttpPost]
 		public async Task<IActionResult> AddlovePost([FromBody] string postId)
 		{
 			var accountId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
@@ -189,6 +195,22 @@ namespace ChoNongSan.Controllers
 				postId = Convert.ToInt32(postId)
 			};
 			var data = await _postApi.AddPostLove(request);
+
+			return Json(data);
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> GetListDistrict([FromBody] int codeProvince)
+		{
+			var data = await _postApi.GetListDistrict(codeProvince);
+
+			return Json(data);
+		}
+
+		[HttpGet]
+		public async Task<JsonResult> GetListSubDistrict(int codePro, int codeDis)
+		{
+			var data = await _postApi.GetListSubDistrict(Convert.ToInt32(codePro), Convert.ToInt32(codeDis));
 
 			return Json(data);
 		}
@@ -211,6 +233,14 @@ namespace ChoNongSan.Controllers
 
 			ViewBag.HiddenLayOut = 1;
 			return View(model);
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> CreateMeet([FromBody] CreateMeetRequest request)
+		{
+			var data = await _meetApi.Create(request);
+
+			return Json(data);
 		}
 	}
 }

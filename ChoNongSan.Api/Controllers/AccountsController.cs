@@ -46,6 +46,20 @@ namespace ChoNongSan.Api.Controllers
 			return Ok(await _accountService.GetAll(request));
 		}
 
+		[HttpGet("lich-su-nap-tien")]
+		public async Task<IActionResult> GetHistoryAddMoney([FromQuery] GetPagingCommonRequest request)
+		{
+			if (request.ById != null && request.ById != 0)
+			{
+				var user = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.AccountId == request.ById && x.IsDelete == false);
+				if (user != null)
+				{
+					return Ok(new { data = await _accountService.GetListHistoryMoney(request), message = "Thành công", status = "OK" });
+				}
+			}
+			return BadRequest(new { message = "Tài khoản không tồn tại", status = "FAILED" });
+		}
+
 		[HttpGet("so-dien-thoai/{phoneNumber}")]
 		public async Task<IActionResult> GetAccountByPhone([FromRoute] string phoneNumber)
 		{

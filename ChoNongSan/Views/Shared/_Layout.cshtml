@@ -1,10 +1,10 @@
 ﻿@using System.Linq;
 
 @{
-    var accountID = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
-    var avatar = User.Claims.Where(x => x.Type == "Avatar").Select(c => c.Value).SingleOrDefault();
-    var userName = User.Identity.Name;
-    if (String.IsNullOrEmpty(userName)) { userName = "Tài khoản"; avatar = "/assetsKH/images/avatar-null.png"; }
+	var accountID = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+	var avatar = User.Claims.Where(x => x.Type == "Avatar").Select(c => c.Value).SingleOrDefault();
+	var userName = User.Identity.Name;
+	if (String.IsNullOrEmpty(userName)) { userName = "Tài khoản"; avatar = "/assetsKH/images/avatar-null.png"; }
 }
 
 <!DOCTYPE html>
@@ -12,505 +12,515 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@ViewData["Title"] - ChoNongSan</title>
-    <meta name="robots" content="noindex, follow" />
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="~/assetsKH/images/logo.png" />
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@ViewData["Title"] - ChoNongSan</title>
+	<meta name="robots" content="noindex, follow" />
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link rel="shortcut icon" type="image/x-icon" href="~/assetsKH/images/logo.png" />
 
-    <!-- CSS
-    ============================================ -->
-    <!-- Vendor CSS (Contain Bootstrap, Icon Fonts) -->
-    <link rel="stylesheet" href="~/assetsKH/css/vendor/font-awesome.min.css" />
-    <link rel="stylesheet" href="~/assetsKH/css/vendor/Pe-icon-7-stroke.css" />
+	<!-- CSS
+	============================================ -->
+	<!-- Vendor CSS (Contain Bootstrap, Icon Fonts) -->
+	<link rel="stylesheet" href="~/assetsKH/css/vendor/font-awesome.min.css" />
+	<link rel="stylesheet" href="~/assetsKH/css/vendor/Pe-icon-7-stroke.css" />
 
-    <!-- Plugin CSS (Global Plugins Files) -->
-    <link rel="stylesheet" href="~/assetsKH/css/plugins/animate.min.css">
-    <link rel="stylesheet" href="~/assetsKH/css/plugins/jquery-ui.min.css">
-    <link rel="stylesheet" href="~/assetsKH/css/plugins/swiper-bundle.min.css">
-    <link rel="stylesheet" href="~/assetsKH/css/plugins/nice-select.css">
-    <link rel="stylesheet" href="~/assetsKH/css/plugins/magnific-popup.min.css" />
+	<!-- Plugin CSS (Global Plugins Files) -->
+	<link rel="stylesheet" href="~/assetsKH/css/plugins/animate.min.css">
+	<link rel="stylesheet" href="~/assetsKH/css/plugins/jquery-ui.min.css">
+	<link rel="stylesheet" href="~/assetsKH/css/plugins/swiper-bundle.min.css">
+	<link rel="stylesheet" href="~/assetsKH/css/plugins/nice-select.css">
+	<link rel="stylesheet" href="~/assetsKH/css/plugins/magnific-popup.min.css" />
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <!-- Style CSS -->
-    <link rel="stylesheet" href="~/assetsKH/css/style.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+	@*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">*@
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+	<!-- Style CSS -->
+	<link rel="stylesheet" href="~/assetsKH/css/style.css">
+
 </head>
 
 <body>
+	<style>
+		.chucuatoi {
+			font-family: 'FontAwesome', Arial, sans-serif;
+		}
+	</style>
+	<div class="main-wrapper">
 
-    <div class="main-wrapper">
+		<!-- Begin Main Header Area -->
+		<header class="main-header_area position-relative">
 
-        <!-- Begin Main Header Area -->
-        <header class="main-header_area position-relative">
+			<div class="header-middle py-5">
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-lg-12">
+							<div class="header-middle-wrap">
+								<a href="/" class="col-auto header-logo px-0">
 
-            <div class="header-middle py-5">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-12">
-                            <div class="header-middle-wrap">
-                                <a href="/" class="col-auto header-logo">
+									<img style="width:170px; height:33px" src="~/assetsKH/images/logo/logo-chu-removebg.png" alt="logo" />
+								</a>
+								<div class="w-50 d-none d-lg-block col-auto px-3">
+									<form asp-action="Index" method="get" class="header-searchbox">
+										<input name="keyword" value="@ViewBag.Keyword" class="input-field" type="text" placeholder="Tìm kiếm theo tiêu đề hoặc địa chỉ">
+										<button class="btn btn-outline-whisper btn-primary-hover" type="submit"><i class="pe-7s-search"></i></button>
+									</form>
+								</div>
+								<div class="header-right col-auto">
+									<ul>
+										@*<li class="d-block d-lg-none" style="padding-right:10px">
+											<a href="#searchBar" class="search-btn toolbar-btn">
+												<i class="pe-7s-search"></i>
+											</a>
+										</li>*@
+										<li class="dropdown " style="padding-right:3px">
+											<button class="d-flex align-items-center btn btn-link dropdown-toggle p-0" type="button" id="settingButton" data-bs-toggle="dropdown" aria-expanded="false">
+												<img id="avatar1" class="rounded-circle " style="height: 30px; width: 30px; " src="@avatar" />
 
-                                    <img style="width:170px; height:33px" src="~/assetsKH/images/logo/logo-chu-removebg.png" alt="logo" />
-                                </a>
-                                <div class="w-50 d-none d-lg-block col-auto px-3">
-                                    <form asp-action="Index" method="get" class="header-searchbox">
-                                        <input name="keyword" value="@ViewBag.Keyword" class="input-field" type="text" placeholder="Tìm kiếm theo tiêu đề hoặc địa chỉ">
-                                        <button class="btn btn-outline-whisper btn-primary-hover" type="submit"><i class="pe-7s-search"></i></button>
-                                    </form>
-                                </div>
-                                <div class="header-right col-auto">
-                                    <ul>
-                                        <li class="d-block d-lg-none" style="padding-right:10px">
-                                            <a href="#searchBar" class="search-btn toolbar-btn">
-                                                <i class="pe-7s-search"></i>
-                                            </a>
-                                        </li>
-                                        <li class="dropdown " style="padding-right:3px">
-                                            <button class="d-flex align-items-center btn btn-link dropdown-toggle p-0" type="button" id="settingButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <img id="avatar1" class="rounded-circle " style="height: 30px; width: 30px; " src="@avatar" />
+												<h5 class=" d-none d-lg-block" style=" margin: 0; padding-left: 10px; font-family:  Poppins, sans-serif ">@userName</h5>
+											</button>
 
-                                                <h5 class=" d-none d-lg-block" style=" margin: 0; padding-left: 10px; font-family:  Poppins, sans-serif ">@userName</h5>
-                                            </button>
+											<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingButton">
+												@if (!String.IsNullOrEmpty(User.Identity.Name))
+												{
+													<li><a class="dropdown-item" style="height:32px" asp-controller="User" asp-action="Profile">Quản lý tài khoản</a></li>
+													<li><a class="dropdown-item" style="height:32px" asp-controller="User" asp-action="SoDuTaiKhoan">Kiểm tra số dư</a></li>
+													<li>
+														<a onclick="logOut()" class="dropdown-item" style="height:32px" asp-controller="User" asp-action="Logout">Đăng xuất</a>
+													</li>
+												}
+												else
+												{
+													<li><a class="dropdown-item" href="/User/ForgotPassword">Quên mật khẩu</a></li>
+													<li><a class="dropdown-item" href="/User/Login">Đăng nhập</a></li>
+													<li><a class="dropdown-item" href="/User/Register">Đăng ký</a></li>
+												}
+											</ul>
+										</li>
 
-                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingButton">
-                                                @if (!String.IsNullOrEmpty(User.Identity.Name))
-                                                {
-                                                    <li><a class="dropdown-item" style="height:32px" asp-controller="User" asp-action="Profile">Quản lý tài khoản</a></li>
-                                                    <li><a class="dropdown-item" style="height:32px" asp-controller="User" asp-action="SoDuTaiKhoan">Kiểm tra số dư</a></li>
-                                                    <li>
-                                                        <a onclick="logOut()" class="dropdown-item" style="height:32px" asp-controller="User" asp-action="Logout">Đăng xuất</a>
-                                                    </li>
-                                                }
-                                                else
-                                                {
-                                                    <li><a class="dropdown-item" href="/User/ForgotPassword">Quên mật khẩu</a></li>
-                                                    <li><a class="dropdown-item" href="/User/Login">Đăng nhập</a></li>
-                                                    <li><a class="dropdown-item" href="/User/Register">Đăng ký</a></li>
-                                                }
-                                            </ul>
-                                        </li>
+										@if (!String.IsNullOrEmpty(User.Identity.Name))
+										{
+											<li class="h-100 d-none d-lg-block" style="padding-right:10px">|</li>
+											<li class="dropdown" style="padding-right:10px">
+												<a class="d-flex align-items-center" href="/QuanLyTinDang/TaoMoi">
+													<img style="height: 30px; width: 30px" src="~/assetsKH/icon/icon-writing.png" />
+													<h5 class="d-none d-lg-block" style="margin: 0; padding-left: 10px; font-family: Poppins">Đăng tin</h5>
+												</a>
+											</li>
 
-                                        @if (!String.IsNullOrEmpty(User.Identity.Name))
-                                        {
-                                            <li class="h-100 d-none d-lg-block" style="padding-right:10px">|</li>
-                                            <li class="dropdown" style="padding-right:10px">
-                                                <a class="d-flex align-items-center" href="/QuanLyTinDang/TaoMoi">
-                                                    <img style="height: 30px; width: 30px" src="~/assetsKH/icon/icon-writing.png" />
-                                                    <h5 class="d-none d-lg-block" style="margin: 0; padding-left: 10px; font-family: Poppins">Đăng tin</h5>
-                                                </a>
-                                            </li>
+										}
+										@*<li class="mobile-menu_wrap d-block d-lg-none">
+											<a href="#mobileMenu" class="mobile-menu_btn toolbar-btn pl-0">
+												<i class="pe-7s-menu"></i>
+											</a>
+										</li>*@
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="main-header header-sticky " data-bg-color="#40AA54">
+				<div class="container">
+					<div class="main-header_nav position-relative">
+						<div class="row align-items-center">
+							<div class="col-lg-12 d-block">
+								<div class="main-menu">
+									<nav class="main-nav">
+										<ul>
+											<li class="drop-holder">
+												<a class="text-center" href="/Home">
+													<img src="~/assetsKH/icon/icon-home.jpg" style="height: 15px; width: 15px; margin:0 4px 2px 0" />
+													Trang chủ
+												</a>
+											</li>
+											<li>
+												<a class="text-center" href="/QuanLyTinDang">
+													Quản lý tin đăng
+												</a>
+											</li>
+											<li class="megamenu-holder">
+												<a class="text-center" asp-controller="QuanLyTinDang" asp-action="YeuThich">
+													Yêu thích
+												</a>
+											</li>
+											<li class="drop-holder">
+												<a class="text-center" href="javascript:void(0)">
+													Liên hệ
+												</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="mobile-menu_wrapper" id="mobileMenu">
+				<div class="harmic-offcanvas-body w-auto">
+					<div class="inner-body">
+						<div class="harmic-offcanvas-top">
+							<a href="#" class="button-close"><i class="pe-7s-close"></i></a>
+						</div>
+						<div class="offcanvas-menu_area">
+							<nav class="offcanvas-navigation">
+								<ul class="mobile-menu">
+									<li>
+										<a class="d-flex align-items-center" href="/Home">
+											<img style="width:20px" src="~/assetsKH/icon/icon-home.jpg" />
+											<span style="margin-left: 10px" class="mm-text">
+												Trang chủ
+											</span>
+										</a>
+									</li>
+									<li>
+										<a class="d-flex align-items-center" href="/QuanLyTinDang">
+											<img style="width: 20px; height: 20px" src="~/assetsKH/icon/icon-mgt-post-removebg.png" />
+											<span style="margin-left: 10px;" class="mm-text">Quản lý tin đăng</span>
+										</a>
+									</li>
+									<li>
+										<a asp-controller="QuanLyTinDang" asp-action="YeuThich" class="d-flex align-items-center">
 
-                                        }
-                                        <li class="mobile-menu_wrap d-block d-lg-none">
-                                            <a href="#mobileMenu" class="mobile-menu_btn toolbar-btn pl-0">
-                                                <i class="pe-7s-menu"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="main-header header-sticky " data-bg-color="#40AA54">
-                <div class="container">
-                    <div class="main-header_nav position-relative">
-                        <div class="row align-items-center">
-                            <div class="col-lg-12 d-block">
-                                <div class="main-menu">
-                                    <nav class="main-nav">
-                                        <ul>
-                                            <li class="drop-holder">
-                                                <a class="text-center" href="/Home">
-                                                    <img src="~/assetsKH/icon/icon-home.jpg" style="height: 15px; width: 15px; margin:0 4px 2px 0" />
-                                                    Trang chủ
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="text-center" href="/QuanLyTinDang">
-                                                    Quản lý tin đăng
-                                                </a>
-                                            </li>
-                                            <li class="megamenu-holder">
-                                                <a class="text-center" asp-controller="QuanLyTinDang" asp-action="YeuThich">
-                                                    Yêu thích
-                                                </a>
-                                            </li>
-                                            <li class="drop-holder">
-                                                <a class="text-center" href="javascript:void(0)">
-                                                    Liên hệ
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="mobile-menu_wrapper" id="mobileMenu">
-                <div class="harmic-offcanvas-body w-auto">
-                    <div class="inner-body">
-                        <div class="harmic-offcanvas-top">
-                            <a href="#" class="button-close"><i class="pe-7s-close"></i></a>
-                        </div>
-                        <div class="offcanvas-menu_area">
-                            <nav class="offcanvas-navigation">
-                                <ul class="mobile-menu">
-                                    <li>
-                                        <a class="d-flex align-items-center" href="/Home">
-                                            <img style="width:20px" src="~/assetsKH/icon/icon-home.jpg" />
-                                            <span style="margin-left: 10px" class="mm-text">
-                                                Trang chủ
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="d-flex align-items-center" href="/QuanLyTinDang">
-                                            <img style="width: 20px; height: 20px" src="~/assetsKH/icon/icon-mgt-post-removebg.png" />
-                                            <span style="margin-left: 10px;" class="mm-text">Quản lý tin đăng</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a asp-controller="QuanLyTinDang" asp-action="YeuThich" class="d-flex align-items-center">
+											<img style="width: 20px; height: 20px" src="~/assetsKH/icon/icon-love1-removebg.png" />
+											<span style="margin-left: 10px;" class="mm-text">
+												Yêu thích
+											</span>
+										</a>
+									</li>
+									<li class="menu-item-has-children">
+										<a href="#" class="d-flex align-items-center">
+											<img style="width: 20px; height: 20px" src="~/assetsKH/icon/icon-contact.png" />
+											<span class="mm-text" style="margin-left:10px">
+												Liên hệ
+											</span>
+										</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="offcanvas-search_wrapper" id="searchBar">
+				<div class="harmic-offcanvas-body ">
+					<div class="container h-100">
+						<div class="offcanvas-search">
+							<div class="harmic-offcanvas-top">
+								<a href="#" class="button-close"><i class="pe-7s-close"></i></a>
+							</div>
+							<span class="searchbox-info">Nhập tìm kiếm của bạn</span>
+							<form action="#" class="hm-searchbox">
+								<input type="text" placeholder="Search">
+								<button class="search-btn" type="submit"><i class="pe-7s-search"></i></button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 
-                                            <img style="width: 20px; height: 20px" src="~/assetsKH/icon/icon-love1-removebg.png" />
-                                            <span style="margin-left: 10px;" class="mm-text">
-                                                Yêu thích
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item-has-children">
-                                        <a href="#" class="d-flex align-items-center">
-                                            <img style="width: 20px; height: 20px" src="~/assetsKH/icon/icon-contact.png" />
-                                            <span class="mm-text" style="margin-left:10px">
-                                                Liên hệ
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="offcanvas-search_wrapper" id="searchBar">
-                <div class="harmic-offcanvas-body ">
-                    <div class="container h-100">
-                        <div class="offcanvas-search">
-                            <div class="harmic-offcanvas-top">
-                                <a href="#" class="button-close"><i class="pe-7s-close"></i></a>
-                            </div>
-                            <span class="searchbox-info">Nhập tìm kiếm của bạn</span>
-                            <form action="#" class="hm-searchbox">
-                                <input type="text" placeholder="Search">
-                                <button class="search-btn" type="submit"><i class="pe-7s-search"></i></button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+			<div class="global-overlay"></div>
+		</header>
+		<!-- Main Header Area End Here -->
+		<!-- Begin Slider Area -->
+		<div class="slider-area">
 
-            <div class="global-overlay"></div>
-        </header>
-        <!-- Main Header Area End Here -->
-        <!-- Begin Slider Area -->
-        <div class="slider-area">
+			<!-- Main Slider -->
+			<div class="swiper-container main-slider swiper-arrow with-bg_white">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide animation-style-01">
+						<div class="slide-inner bg-height" data-bg-image="/assetsKH/images/slider/bg/1-1.jpg">
+							<div class="parallax-img-wrap">
+								<div class="chilly">
+									<div class="scene fill">
+										<div class="expand-width" data-depth="0.2">
+											<img src="~/assetsKH/images/slider/inner-img/1-1-231x210.png" alt="trái ớt" />
+										</div>
+									</div>
+								</div>
+								<div class="avocado">
+									<div class="scene fill">
+										<div class="expand-width" data-depth="0.5">
+											<img src="~/assetsKH/images/slider/inner-img/1-2-224x204.png" alt="Inner Image">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="container">
+								<div class="parallax-with-content">
+									<div class="slide-content">
+										<span class="sub-title mb-3">Đa dạng & Phong phú</span>
+										<h3 class="title mb-9">Đảm bảo chất lượng.</h3>
+									</div>
+									<div class="parallax-img-wrap">
+										<div class="tomatoes">
+											<div class="scene fill">
+												<div class="expand-width" data-depth="0.5">
+													<img src="~/assetsKH/images/slider/inner-img/1-3-601x534.png" alt="Inner Image">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide animation-style-01">
+						<div class="slide-inner bg-height" data-bg-image="/assetsKH/images/slider/bg/1-1.jpg">
+							<div class="parallax-img-wrap">
+								<div class="chilly">
+									<div class="scene fill">
+										<div class="expand-width" data-depth="0.2">
+											<img src="~/assetsKH/images/slider/inner-img/1-1-231x210.png" alt="trái ớt" />
+										</div>
+									</div>
+								</div>
+								<div class="avocado">
+									<div class="scene fill">
+										<div class="expand-width" data-depth="0.5">
+											<img src="~/assetsKH/images/slider/inner-img/1-2-224x204.png" alt="Inner Image">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="container">
+								<div class="parallax-with-content">
+									<div class="slide-content">
+										<span class="sub-title mb-3">Uy tín & Chất lượng</span>
+										<h2 class="title mb-9">Miễn phí tin đăng<br> đầu tiên.</h2>
+									</div>
+									<div class="parallax-img-wrap">
+										<div class="tomatoes">
+											<div class="scene fill">
+												<div class="expand-width" data-depth="0.5">
+													<img src="~/assetsKH/images/slider/inner-img/2-1-601x426.png" alt="Inner Image">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Add Pagination -->
+				<div class="swiper-pagination with-bg d-md-none"></div>
 
-            <!-- Main Slider -->
-            <div class="swiper-container main-slider swiper-arrow with-bg_white">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide animation-style-01">
-                        <div class="slide-inner bg-height" data-bg-image="/assetsKH/images/slider/bg/1-1.jpg">
-                            <div class="parallax-img-wrap">
-                                <div class="chilly">
-                                    <div class="scene fill">
-                                        <div class="expand-width" data-depth="0.2">
-                                            <img src="~/assetsKH/images/slider/inner-img/1-1-231x210.png" alt="trái ớt" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="avocado">
-                                    <div class="scene fill">
-                                        <div class="expand-width" data-depth="0.5">
-                                            <img src="~/assetsKH/images/slider/inner-img/1-2-224x204.png" alt="Inner Image">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="container">
-                                <div class="parallax-with-content">
-                                    <div class="slide-content">
-                                        <span class="sub-title mb-3">Đa dạng & Phong phú</span>
-                                        <h3 class="title mb-9">Đảm bảo chất lượng.</h3>
-                                    </div>
-                                    <div class="parallax-img-wrap">
-                                        <div class="tomatoes">
-                                            <div class="scene fill">
-                                                <div class="expand-width" data-depth="0.5">
-                                                    <img src="~/assetsKH/images/slider/inner-img/1-3-601x534.png" alt="Inner Image">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide animation-style-01">
-                        <div class="slide-inner bg-height" data-bg-image="/assetsKH/images/slider/bg/1-1.jpg">
-                            <div class="parallax-img-wrap">
-                                <div class="chilly">
-                                    <div class="scene fill">
-                                        <div class="expand-width" data-depth="0.2">
-                                            <img src="~/assetsKH/images/slider/inner-img/1-1-231x210.png" alt="trái ớt" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="avocado">
-                                    <div class="scene fill">
-                                        <div class="expand-width" data-depth="0.5">
-                                            <img src="~/assetsKH/images/slider/inner-img/1-2-224x204.png" alt="Inner Image">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="container">
-                                <div class="parallax-with-content">
-                                    <div class="slide-content">
-                                        <span class="sub-title mb-3">Uy tín & Chất lượng</span>
-                                        <h2 class="title mb-9">Miễn phí tin đăng<br> đầu tiên.</h2>
-                                    </div>
-                                    <div class="parallax-img-wrap">
-                                        <div class="tomatoes">
-                                            <div class="scene fill">
-                                                <div class="expand-width" data-depth="0.5">
-                                                    <img src="~/assetsKH/images/slider/inner-img/2-1-601x426.png" alt="Inner Image">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Add Pagination -->
-                <div class="swiper-pagination with-bg d-md-none"></div>
+				<!-- Add Arrows -->
+				<div class="swiper-button-next"></div>
+				<div class="swiper-button-prev"></div>
+			</div>
+		</div>
+		<!-- Slider Area End Here -->
+		<!-- Begin Shipping Area -->
+		@{ if (ViewBag.HiddenLayOut != 1)
+			{
+				<div class="shipping-area section-space-top-55">
+					<div class="container ">
+						<div class="row ">
+							<div class="d-lg-block p-0 col-lg-3">
+							</div>
+							<div class="col-6 p-0 col-lg-3">
+								<div class="shipping-item row p-0 " style="margin:0 10px">
+									<div class="shipping-img col-auto mx-auto p-2">
+										<img src="~/assetsKH/images/shipping/icon/earphones.png" alt="Shipping Icon">
+									</div>
+									<div class="shipping-content col-auto mx-auto text-center">
+										<h5 class="title">Hỗ trợ trực tuyến</h5>
+									</div>
+								</div>
+							</div>
+							<div class="col-6 p-0 col-lg-3">
+								<div class="shipping-item row p-0" style="margin:0 10px">
+									<div class="shipping-img col-auto mx-auto p-2">
+										<img src="~/assetsKH/images/shipping/icon/shield.png" alt="Shipping Icon">
+									</div>
+									<div class="shipping-content col-auto mx-auto text-center">
+										<h5 class="title">Thanh toán an toàn</h5>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		}
 
-                <!-- Add Arrows -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-        </div>
-        <!-- Slider Area End Here -->
-        <!-- Begin Shipping Area -->
-        @{ if (ViewBag.HiddenLayOut != 1)
-            {
-                <div class="shipping-area section-space-top-55">
-                    <div class="container ">
-                        <div class="row ">
-                            <div class="d-lg-block p-0 col-lg-3">
-                            </div>
-                            <div class="col-6 p-0 col-lg-3">
-                                <div class="shipping-item row p-0 " style="margin:0 10px">
-                                    <div class="shipping-img col-auto mx-auto p-2">
-                                        <img src="~/assetsKH/images/shipping/icon/earphones.png" alt="Shipping Icon">
-                                    </div>
-                                    <div class="shipping-content col-auto mx-auto text-center">
-                                        <h5 class="title">Hỗ trợ trực tuyến</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 p-0 col-lg-3">
-                                <div class="shipping-item row p-0" style="margin:0 10px">
-                                    <div class="shipping-img col-auto mx-auto p-2">
-                                        <img src="~/assetsKH/images/shipping/icon/shield.png" alt="Shipping Icon">
-                                    </div>
-                                    <div class="shipping-content col-auto mx-auto text-center">
-                                        <h5 class="title">Thanh toán an toàn</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        }
+		<!-- Shipping Area End Here -->
+		<!-- Begin Product Area -->
+		@RenderBody()
+		<!-- Product Area End Here -->
+		<!-- Begin Banner Area -->
+		<!-- Banner Area End Here -->
+		<!-- Begin Product Area -->
+		<!-- Product Area End Here -->
+		<!-- Begin Banner Area -->
+		<!-- Banner Area End Here -->
+		<!-- Begin Product Area -->
+		<!-- Product Area End Here -->
+		<!-- Begin Blog Area -->
+		<!-- Blog Area End Here -->
+		<!-- Begin Footer Area -->
+		<div class="footer-area">
+			<div class="footer-top section-space-y-axis-100 text-black" data-bg-color="#e5ddcc">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3 col-md-6">
+							<div class="widget-item">
+								<div class="footer-logo pb-4">
+									<a href="/">
+										<img src="~/assetsKH/images/logo/logo-chu-removebg.png" alt="logo" />
+									</a>
+								</div>
+								<p class="short-desc mb-2">Mang lại cho bạn những thực phẩm mà bạn cần thiết cho mỗi bữa ăn của chính mình. </p>
+								<div class="widget-contact-info pb-6">
+									<ul>
+										<li>
+											<i class="pe-7s-map-marker"></i>
+											99 Phương Nam, Tam Kỳ, Quảng Nam
+										</li>
+										<li>
+											<i class="pe-7s-mail"></i>
+											<a href="mailto://chonongsan.vvt.vn@gmail.com">chonongsan.vvt.vn@gmail.com</a>
+										</li>
+									</ul>
+								</div>
+								<div class="payment-method">
+									<a href="javascript:void(0)">
+										<img src="~/assetsKH/images/payment/1.png" alt="Payment Method">
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-2 offset-lg-1 col-md-6 pt-10 pt-lg-0">
+							<div class="widget-item">
+								<h3 class="widget-title mb-5">Thông tin</h3>
+								<ul class="widget-list-item">
+									<li>
+										<a href="javascript:void(0)">CÂU HỎI THƯỜNG GẶP</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)">KHẢ NĂNG TIẾP CẬN</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)">SỐ DƯ QUÀ TẶNG</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-lg-2 offset-lg-1 col-md-6 pt-10 pt-lg-0">
+							<div class="widget-item">
+								<h3 class="widget-title mb-5">TÀI KHOẢN CỦA TÔI</h3>
+								<ul class="widget-list-item">
+									<li>
+										<a href="javascript:void(0)">THỦ TỤC THANH TOÁN</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)">ĐIỀU KHOẢN SỬ DỤNG</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)">THẨM ĐỊNH</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)">YÊU THÍCH</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-6 pt-10 pt-lg-0">
+							<div class="widget-item">
+								<h3 class="widget-title mb-5">BẢNG TIN</h3>
+								<p class="short-desc">Theo dõi chúng tôi để cập nhật thêm nhiều tin tức mới nhất.</p>
+							</div>
+							<div class="widget-form-area">
+								<form class="widget-form" action="#">
+									<input class="input-field" type="email" autocomplete="off" placeholder="Eamil của bạn">
+									<div class="button-wrap pt-5">
+										<button class="btn btn-custom-size btn-primary btn-secondary-hover rounded" id="mc-submit">Gửi Mail</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer-bottom py-3" data-bg-color="#40AA54">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="copyright">
+								<span class="copyright-text text-white">© 2021 Phát triển bởi <i class="fa fa-heart text-danger"></i> bởi  <a href="javascript:void(0)" target="_blank">VVT</a> </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Footer Area End Here -->
+		<!-- Begin Scroll To Top -->
+		<a class="scroll-to-top" href="">
+			<i class="fa fa-chevron-up"></i>
+		</a>
+		<!-- Scroll To Top End Here -->
+	</div>
 
-        <!-- Shipping Area End Here -->
-        <!-- Begin Product Area -->
-        @RenderBody()
-        <!-- Product Area End Here -->
-        <!-- Begin Banner Area -->
-        <!-- Banner Area End Here -->
-        <!-- Begin Product Area -->
-        <!-- Product Area End Here -->
-        <!-- Begin Banner Area -->
-        <!-- Banner Area End Here -->
-        <!-- Begin Product Area -->
-        <!-- Product Area End Here -->
-        <!-- Begin Blog Area -->
-        <!-- Blog Area End Here -->
-        <!-- Begin Footer Area -->
-        <div class="footer-area">
-            <div class="footer-top section-space-y-axis-100 text-black" data-bg-color="#e5ddcc">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-6">
-                            <div class="widget-item">
-                                <div class="footer-logo pb-4">
-                                    <a href="/">
-                                        <img src="~/assetsKH/images/logo/logo-chu-removebg.png" alt="logo" />
-                                    </a>
-                                </div>
-                                <p class="short-desc mb-2">Mang lại cho bạn những thực phẩm mà bạn cần thiết cho mỗi bữa ăn của chính mình. </p>
-                                <div class="widget-contact-info pb-6">
-                                    <ul>
-                                        <li>
-                                            <i class="pe-7s-map-marker"></i>
-                                            99 Phương Nam, Tam Kỳ, Quảng Nam
-                                        </li>
-                                        <li>
-                                            <i class="pe-7s-mail"></i>
-                                            <a href="mailto://chonongsan.vvt.vn@gmail.com">chonongsan.vvt.vn@gmail.com</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="payment-method">
-                                    <a href="javascript:void(0)">
-                                        <img src="~/assetsKH/images/payment/1.png" alt="Payment Method">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 offset-lg-1 col-md-6 pt-10 pt-lg-0">
-                            <div class="widget-item">
-                                <h3 class="widget-title mb-5">Thông tin</h3>
-                                <ul class="widget-list-item">
-                                    <li>
-                                        <a href="javascript:void(0)">CÂU HỎI THƯỜNG GẶP</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">KHẢ NĂNG TIẾP CẬN</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">SỐ DƯ QUÀ TẶNG</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 offset-lg-1 col-md-6 pt-10 pt-lg-0">
-                            <div class="widget-item">
-                                <h3 class="widget-title mb-5">TÀI KHOẢN CỦA TÔI</h3>
-                                <ul class="widget-list-item">
-                                    <li>
-                                        <a href="javascript:void(0)">THỦ TỤC THANH TOÁN</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">ĐIỀU KHOẢN SỬ DỤNG</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">THẨM ĐỊNH</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">YÊU THÍCH</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 pt-10 pt-lg-0">
-                            <div class="widget-item">
-                                <h3 class="widget-title mb-5">BẢNG TIN</h3>
-                                <p class="short-desc">Theo dõi chúng tôi để cập nhật thêm nhiều tin tức mới nhất.</p>
-                            </div>
-                            <div class="widget-form-area">
-                                <form class="widget-form" action="#">
-                                    <input class="input-field" type="email" autocomplete="off" placeholder="Eamil của bạn">
-                                    <div class="button-wrap pt-5">
-                                        <button class="btn btn-custom-size btn-primary btn-secondary-hover rounded" id="mc-submit">Gửi Mail</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom py-3" data-bg-color="#40AA54">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="copyright">
-                                <span class="copyright-text text-white">© 2021 Phát triển bởi <i class="fa fa-heart text-danger"></i> bởi  <a href="javascript:void(0)" target="_blank">VVT</a> </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Footer Area End Here -->
-        <!-- Begin Scroll To Top -->
-        <a class="scroll-to-top" href="">
-            <i class="fa fa-chevron-up"></i>
-        </a>
-        <!-- Scroll To Top End Here -->
-    </div>
+	<!-- Global Vendor, plugins JS -->
+	<!-- JS Files
+	============================================ -->
+	<!-- Global Vendor, plugins JS -->
+	<!-- Vendor JS -->
+	<script src="~/assetsKH/js/vendor/bootstrap.bundle.min.js"></script>
+	<script src="~/assetsKH/js/vendor/jquery-3.5.1.min.js"></script>
+	<script src="~/assetsKH/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+	<script src="~/assetsKH/js/vendor/modernizr-3.11.2.min.js"></script>
+	<script src="~/assetsKH/js/vendor/jquery.waypoints.js"></script>
 
-    <!-- Global Vendor, plugins JS -->
-    <!-- JS Files
-    ============================================ -->
-    <!-- Global Vendor, plugins JS -->
-    <!-- Vendor JS -->
-    <script src="~/assetsKH/js/vendor/bootstrap.bundle.min.js"></script>
-    <script src="~/assetsKH/js/vendor/jquery-3.5.1.min.js"></script>
-    <script src="~/assetsKH/js/vendor/jquery-migrate-3.3.0.min.js"></script>
-    <script src="~/assetsKH/js/vendor/modernizr-3.11.2.min.js"></script>
-    <script src="~/assetsKH/js/vendor/jquery.waypoints.js"></script>
+	<!--Plugins JS-->
+	<script src="~/assetsKH/js/plugins/wow.min.js"></script>
+	<script src="~/assetsKH/js/plugins/jquery-ui.min.js"></script>
+	<script src="~/assetsKH/js/plugins/swiper-bundle.min.js"></script>
+	<script src="~/assetsKH/js/plugins/jquery.nice-select.js"></script>
+	<script src="~/assetsKH/js/plugins/parallax.min.js"></script>
+	<script src="~/assetsKH/js/plugins/jquery.magnific-popup.min.js"></script>
 
-    <!--Plugins JS-->
-    <script src="~/assetsKH/js/plugins/wow.min.js"></script>
-    <script src="~/assetsKH/js/plugins/jquery-ui.min.js"></script>
-    <script src="~/assetsKH/js/plugins/swiper-bundle.min.js"></script>
-    <script src="~/assetsKH/js/plugins/jquery.nice-select.js"></script>
-    <script src="~/assetsKH/js/plugins/parallax.min.js"></script>
-    <script src="~/assetsKH/js/plugins/jquery.magnific-popup.min.js"></script>
+	<!--Main JS (Common Activation Codes)-->
+	<script src="~/assetsKH/js/main.js"></script>
 
-    <!--Main JS (Common Activation Codes)-->
-    <script src="~/assetsKH/js/main.js"></script>
+	@*<script src="~/lib/jquery/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
+	<script src="~/lib/jquery/dist/jquery-ui.min.js"></script>*@
+	<script type="text/javascript">
+		function logOut() {
+			sessionStorage.removeItem('avatar');
+			sessionStorage.removeItem('testObject1');
+			sessionStorage.removeItem('testObject');
+		}
+		$(document).ready(function () {
+			var a = sessionStorage.getItem('avatar');
+			if (a != null) {
+				var avatar = JSON.parse(sessionStorage.getItem('avatar'));
+				let bin = atob(avatar.base64);
+				let length = bin.length;
 
-    <script type="text/javascript">
-        function logOut() {
-            sessionStorage.removeItem('avatar');
-            sessionStorage.removeItem('testObject1');
-            sessionStorage.removeItem('testObject');
-        }
-        $(document).ready(function () {
-            var a = sessionStorage.getItem('avatar');
-            if (a != null) {
-                var avatar = JSON.parse(sessionStorage.getItem('avatar'));
-                let bin = atob(avatar.base64);
-                let length = bin.length;
+				let buf = new ArrayBuffer(length);
+				let arr = new Uint8Array(buf);
+				bin.split('').forEach((e, i) => arr[i] = e.charCodeAt(0));
+				var f = new File([buf], avatar.name, { type: avatar.type, lastModified: avatar.lastModified });
+				document.getElementById('avatar1').src = URL.createObjectURL(f);;
+			}
+			//else {
+			//    if (document.getElementById('avatar1').src == "") {
+			//        document.getElementById('avatar1').src = "/assetsKH/images/avatar-null.png";
+			//    }
+			//}
 
-                let buf = new ArrayBuffer(length);
-                let arr = new Uint8Array(buf);
-                bin.split('').forEach((e, i) => arr[i] = e.charCodeAt(0));
-                var f = new File([buf], avatar.name, { type: avatar.type, lastModified: avatar.lastModified });
-                document.getElementById('avatar1').src = URL.createObjectURL(f);;
-            }
-            //else {
-            //    if (document.getElementById('avatar1').src == "") {
-            //        document.getElementById('avatar1').src = "/assetsKH/images/avatar-null.png";
-            //    }
-            //}
+		});
+	</script>
 
-        });
-    </script>
-
-    @await RenderSectionAsync("Scripts", required: false)
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

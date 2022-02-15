@@ -71,7 +71,7 @@
 									</div>
 								</div>
 
-								<div class="my-3 price-box d-flex align-items-center justify-content-between">
+								<div class="my-3 price-box d-lg-flex align-items-center justify-content-between">
 									<div class="d-flex align-items-center">
 										<span class="title me-lg-2 me-1 font-size-16" style="font-weight:bold">Tiêu đề:</span>
 										<span class="font-weight-lighter title my-auto" style="font-family:Arial,sans-serif">@Model.Title</span>
@@ -107,23 +107,23 @@
 									</div>
 								</div>
 
-								<div class="row-cols-1 d-flex align-items-center justify-content-between my-2">
-									<div class="col-auto d-flex align-items-center">
+								<div class="row-cols-1 d-lg-flex align-items-center justify-content-between my-2">
+									<div class="ps-0 col-auto d-flex align-items-center mb-2">
 										<span class="title pe-lg-2 font-size-16" style="font-weight:bold">Khối lượng:</span>
 										<span class="new-price text-dark">@(Model.WeightNumber)/@(Model.WeightName)</span>
 									</div>
-									<div class="col-auto d-flex align-items-center ms-2">
+									<div class="pe-0 col-auto d-flex align-items-center ">
 										<span class="title pe-2 font-size-16" style="font-weight:bold">Giá:</span>
 										<strong class="new-price font-weight-bold" style="color: #d0021b; ">@(Model.Price.Value.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"))) / @Model.WeightName</strong>
 									</div>
 								</div>
 
-								<div class="mb-2 d-flex align-items-center justify-content-between">
-									<div class="d-flex align-items-center ">
+								<div class="mb-2 d-lg-flex align-items-center justify-content-between">
+									<div class="d-flex align-items-center mb-2">
 										<span class="title pe-lg-2 " style="font-weight:bold">Danh mục :</span>
 										<p class="mb-0">@Model.CatName</p>
 									</div>
-									<div class="d-flex align-items-center ms-2">
+									<div class="d-flex align-items-center">
 										<i class="me-2 bi bi-calendar3"></i>
 										<p class="mb-0">@(Model.TimePost.Value.ToString("HH:mm dd/MM/yyyy"))</p>
 									</div>
@@ -132,26 +132,34 @@
 									<i class="me-2 bi bi-geo-alt-fill"></i>
 									<p class="m-0">@Model.Address</p>
 								</div>
-								<div class="d-flex align-items-center justify-content-between mb-2">
-									<div class="d-flex align-items-center">
-										<img style="height:30px" class="me-lg-2 me-1" src="~/assetsKH/icon/icon-giao-hang.png" />
-										@if (Model.IsDeliver == true)
-										{
-											<p class="m-0">Có</p>
-										}
-										else
-										{
-											<p class="m-0">Không</p>
-										}
+								<div class="d-lg-flex align-items-center justify-content-between mb-2">
+									<div class="justify-content-between d-flex">
+										<div class="d-flex align-items-center">
+											<img style="height:30px" class="me-lg-2 me-1" src="~/assetsKH/icon/icon-giao-hang.png" />
+											@if (Model.IsDeliver == true)
+											{
+												<p class="m-0">Có</p>
+											}
+											else
+											{
+												<p class="m-0">Không</p>
+											}
+										</div>
+										<div class="d-flex align-items-center me-5">
+											<img class="mx-lg-2 ms-1" style="height:30px" src="~/assetsKH/icon/icon-chatluong-removebg.png" />
+											<p class="m-0">@Model.Quality</p>
+										</div>
 									</div>
-									<div class="d-flex align-items-center me-5">
-										<img class="mx-lg-2 ms-1" style="height:30px" src="~/assetsKH/icon/icon-chatluong-removebg.png" />
-										<p class="m-0">@Model.Quality</p>
-									</div>
+
 									<div class="d-flex align-items-center">
 										<span class="title me-lg-2 me-1" style="font-weight:bold">Hạn bảo quản:</span>
 										<p class="m-0">@(Model.Expiry) ngày</p>
 									</div>
+								</div>
+								<div class="d-flex align-items-center mb-2">
+									<button type="button" class="mx-auto mt-10 btn btn-primary" style="background-color:#40AA54" data-toggle="modal" data-target="#exampleModal">
+										Tạo lịch hẹn
+									</button>
 								</div>
 							</div>
 						</div>
@@ -162,11 +170,101 @@
 	</div>
 </main>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title chucuatoi" id="exampleModalLabel">Đặt lịch hẹn</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<input hidden id="posId" value="@Model.PostID" />
+				<div class="form-group mb-3">
+					<label for="exampleInputPassword1">Số điện thoại</label>
+					<input type="text" class="form-control" id="phone" placeholder="Nhập số điện thoại">
+				</div>
+				<div class="form-group  d-lg-flex justify-content-between">
+					<div class="col-auto mb-3">
+						<label for="exampleInputPassword1">Ngày</label>
+						<input type="date" class="form-control" id="date" placeholder="Password">
+					</div>
+					<div class="col-auto">
+						<label for="exampleInputPassword1">Thời gian</label>
+						<input type="time" class="form-control" id="time" placeholder="Password">
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+				<button type="button" id="btnSubmit" class="btn btn-primary">Đặt</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 @section Scripts{
 
 	<script type="text/javascript">
 
-        $(function () {
+		$(document).ready(function () {
+
+			$('#btnSubmit').click(function () {
+				var date = $('#date').val();
+				var time = $('#time').val();
+				var phone = $('#phone').val();
+				var postId = $('#posId').val();
+				var nguoiTao = $('#AccountId').val();
+
+				var regex = new RegExp(/^((09|03|07|08|05)((\d){8}))$/);
+				if (!regex.test(phone)) {
+					alert("Số điện thoại không đúng định dạng");
+					$('#phone').focus();
+					return;
+				}
+				if (phone != phone.trim() && phone != "") {
+					alert("Vui lòng nhập số điện thoại của bạn");
+					$('#phone').focus();
+					return;
+				}
+				if (date == "") {
+					alert("Vui lòng chọn ngày gặp mặt");
+					$('#date').focus();
+					return;
+				}
+				if (time == "") {
+					alert("Vui lòng chọn giờ gặp mặt");
+					$('#time').focus();
+					return;
+				}
+
+				var lichhen = {
+					"date": date,
+					"time": time,
+					"postId": postId,
+					"phone": phone,
+					"nguoiTaoLich": nguoiTao
+				}
+				document.getElementById("btnSubmit").type = 'submit';
+				$.ajax({
+					type: "POST",
+                    url: '@Url.Action("CreateMeet", "QuanLyTinDang")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(lichhen),
+                    dataType: 'json',
+					success: function (result) {
+						output = JSON.parse(result);
+						alert(output.message);
+                        console.log(result);
+                    }
+				});
+			});
+		});
+
+		$(function () {
+
             $('#btnAddLove').click(function () {
                 var a = $(this).attr('name');
                 const id = $('#AccountId').val();

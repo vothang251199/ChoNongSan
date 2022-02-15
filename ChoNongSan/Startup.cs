@@ -45,6 +45,7 @@ namespace ChoNongSan
             services.AddTransient<IPostApi, PostApi>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<IWeightApi, WeightApi>();
+            services.AddTransient<IMeetApi, MeetApi>();
 
             IMvcBuilder builder = services.AddRazorPages();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");

@@ -33,6 +33,9 @@ namespace ChoNongSan.ViewModels.Responses
         [Display(Name = "Số bài viết")]
         public int? NumberOfPost { get; set; }
 
+        [Display(Name = "Số tiền")]
+        public decimal? Money { get; set; }
+
         [Display(Name = "Ngày tạo")]
         public DateTime? CreateDate { get; set; }
     }

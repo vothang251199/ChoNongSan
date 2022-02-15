@@ -24,6 +24,7 @@ namespace ChoNongSan.Data.Models
         public virtual DbSet<ImagePost> ImagePosts { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Love> Loves { get; set; }
+        public virtual DbSet<Meet> Meets { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
@@ -34,7 +35,7 @@ namespace ChoNongSan.Data.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.;Database= ChoNongSan; Integrated Security = True;");
+                optionsBuilder.UseSqlServer("Server=tcp:dbchonongsan.database.windows.net,1433;Initial Catalog=ChoNongSan;Persist Security Info=False;User ID=admindb;Password=admin123@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
@@ -111,9 +112,7 @@ namespace ChoNongSan.Data.Models
 
                 entity.ToTable("HistoryMoney");
 
-                entity.Property(e => e.HisId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("HisID");
+                entity.Property(e => e.HisId).HasColumnName("HisID");
 
                 entity.Property(e => e.AccountId).HasColumnName("AccountID");
 
@@ -122,10 +121,16 @@ namespace ChoNongSan.Data.Models
                 entity.Property(e => e.Time).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Account)
-                    .WithMany(p => p.HistoryMoneys)
+                    .WithMany(p => p.HistoryMoneyAccounts)
                     .HasForeignKey(d => d.AccountId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_HistoryMoney_Account");
+
+                entity.HasOne(d => d.WhoAddMoneyNavigation)
+                    .WithMany(p => p.HistoryMoneyWhoAddMoneyNavigations)
+                    .HasForeignKey(d => d.WhoAddMoney)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_HistoryMoney_Account1");
             });
 
             modelBuilder.Entity<ImagePost>(entity =>
@@ -185,6 +190,29 @@ namespace ChoNongSan.Data.Models
                     .HasForeignKey(d => d.PostId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Love_Post");
+            });
+
+            modelBuilder.Entity<Meet>(entity =>
+            {
+                entity.ToTable("Meet");
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(11)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.NguoiTaoLichNavigation)
+                    .WithMany(p => p.Meets)
+                    .HasForeignKey(d => d.NguoiTaoLich)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Meet_Account");
+
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.Meets)
+                    .HasForeignKey(d => d.PostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Meet_Post");
             });
 
             modelBuilder.Entity<Post>(entity =>
@@ -285,9 +313,9 @@ namespace ChoNongSan.Data.Models
                 entity.Property(e => e.WeightName).HasMaxLength(20);
             });
 
-            //OnModelCreatingPartial(modelBuilder);
+            OnModelCreatingPartial(modelBuilder);
         }
 
-        //private partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
