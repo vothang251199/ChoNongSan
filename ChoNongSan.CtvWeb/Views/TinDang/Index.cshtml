@@ -2,69 +2,69 @@
 @model PageResult<ChoNongSan.ViewModels.Responses.PostVmTongQuat>
 
 @{
-    ViewData["Title"] = "Tin đăng";
-    Layout = "~/Views/Shared/_CtvLayout.cshtml";
+	ViewData["Title"] = "Tin đăng";
+	Layout = "~/Views/Shared/_CtvLayout.cshtml";
 }
 
 @if (@TempData["ALertMessage"] != null)
 {
-    <div class="alert alert-success" style="text-align:center; margin:30px 0">
-        <h3>@TempData["ALertMessage"]</h3>
-    </div>
+	<div class="alert alert-success" style="text-align:center; margin:30px 0">
+		<h3>@TempData["ALertMessage"]</h3>
+	</div>
 }
 <h1 class="mb-0">Tin đăng</h1>
 <hr />
 @if (Model.Items.Count != 0)
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Tên người bán
-                </th>
-                <th>
-                    Tiêu đề
-                </th>
-                <th>
-                    Khối lượng
-                </th>
-                <th>
-                    Giá
-                </th>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Tên người bán
+				</th>
+				<th>
+					Tiêu đề
+				</th>
+				<th>
+					Khối lượng
+				</th>
+				<th>
+					Giá
+				</th>
 
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Items)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NameAccount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @(item.WeightNumber + " "+item.WeightName)
-                    </td>
-                    <td>
-                        @(item.Price + "/" + item.WeightName)
-                    </td>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.Items)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.NameAccount)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Title)
+					</td>
+					<td>
+						@(item.WeightNumber + " "+item.WeightName)
+					</td>
+					<td>
+						@(item.Price + "/" + item.WeightName)
+					</td>
 
-                    <td>
-                        @Html.ActionLink("Phê duyệt", "Duyet", new { postId = item.PostID })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    @await Component.InvokeAsync("Pager", Model)
+					<td>
+						@Html.ActionLink("Phê duyệt", "Duyet", new { postId = item.PostID })
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	@await Component.InvokeAsync("Pager", Model)
 }
 else
 {
-<div class="mx-auto">
-    <h3 class="text-danger text-center w-auto">Chưa có tin đăng nào cần phê duyệt</h3>
-</div>
-    
+	<div class="mx-auto">
+		<h3 class="text-danger text-center w-auto">Chưa có tin đăng nào cần phê duyệt</h3>
+	</div>
+
 }

@@ -1,5 +1,6 @@
 ﻿using ChoNongSan.ApiUsedForWeb.ApiService;
 using ChoNongSan.ViewModels.Requests.DanhGia;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ChoNongSan.Controllers
 {
+	[Authorize]
 	public class DanhGiaController : Controller
 	{
 		private readonly IReviewApi _reviewApi;

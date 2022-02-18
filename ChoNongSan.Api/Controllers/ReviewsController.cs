@@ -1,6 +1,7 @@
 ﻿using ChoNongSan.Application.DanhGia;
 using ChoNongSan.Application.LichHen;
 using ChoNongSan.Data.Models;
+using ChoNongSan.ViewModels.Requests.Common;
 using ChoNongSan.ViewModels.Requests.DanhGia;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -56,6 +57,17 @@ namespace ChoNongSan.Api.Controllers
 				}
 			}
 			return BadRequest(new { message = "Đánh giá thất bại", status = "FAILED" });
+		}
+
+		[HttpGet("danh-sach-danh-gia/{postId}")]
+		public async Task<IActionResult> GetListReview([FromRoute] int postId, [FromQuery] GetPagingCommonRequest request)
+		{
+			var post = await _context.Posts.AsNoTracking().FirstOrDefaultAsync(x => x.PostId == postId);
+			if (post != null)
+			{
+				return Ok(new { data = await _reviewService.GetListReview(postId, request), status = "OK" });
+			}
+			return BadRequest(new { message = "Thất bại", status = "FAILED" });
 		}
 	}
 }

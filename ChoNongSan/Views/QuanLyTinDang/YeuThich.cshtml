@@ -9,70 +9,70 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (Model.TotalRecords == 0)
-{
-    <span style="color:orangered" class="mx-auto text-center">Bạn chưa thêm tin nào vao yêu thích</span>
-}
-else
-{
-    <main class="main-content">
-        <div class="shop-area section-space-top-55">
-            <div class="container">
-                <div class="row">
-                    <div class="col-8 mx-auto order-lg-1 order-1">
-                        <div class="tab-content text-charcoal">
-                            <div class="tab-pane fade show active" id="list-view" role="tabpanel" aria-labelledby="list-view-tab">
-                                <div class="product-list-view row">
-                                    @foreach (var item in Model.Items)
-                                    {
-                                        <div class="col-12 mb-6 ">
-                                            <div class="product-item img-thumbnail">
-                                                <div class="product-img img-zoom-effect">
-                                                    <a href="single-product.html">
-                                                        <img class="img-full img-thumbnail rounded" src="@item.ImageDefault" alt="">
-                                                    </a>
-                                                    <div class="product-add-action">
-                                                        <ul>
-                                                            <li>
-                                                                <a class="rounded" href="wishlist.html">
-                                                                    <i class="pe-7s-close"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="product-content align-self-center">
-                                                    <a class="product-name pb-2" href="single-product.html">@item.Title</a>
-                                                    <div class="price-box pb-1">
-                                                        <span class="new-price">@(item.Price.Value.ToString("N0")+ " VNĐ") / @item.WeightName</span>
-                                                    </div>
-                                                    <div class="rating-box pb-2">
-                                                        <ul>
-                                                            <li><i class="pe-7s-star"></i></li>
-                                                            <li><i class="pe-7s-star"></i></li>
-                                                            <li><i class="pe-7s-star"></i></li>
-                                                            <li><i class="pe-7s-star"></i></li>
-                                                            <li><i class="pe-7s-star"></i></li>
-                                                        </ul>
-                                                    </div>
-                                                    <p class="short-desc mb-0 text-wrap">Mô tả: @item.Description</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="pagination-area mb-5">
-                            <div class="d-flex justify-content-center">
-                                @await Component.InvokeAsync("Pager", Model)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+<main class="main-content">
+	<div class="shop-area section-space-top-55">
+		<div class="container">
+			<div class="row">
+				<div class="col-8 mx-auto order-lg-1 order-1">
+					@if (Model.TotalRecords == 0)
+					{
+						<h2 style="color:red" class="mx-auto text-center mb-10">Bạn chưa thêm tin nào vao yêu thích</h2>
+					}
+					else
+					{
+						<div class="tab-content text-charcoal">
+							<div class="tab-pane fade show active" id="list-view" role="tabpanel" aria-labelledby="list-view-tab">
+								<div class="product-list-view row">
+									@foreach (var item in Model.Items)
+									{
+										<div class="col-12 mb-6 ">
+											<div class="product-item img-thumbnail">
+												<div class="product-img img-zoom-effect">
+													<a href="single-product.html">
+														<img class="img-full img-thumbnail rounded" src="@item.ImageDefault" alt="">
+													</a>
+													<div class="product-add-action">
+														<ul>
+															<li>
+																<a class="rounded" href="wishlist.html">
+																	<i class="pe-7s-close"></i>
+																</a>
+															</li>
+														</ul>
+													</div>
+												</div>
+												<div class="product-content align-self-center">
+													<a class="product-name pb-2" href="single-product.html">@item.Title</a>
+													<div class="price-box pb-1">
+														<span class="new-price">@(item.Price.Value.ToString("N0")+ " VNĐ") / @item.WeightName</span>
+													</div>
+													<div class="rating-box pb-2">
+														<ul>
+															<li><i class="pe-7s-star"></i></li>
+															<li><i class="pe-7s-star"></i></li>
+															<li><i class="pe-7s-star"></i></li>
+															<li><i class="pe-7s-star"></i></li>
+															<li><i class="pe-7s-star"></i></li>
+														</ul>
+													</div>
+													<p class="short-desc mb-0 text-wrap">Mô tả: @item.Description</p>
+												</div>
+											</div>
+										</div>
+									}
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="pagination-area mb-5">
+							<div class="d-flex justify-content-center">
+								@await Component.InvokeAsync("Pager", Model)
+							</div>
+						</div>
+					}
 
-}
+				</div>
+			</div>
+		</div>
+	</div>
+</main>

@@ -79,9 +79,17 @@ namespace ChoNongSan.Application.KhachHang.Posts
 		{
 			var post = await _context.Posts.FindAsync(postID);
 			var lsImage = await _context.ImagePosts.AsNoTracking().Where(p => p.PostId == post.PostId).Select(y => y.ImagePath).ToListAsync();
+			var danhgia = await _context.Reviews.Where(x => x.PostId == postID).ToListAsync();
+			var sosao = 0.0;
+			if (danhgia.Count() != 0)
+			{
+				sosao = (double)danhgia.Average(x => x.NumberOfReviews);
+			}
+			
 			var viewModel = new PostVmChiTiet()
 			{
 				PostID = post.PostId,
+				SoSao = sosao,
 				Title = post.Title,
 				NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(x => x.AccountId == post.AccountId).FullName,
 				Price = post.Price,
@@ -256,9 +264,9 @@ namespace ChoNongSan.Application.KhachHang.Posts
 					Title = x.Title,
 					Address = x.Address,
 					NumImg = _context.ImagePosts.AsNoTracking().Where(y => y.PostId == x.PostId).Count(),
-					//NameAccount = _context.Accounts.AsNoTracking().SingleOrDefault(p => p.AccountId == x.AccountId).FullName,
+					NameAccount = _context.Accounts.AsNoTracking().SingleOrDefault(p => p.AccountId == x.AccountId).FullName,
 					Price = x.Price,
-					//WeightName = _context.WeightTypes.AsNoTracking().SingleOrDefault(p => p.WeightId == x.WeightId).WeightName,
+					WeightName = _context.WeightTypes.AsNoTracking().SingleOrDefault(p => p.WeightId == x.WeightId).WeightName,
 					WeightNumber = x.WeightNumber,
 					ViewCount = x.ViewCount,
 					Description = x.Description,

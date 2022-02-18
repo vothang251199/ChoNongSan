@@ -1,8 +1,11 @@
 ﻿using ChoNongSan.ApiUsedForWeb.ApiService;
 using ChoNongSan.ApiUsedForWeb.ViewModels;
+using ChoNongSan.ViewModels.Common;
 using ChoNongSan.ViewModels.Requests.Common;
+using ChoNongSan.ViewModels.Requests.NapTien;
 using ChoNongSan.ViewModels.Requests.TaiKhoan;
 using ChoNongSan.ViewModels.Requests.TaiKhoan.KhachHang;
+using ChoNongSan.ViewModels.Responses;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -28,12 +31,14 @@ namespace ChoNongSan.Controllers
 	public class UserController : Controller
 	{
 		private readonly IUserApi _userApi;
+		private readonly INapTienApi _napTienApi;
 		private readonly IConfiguration _config;
 
-		public UserController(IUserApi userApi, IConfiguration config)
+		public UserController(IUserApi userApi, IConfiguration config, INapTienApi napTienApi)
 		{
 			_userApi = userApi;
 			_config = config;
+			_napTienApi = napTienApi;
 		}
 
 		public IActionResult Index()
@@ -335,6 +340,7 @@ namespace ChoNongSan.Controllers
 			var UserId = Convert.ToInt32(User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault());
 			var user = await _userApi.GetUserById(UserId);
 			ViewBag.SoDu = user.Money;
+			ViewBag.AccountId = UserId;
 			return View();
 		}
 
@@ -342,20 +348,30 @@ namespace ChoNongSan.Controllers
 		[HttpGet]
 		public async Task<IActionResult> LichSuNapTien(int pageIndex = 1, int pageSize = 5)
 		{
-			
-
 			var UserId = Convert.ToInt32(User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault());
 
 			var request = new GetPagingCommonRequest()
 			{
-				ById = UserId,
 				PageIndex = pageIndex,
 				PageSize = pageSize
 			};
+			var lsNaptien = await _napTienApi.GetListNapTien(UserId, 3, request);
+			var obj = (JObject)JsonConvert.DeserializeObject(lsNaptien);
+
+			var result = obj["data"].ToObject<PageResult<NapTienVm>>();
 
 			var user = await _userApi.GetUserById(UserId);
 			ViewBag.SoDu = user.Money;
-			return View();
+			return View(result);
+		}
+
+		//[Authorize]
+		[HttpPost]
+		public async Task<JsonResult> XacNhanNapTien(LichSuNapTienRequest request)
+		{
+			var data = await _napTienApi.CreateOrUpdate(request);
+
+			return Json(data);
 		}
 	}
 }

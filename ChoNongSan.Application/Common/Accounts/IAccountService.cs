@@ -42,8 +42,6 @@ namespace ChoNongSan.Application.Common.Accounts
 		Task<string> ResetPassword(ResetPassRequest request);
 
 		Task<Account> GetAccountByPhone(string phone);
-
-		Task<PageResult<MoneyVm>> GetListHistoryMoney(GetPagingCommonRequest request);
 	}
 
 	public class AccountService : IAccountService
@@ -202,6 +200,7 @@ namespace ChoNongSan.Application.Common.Accounts
 				CreateDate = DateTime.Now,
 				Avatar = "/user-content/avatar-null.png",
 				RolesId = 3,
+				MoneyOfOver = 0
 			};
 
 			_context.Accounts.Add(user);
@@ -305,43 +304,6 @@ namespace ChoNongSan.Application.Common.Accounts
 			var account = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.PhoneNumber == phone && x.IsDelete == false);
 
 			return account;
-		}
-
-		public async Task<PageResult<MoneyVm>> GetListHistoryMoney(GetPagingCommonRequest request)
-		{
-			var lsHisMoney = await _context.HistoryMoneys.AsNoTracking().Where(x => x.AccountId == request.ById).ToListAsync();
-
-			var totalRow = lsHisMoney.Count;
-			List<MoneyVm> data;
-			if (request.PageIndex != 0 && request.PageSize != 0)
-			{
-				data = lsHisMoney.Skip((request.PageIndex - 1) * request.PageSize)
-				.Take(request.PageSize)
-				.Select(x => new MoneyVm()
-				{
-					Money = (decimal)x.NumberMoney,
-					Time = (DateTime)x.Time,
-					WhoAdd = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.WhoAddMoney).UserName,
-				}).ToList();
-			}
-			else
-			{
-				data = lsHisMoney.Select(x => new MoneyVm()
-				{
-					Money = (decimal)x.NumberMoney,
-					Time = (DateTime)x.Time,
-					WhoAdd = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.WhoAddMoney).UserName,
-				}).ToList();
-			}
-
-			var pageResult = new PageResult<MoneyVm>()
-			{
-				TotalRecords = totalRow,
-				Items = data,
-				PageIndex = request.PageIndex,
-				PageSize = request.PageSize
-			};
-			return pageResult;
 		}
 	}
 }

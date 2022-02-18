@@ -1,7 +1,7 @@
 ﻿@using System.Globalization;
 @using ChoNongSan.ViewModels.Common
 
-@model PageResult<ChoNongSan.Data.Models.HistoryMoney>
+@model PageResult<ChoNongSan.ViewModels.Responses.NapTienVm>
 
 @{
 	ViewData["Title"] = "LichSuNapTien";
@@ -40,34 +40,64 @@
 				<h4 class="my-2 text-uppercase" style="font-family: Arial, sans-serif">Lịch sử nạp tiền</h4>
 			</div>
 			<div class="mt-lg-10 mt-5 col-12 row d-flex align-items-center" style="flex-direction:column">
+
 				@if (Model.Items.Count != 0)
 				{
-					<table class="table">
-						<thead>
-							<tr>
-								<th>
-									Thời gian nhạp tiền
-								</th>
-								<th>
-									Số tiền
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach (var item in Model.Items)
-							{
-								<tr>
-									<td>
-										@Html.DisplayFor(modelItem => item.Time)
-									</td>
-									<td>
-										@Html.DisplayFor(modelItem => item.NumberMoney)
-									</td>
-								</tr>
-							}
-						</tbody>
-					</table>
-					@await Component.InvokeAsync("Pager", Model)
+					<form action="javascript:void(0)">
+						<div class="table-content table-responsive">
+							<table class="table">
+								<thead>
+									<tr>
+										<th class="product-thumbnail">Ảnh xác nhận</th>
+										<th class="cart-product-name">Cách nạp</th>
+										<th class="product-price">Số tiền</th>
+										<th class="product-price">Thời gian</th>
+										<th class="product-price">Trạng thái</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var item in Model.Items)
+									{
+									<tr>
+										<td class="product-thumbnail">
+											<a href="@item.anhnaptien" target="_blank">
+												<img style="width:112px; height:124px" src="@item.anhnaptien" alt="Cart Thumbnail">
+											</a>
+										</td>
+										@if (item.Cachnap.Contains("CK"))
+										{
+											<td class="product-name"><a href="javascript:void(0)">Chuyển khoản</a></td>
+										}
+										else
+										{
+											<td class="product-name"><a href="javascript:void(0)">Tin nhắn</a></td>
+										}
+										<td class="product-price"><span class="amount">@(item.Sotien.ToString("C0", CultureInfo.GetCultureInfo("vi-VN")))</span></td>
+										<td class="product-price"><span class="amount">@(item.Time.ToString("HH:mm dd/MM/yyyy"))</span></td>
+										@if (item.Status == 0)
+										{
+											<td class="product-price"><span class="amount" style="font-weight:bold">Chờ xét duyệt</span></td>
+										}
+										else if (item.Status == 1)
+										{
+											<td class="product-price"><span class="amount font-weight-bold" style="color: red; font-weight: bold">Không chính xác</span></td>
+										}
+										else
+										{
+											<td class="product-price"><span class="amount font-weight-bold" style="color: #40AA54; font-weight: bold">Đã nạp</span></td>
+										}
+									</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					</form>
+
+					<div class="d-flex pt-5">
+						<div class="m-auto">
+							@await Component.InvokeAsync("Pager", Model)
+						</div>
+					</div>
 				}
 				else
 				{

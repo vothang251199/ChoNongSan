@@ -1,0 +1,141 @@
+﻿@using System.Globalization;
+
+@using ChoNongSan.ViewModels.Common
+@model PageResult<ChoNongSan.ViewModels.Responses.NapTienVm>
+
+@{
+	ViewData["Title"] = "Quản lý nạp tiền";
+	Layout = "~/Views/Shared/_CtvLayout.cshtml";
+}
+
+@if (@TempData["ALertMessage"] != null)
+{
+	<div class="alert alert-success" style="text-align:center; margin:30px 0">
+		<h3>@TempData["ALertMessage"]</h3>
+	</div>
+}
+<h1 class="mb-0">Danh sách nạp tiền</h1>
+<input hidden id="acId" value="@ViewBag.CTV" />
+<hr />
+@if (Model.Items.Count != 0)
+{
+	<table class="col-12 mt-4 table">
+		<thead>
+			<tr class="">
+				<th>
+					Tên người nạp
+				</th>
+				<th>
+					Số tiền
+				</th>
+				<th>
+					Cách nạp
+				</th>
+				<th>
+					Thời gian
+				</th>
+				<th>
+					Ảnh
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.Items)
+			{
+				<tr>
+					<td>
+						<label>@item.TenNguoiNap</label>
+					</td>
+					<td>
+						<label>@(item.Sotien.ToString("C0", CultureInfo.GetCultureInfo("vi-VN")))</label>
+					</td>
+					<td>
+						@if (item.Cachnap.Contains("CK"))
+						{
+							<label>Chuyển khoản</label> }
+						else
+						{
+							<label>Tin nhắn</label>
+						}
+					</td>
+					<td>
+						<label>@(item.Time.ToString("HH:mm dd/MM/yyyy"))</label>
+					</td>
+					<td>
+						<a href="@item.anhnaptien" target="_blank">
+							<img style="width:112px; height:124px" src="@item.anhnaptien" alt="Cart Thumbnail">
+						</a>
+					</td>
+					<td class="">
+						<a id="@item.HisId" class="btn btn-danger tuchoi" href="javascript:void(0)">Từ chối</a>
+						<a id="@item.HisId" class="btn btn-success dongy" href="javascript:void(0)">Đồng ý</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<div class="d-flex justify-content-center">
+		@await Component.InvokeAsync("Pager", Model)
+	</div>
+}
+else
+{
+	<div class="mx-auto">
+		<h3 class="text-danger text-center w-auto">Chưa có người dùng nào nạp tiền</h3>
+	</div>
+
+}
+@section Scripts{
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('.tuchoi').click(function () {
+				var data = new FormData();
+				data.append("CTV", $('#acId').val());
+				data.append("Status", 1);
+				data.append("Role", 2);
+				data.append("HisId", this.id);
+				$.ajax({
+					type: "POST",
+                    url: '@Url.Action("Duyet", "XetNapTien")',
+					contentType: false,
+					processData: false,
+					data: data,
+					success: function (result) {
+						output = JSON.parse(result);
+						if (output.status == "OK") {
+							window.location = "/XetNapTien/Index";
+						} else {
+							alert(output.message);
+						}
+
+                    }
+				});
+			});
+			$('.dongy').click(function () {
+				var data = new FormData();
+				data.append("CTV", $('#acId').val());
+				data.append("Status", 2);
+				data.append("Role", 2);
+				data.append("HisId", this.id);
+				$.ajax({
+					type: "POST",
+                    url: '@Url.Action("Duyet", "XetNapTien")',
+					contentType: false,
+					processData: false,
+					data: data,
+					success: function (result) {
+						output = JSON.parse(result);
+						if (output.status == "OK") {
+							window.location = "/XetNapTien/Index";
+						} else {
+							alert(output.message);
+						}
+
+                    }
+				});
+			});
+		});
+	</script>
+}

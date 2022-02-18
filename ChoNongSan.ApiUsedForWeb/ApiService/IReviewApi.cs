@@ -1,4 +1,5 @@
-﻿using ChoNongSan.ViewModels.Requests.DanhGia;
+﻿using ChoNongSan.ViewModels.Requests.Common;
+using ChoNongSan.ViewModels.Requests.DanhGia;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
@@ -13,6 +14,8 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 	public interface IReviewApi
 	{
 		Task<string> Create(ReviewRequest request);
+
+		Task<string> GetListReview(int postId, GetPagingCommonRequest request);
 	}
 
 	public class ReviewApi : IReviewApi
@@ -35,6 +38,16 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 			client.BaseAddress = new Uri(_config["ApiUrl"]);
 
 			var response = await client.PostAsync("/api/danhgia/tao-danh-gia", httpContnet);
+
+			var data = await response.Content.ReadAsStringAsync();
+			return data;
+		}
+
+		public async Task<string> GetListReview(int postId, GetPagingCommonRequest request)
+		{
+			var client = _httpClientFactory.CreateClient();
+			client.BaseAddress = new Uri(_config["ApiUrl"]);
+			var response = await client.GetAsync($"/api/danhgia/danh-sach-danh-gia/{postId}?PageIndex={request.PageIndex}&PageSize={request.PageSize}");
 
 			var data = await response.Content.ReadAsStringAsync();
 			return data;

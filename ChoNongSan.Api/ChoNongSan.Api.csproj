@@ -32,4 +32,8 @@
     <ProjectReference Include="..\ChoNongSan.ViewModels\ChoNongSan.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\naptien-content\" />
+  </ItemGroup>
+
 </Project>

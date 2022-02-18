@@ -17,6 +17,7 @@
 
 <div class="container my-10">
 	<input hidden value="@ViewBag.ApiUrl" id="ApiUrl" />
+	<input hidden id="checktien" value="@ViewBag.CheckMoney" />
 	<form asp-action="TaoMoi" method="post" enctype="multipart/form-data">
 		<div class="row d-flex">
 			<div class="col-lg-6 col-12 mx-auto" style="margin-bottom:30px">
@@ -232,6 +233,14 @@
 						</div>
 					</div>
 				</div>
+				@if(ViewBag.CheckMoney == 0) { 
+					<div class="form-group mt-3">
+						<label><span style="font-weight:bold; color:red">Chú ý: </span>Tài khoản của bạn không đủ để đăng tin mới.
+							<a href="/User/SoDuTaiKhoan"  class="font-size-20 chucuatoi" style="color: #40AA54"> Nạp ngay!</a>
+						</label>
+					</div>
+				}
+				
 			</div>
 
 			<div class="col-lg-12 col-12 d-flex">
@@ -243,6 +252,29 @@
 			</div>
 		</div>
 	</form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title chucuatoi" id="exampleModalLabel">Thông báo</h5>
+				<button type="button" class="close dongModal" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group mb-3">
+					<label>Tài khoản của bạn không đủ để đăng tin mới. Vui lòng nạp thêm tiền!</label>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary dongModal" data-dismiss="modal">Hủy</button>
+				<a href="/User/SoDuTaiKhoan" style="background-color:#40AA54" class="btn btn-primary">Nạp ngay</a>
+			</div>
+		</div>
+	</div>
 </div>
 
 @section Scripts{
@@ -339,15 +371,19 @@
 		let subdistrict = document.getElementById("txtSubDistrict");
 
 		$(document).ready(function () {
-			
+
+			$('.dongModal').click(function () {
+				$('#exampleModal').modal('hide');
+			});
+
 			$('#btnSubmit').click(function (e) {
 				//Kiểm tra dữ liệu trong input tỉnh, huyện, xã
 				province.value = document.getElementById("Province").value;
 				district.value = document.getElementById("District").value;
 				subdistrict.value = document.getElementById("SubDistrict").value;
-				
+
 				if (province.value == "" || district.value == "" || subdistrict.value == "" ) {
-					
+
 					if (subdistrict.value == "") {
 						document.getElementById("spSubDistrict").innerHTML = "Vui lòng chọn Xã/Phường";
 						document.querySelector('.subdistrict div.nice-select').focus();
@@ -361,6 +397,12 @@
 						document.querySelector('.province div.nice-select').focus();
 					}
 
+					return;
+				}
+
+				var checktien = $('#checktien').val();
+				if (checktien == 0) {
+					$('#exampleModal').modal('show');
 					return;
 				}
 
@@ -461,6 +503,10 @@
 					}
 
 				}
+			});
+
+			$("#SubDistrict").change(function () {
+				document.getElementById("spSubDistrict").innerHTML = "";
 			});
 
 			//Load ảnh đã lưu trong sessionStorage ra

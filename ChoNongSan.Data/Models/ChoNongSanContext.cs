@@ -76,12 +76,6 @@ namespace ChoNongSan.Data.Models
                 entity.Property(e => e.UserName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.Roles)
-                    .WithMany(p => p.Accounts)
-                    .HasForeignKey(d => d.RolesId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Account_Roles");
             });
 
             modelBuilder.Entity<Banner>(entity =>
@@ -116,21 +110,21 @@ namespace ChoNongSan.Data.Models
 
                 entity.Property(e => e.AccountId).HasColumnName("AccountID");
 
+                entity.Property(e => e.CachNap)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Ctv).HasColumnName("CTV");
+
                 entity.Property(e => e.NumberMoney).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.Time).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Account)
-                    .WithMany(p => p.HistoryMoneyAccounts)
+                    .WithMany(p => p.HistoryMoneys)
                     .HasForeignKey(d => d.AccountId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_HistoryMoney_Account");
-
-                entity.HasOne(d => d.WhoAddMoneyNavigation)
-                    .WithMany(p => p.HistoryMoneyWhoAddMoneyNavigations)
-                    .HasForeignKey(d => d.WhoAddMoney)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_HistoryMoney_Account1");
             });
 
             modelBuilder.Entity<ImagePost>(entity =>

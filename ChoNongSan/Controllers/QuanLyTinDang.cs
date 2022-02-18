@@ -34,9 +34,10 @@ namespace ChoNongSan.Controllers
 		private readonly IWeightApi _weightApi;
 		private readonly IUserApi _userApi;
 		private readonly IMeetApi _meetApi;
+		private readonly IReviewApi _reviewApi;
 
 		public QuanLyTinDang(IConfiguration config, IPostApi postApi, IStorageService storageService,
-			ICategoryApi categoryApi, IWeightApi weightApi, IUserApi userApi, IMeetApi meetApi)
+			ICategoryApi categoryApi, IWeightApi weightApi, IUserApi userApi, IMeetApi meetApi, IReviewApi reviewApi)
 		{
 			_userApi = userApi;
 			_weightApi = weightApi;
@@ -45,6 +46,7 @@ namespace ChoNongSan.Controllers
 			_config = config;
 			_postApi = postApi;
 			_meetApi = meetApi;
+			_reviewApi = reviewApi;
 		}
 
 		[HttpGet]
@@ -127,7 +129,15 @@ namespace ChoNongSan.Controllers
 			var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
 			var user = await _userApi.GetUserById(Convert.ToInt32(userId));
 			ViewBag.Phone = user.PhoneNumber;
-
+			if(user.Money >= 5000)
+			{
+				ViewBag.CheckMoney = 1;
+			}
+			else
+			{
+				ViewBag.CheckMoney = 0;
+			}
+			
 			return View();
 		}
 
@@ -135,12 +145,13 @@ namespace ChoNongSan.Controllers
 		[Consumes("multipart/form-data")]
 		public async Task<IActionResult> TaoMoi(CreatePostRequest request)
 		{
+			var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
+			var user = await _userApi.GetUserById(Convert.ToInt32(userId));
 			if (!ModelState.IsValid)
 			{
 				ViewBag.CategoryList = await _categoryApi.GetListCat();
 				ViewBag.WeightList = await _weightApi.GetListWeight();
-				var userId = User.Claims.Where(x => x.Type == "Id").Select(c => c.Value).SingleOrDefault();
-				var user = await _userApi.GetUserById(Convert.ToInt32(userId));
+				
 				ViewBag.Phone = user.PhoneNumber;
 				ViewBag.LsImg = request.ThumbnailImage;
 				ViewBag.ApiUrl = _config["ApiUrl"];
@@ -250,6 +261,19 @@ namespace ChoNongSan.Controllers
 			else
 			{
 				ViewBag.Check = 2;
+			}
+
+			var request = new GetPagingCommonRequest()
+			{
+				PageIndex = 0,
+				PageSize = 0
+			};
+			var data = await _reviewApi.GetListReview(postId, request);
+			var obj1 = (JObject)JsonConvert.DeserializeObject(data);
+			if (Convert.ToString(obj1["status"]).Contains("OK"))
+			{
+				var result = obj1["data"].ToObject<PageResult<ReviewVm>>();
+				ViewBag.LsReview = result;
 			}
 
 			return View(model);

@@ -9,8 +9,7 @@ namespace ChoNongSan.Data.Models
     {
         public Account()
         {
-            HistoryMoneyAccounts = new HashSet<HistoryMoney>();
-            HistoryMoneyWhoAddMoneyNavigations = new HashSet<HistoryMoney>();
+            HistoryMoneys = new HashSet<HistoryMoney>();
             Loves = new HashSet<Love>();
             Meets = new HashSet<Meet>();
             Posts = new HashSet<Post>();
@@ -32,9 +31,7 @@ namespace ChoNongSan.Data.Models
         public bool? IsDelete { get; set; }
         public int RolesId { get; set; }
 
-        public virtual Role Roles { get; set; }
-        public virtual ICollection<HistoryMoney> HistoryMoneyAccounts { get; set; }
-        public virtual ICollection<HistoryMoney> HistoryMoneyWhoAddMoneyNavigations { get; set; }
+        public virtual ICollection<HistoryMoney> HistoryMoneys { get; set; }
         public virtual ICollection<Love> Loves { get; set; }
         public virtual ICollection<Meet> Meets { get; set; }
         public virtual ICollection<Post> Posts { get; set; }

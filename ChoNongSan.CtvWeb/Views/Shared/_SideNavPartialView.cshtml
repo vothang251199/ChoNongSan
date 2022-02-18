@@ -1,42 +1,46 @@
 ﻿<div class="side-nav">
-    <div class="side-nav-inner">
-        <ul class="side-nav-menu scrollable">
-            <li class="nav-item dropdown open mt-4">
-                <a class="dropdown-toggle active" asp-controller="TinDang" asp-action="Index">
-                    <span class="icon-holder">
-                        <i class="anticon anticon-dashboard"></i>
-                    </span>
-                    <span class="title">Duyệt tin đăng</span>
-                    
-                </a>
-            </li>
-            <li class="nav-item dropdown ">
-                <a class="dropdown-toggle" asp-controller="User" asp-action="CapNhatTaiKhoan">
-                    <span class="icon-holder">
-                        <i class="far fa-user-circle"></i>
-                    </span>
-                    <span class="title">Cập nhật tài khoản</span>
-                    
-                </a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="dropdown-toggle" asp-controller="User" asp-action="DoiMatKhau">
-                    <span class="icon-holder">
-                        <i class="anticon anticon-sync"></i>
-                    </span>
-                    <span class="title">Đổi mật khẩu</span>
-                    
-                </a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="dropdown-toggle" asp-controller="User" asp-action="Logout">
-                    <span class="icon-holder">
-                        <i class="anticon font-size-16 anticon-logout"></i>
-                    </span>
-                    <span class="title">Đăng xuất</span>
-                    
-                </a>
-            </li>
-        </ul>
-    </div>
+	<div class="side-nav-inner">
+		<ul class="side-nav-menu scrollable">
+			<li class="nav-item dropdown open mt-4">
+				<a class="dropdown-toggle active" asp-controller="TinDang" asp-action="Index">
+					<span class="icon-holder">
+						<i class="anticon anticon-dashboard"></i>
+					</span>
+					<span class="title">Duyệt tin đăng</span>
+				</a>
+			</li>
+			<li class="nav-item dropdown">
+				<a class="dropdown-toggle active" asp-controller="XetNapTien" asp-action="Index">
+					<span class="icon-holder">
+						<i class="anticon anticon-dashboard"></i>
+					</span>
+					<span class="title">Quản lý nạp tiền</span>
+				</a>
+			</li>
+			<li class="nav-item dropdown ">
+				<a class="dropdown-toggle" asp-controller="User" asp-action="CapNhatTaiKhoan">
+					<span class="icon-holder">
+						<i class="far fa-user-circle"></i>
+					</span>
+					<span class="title">Cập nhật tài khoản</span>
+				</a>
+			</li>
+			<li class="nav-item dropdown">
+				<a class="dropdown-toggle" asp-controller="User" asp-action="DoiMatKhau">
+					<span class="icon-holder">
+						<i class="anticon anticon-sync"></i>
+					</span>
+					<span class="title">Đổi mật khẩu</span>
+				</a>
+			</li>
+			<li class="nav-item dropdown">
+				<a class="dropdown-toggle" asp-controller="User" asp-action="Logout">
+					<span class="icon-holder">
+						<i class="anticon font-size-16 anticon-logout"></i>
+					</span>
+					<span class="title">Đăng xuất</span>
+				</a>
+			</li>
+		</ul>
+	</div>
 </div>

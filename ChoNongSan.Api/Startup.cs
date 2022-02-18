@@ -10,6 +10,7 @@ using ChoNongSan.Application.CTV;
 using ChoNongSan.Application.DanhGia;
 using ChoNongSan.Application.KhachHang.Posts;
 using ChoNongSan.Application.LichHen;
+using ChoNongSan.Application.NapTien;
 using ChoNongSan.Data.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -53,6 +54,7 @@ namespace ChoNongSan.Api
 			services.AddTransient<IAddressService, AddressService>();
 			services.AddTransient<IMeetService, MeetService>();
 			services.AddTransient<IReviewService, ReviewService>();
+			services.AddTransient<INapTienService, NapTienService>();
 			//services.AddTransient<UserManager<Account>, UserManager<Account>>();
 
 			//services.AddTransient<SignInManager<Account>, SignInManager<Account>>();
