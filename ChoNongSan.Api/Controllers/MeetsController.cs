@@ -1,5 +1,6 @@
 ﻿using ChoNongSan.Application.LichHen;
 using ChoNongSan.Data.Models;
+using ChoNongSan.ViewModels.Requests.Common;
 using ChoNongSan.ViewModels.Requests.LichHen;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,9 +37,17 @@ namespace ChoNongSan.Api.Controllers
 				{
 					if (user.AccountId != userPost.AccountId)
 					{
-						var result = await _meetService.Create(request);
-						if (result)
-							return Ok(new { message = "Tạo lịch hẹn thành công", status = "OK" });
+						var meet = await _context.Meets.AsNoTracking().FirstOrDefaultAsync(x => x.PostId == request.PostId && x.NguoiTaoLich == request.NguoiTaoLich);
+						if (meet == null)
+						{
+							var result = await _meetService.Create(request);
+							if (result)
+								return Ok(new { message = "Tạo lịch hẹn thành công", status = "OK" });
+						}
+						else
+						{
+							return BadRequest(new { message = "Bạn đã tạo lịch hẹn cho tin đăng này", status = "FAILED" });
+						}
 					}
 					else
 					{
@@ -62,10 +71,38 @@ namespace ChoNongSan.Api.Controllers
 					var meet = await _context.Meets.AsNoTracking().FirstOrDefaultAsync(x => x.PostId == postId && x.NguoiTaoLich == accountId);
 
 					if (meet != null)
-						return Ok(new { status = "OK" });
+						return Ok(new { message = "Đã tạo", status = "Yes" });
 				}
 			}
-			return BadRequest(new { status = "FAILED" });
+			return BadRequest(new { message = "Chưa tạo", status = "No" });
+		}
+
+		[HttpGet("danh-sach-lich-hen/{accountId}")]
+		public async Task<IActionResult> GetListMeet([FromRoute] int accountId, [FromQuery] GetPagingCommonRequest request)
+		{
+			var user = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.AccountId == accountId);
+			if (user != null)
+			{
+				return Ok(new { data = await _meetService.GetListMeet(accountId, request), status = "OK" });
+			}
+			return BadRequest(new { message = "Thất bại", status = "FAILED" });
+		}
+
+		[HttpGet("duyet-lich-hen/{meetId}/{stt}")]
+		public async Task<IActionResult> DuyetLich([FromRoute] int meetId, [FromRoute] int stt)
+		{
+			var meet = await _context.Meets.AsNoTracking().FirstOrDefaultAsync(x => x.MeetId == meetId);
+			if (meet != null)
+			{
+				var data = await _meetService.DuyetLich(meetId, stt);
+				if (data && stt == 1)
+					return Ok(new { message = "Đã từ chối", status = "OK" });
+				if (data && stt == 2)
+					return Ok(new { message = "Đã đồng ý", status = "OK" });
+				if (!data)
+					return BadRequest(new { message = "Lỗi", status = "FAILED" });
+			}
+			return BadRequest(new { message = "Không tìm thấy lịch hẹn", status = "FAILED" });
 		}
 	}
 }

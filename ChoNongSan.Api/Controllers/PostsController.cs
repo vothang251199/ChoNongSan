@@ -41,15 +41,15 @@ namespace ChoNongSan.Api.Controllers
 		}
 
 		[HttpGet("tin-dang-co-nhieu-luot-xem/{number}")]
-		public IActionResult GetAllManyViews([FromRoute] int number)
+		public async Task<IActionResult> GetAllManyViews([FromRoute] int number)
 		{
-			return Ok(_postService.GetAllManyViews(number));
+			return Ok(await _postService.GetAllManyViews(number));
 		}
 
 		[HttpGet("tin-dang-moi-nhat/{number}")]
-		public IActionResult GetPostNew([FromRoute] int number)
+		public async Task<IActionResult> GetPostNew([FromRoute] int number)
 		{
-			return Ok(_postService.PostNew(number));
+			return Ok(await _postService.PostNew(number));
 		}
 
 		[HttpGet("{postID}")]
@@ -113,13 +113,16 @@ namespace ChoNongSan.Api.Controllers
 		[HttpDelete("an-tin/{PostID}")]
 		public async Task<IActionResult> HiddenPost(int PostID)
 		{
-			var post = await _context.Posts.FindAsync(PostID);
-			if (post == null) return BadRequest("Bài viết không tồn tài");
-
-			var result = await _postService.HiddenPost(PostID);
-			if (!result) return BadRequest();
-
-			return Ok("Ẩn bài viết thành công");
+			var post = await _context.Posts.AsNoTracking().FirstOrDefaultAsync(x=>x.PostId == PostID && x.StatusPost == 2 && x.IsHidden == false);
+			if (post != null)
+			{
+				var result = await _postService.HiddenPost(PostID);
+				if (result)
+					return Ok(new { message = "Ẩn bài viết thành công" , status= "OK"});
+				return BadRequest(new { message = "Ẩn bài viết thất bại", status = "FAILED" });
+			} 
+			
+			return BadRequest(new { message = "Bài viết không tồn tài", status = "FAILED" });
 		}
 
 		[HttpPost("them-yeu-thich")]

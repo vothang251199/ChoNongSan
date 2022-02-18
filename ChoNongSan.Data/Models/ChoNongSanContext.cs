@@ -280,6 +280,8 @@ namespace ChoNongSan.Data.Models
 
                 entity.Property(e => e.PostId).HasColumnName("PostID");
 
+                entity.Property(e => e.Time).HasColumnType("datetime");
+
                 entity.HasOne(d => d.Account)
                     .WithMany(p => p.Reviews)
                     .HasForeignKey(d => d.AccountId)

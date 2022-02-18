@@ -4,6 +4,13 @@
 
 @model PageResult<PostVmTongQuat>
 
+<style>
+	button.hover-bong:hover {
+		box-shadow: 0 5px 5px;
+		color: #40AA54
+	}
+</style>
+
 <h4 class="heading mt-3">Tin đang hiển thị</h4>
 <hr />
 @if (Model.TotalRecords == 0)
@@ -29,8 +36,9 @@ else
 					</div>
 				</div>
 				<div class="product-content align-self-center">
-					<div class="rating-box py-2">
-						<span class="">Tiêu đề: </span> <b>@item.Title</b>
+					<div class="d-lg-flex py-2">
+						<span class="">Tiêu đề: </span>
+						<b>@item.Title</b>
 					</div>
 					<span class="product-name pb-2">@item.Description</span>
 					<div class="price-box pb-1">
@@ -45,14 +53,15 @@ else
 							<li><i class="pe-7s-star"></i></li>
 						</ul>
 					</div>
-					<p class="short-desc mb-0">
-						@item.TimePost.Value.ToString("hh:mm dd/MM/yyyy")
-					</p>
-
+					<div class="d-lg-flex justify-content-between">
+						<p class="short-desc mb-0">
+							@item.TimePost.Value.ToString("hh:mm dd/MM/yyyy")
+						</p>
+						<button id="@item.PostID" href="javascript:void(0)" class="hover-bong p-0 btn btn-link align-self-end mb-2 me-2" style="flex-direction:column">
+							<img style=" height:35px" src="~/assetsKH/icon/btn-an-tin.png" />
+						</button>
+					</div>
 				</div>
-				<button class="p-0 btn btn-link align-self-end mb-2 me-2" style="flex-direction:column">
-					<img style=" height:35px" src="~/assetsKH/icon/btn-an-tin.png" />
-				</button>
 			</div>
 		</div>
 	}
@@ -63,3 +72,59 @@ else
 		@await Component.InvokeAsync("Pager", Model)
 	</div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title chucuatoi" id="exampleModalLabel">Ẩn tin đăng</h5>
+				<button type="button" class="dong close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group mb-3">
+					<label for="exampleInputPassword1">Bạn có muốn ẩn tin này không ?</label>
+				</div>
+			</div>
+			<div class="modal-footer">
+
+				<button type="button" class="dong btn btn-dark" style="color:white">Không</button>
+				<button id="btnSubmit" type="submit" class="btn btn-success" style="color:white">Có</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	let id;
+	$('.hover-bong').click(function () {
+		$('#exampleModal').modal('show');
+		id = this.id;
+	});
+
+	$('#btnSubmit').click(function () {
+		//document.getElementById("btnSubmit").type = 'submit';
+		$.ajax({
+			type: "POST",
+            url: '@Url.Action("HiddenPost", "QuanLyTinDang")',
+            contentType: 'application/json',
+            data: JSON.stringify(id),
+            dataType: 'json',
+			success: function (result) {
+				output = JSON.parse(result);
+				if (output.status == "OK") {
+					window.location = "/QuanLyTinDang?ActiveTab=DaAn&byId=3";
+				} else {
+					alert(output.message);
+				}
+				
+            }
+		});
+	});
+
+	$('.dong').click(function () {
+		$('#exampleModal').modal('hide');
+	})
+</script>

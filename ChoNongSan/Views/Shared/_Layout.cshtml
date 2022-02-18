@@ -59,7 +59,7 @@
 					<div class="row align-items-center">
 						<div class="col-lg-12">
 							<div class="header-middle-wrap">
-								<a href="/" class="col-auto header-logo px-0">
+								<a href="javascript:void(0)" class="col-auto header-logo px-0">
 
 									<img style="width:170px; height:33px" src="~/assetsKH/images/logo/logo-chu-removebg.png" alt="logo" />
 								</a>
@@ -138,10 +138,17 @@
 													Trang chủ
 												</a>
 											</li>
-											<li>
-												<a class="text-center" href="/QuanLyTinDang">
-													Quản lý tin đăng
+											<li >
+												<a class="text-center" href="javascript:void(0)" id="btnQLTD" data-bs-toggle="dropdown" aria-expanded="false">
+													Quản lý tin
 												</a>
+												<ul class="dropdown-menu dropdown-menu-end"  aria-labelledby="btnQLTD">
+													<li class="w-auto"><a class="dropdown-item" style="height:32px" href="/QuanLyTinDang/Index">Quản lý tin đăng</a></li>
+													<li><a class="dropdown-item" style="height:32px" href="/QuanLyTinDang/TaoMoi">Đăng tin</a></li>
+													<li>
+														<a class="dropdown-item" style="height:32px" href="/LichHen/Index">Lịch hẹn</a>
+													</li>
+												</ul>
 											</li>
 											<li class="megamenu-holder">
 												<a class="text-center" asp-controller="QuanLyTinDang" asp-action="YeuThich">
@@ -439,7 +446,7 @@
 							</div>
 							<div class="widget-form-area">
 								<form class="widget-form" action="#">
-									<input class="input-field" type="email" autocomplete="off" placeholder="Eamil của bạn">
+									<input class="input-field" type="email" autocomplete="off" placeholder="Email của bạn">
 									<div class="button-wrap pt-5">
 										<button class="btn btn-custom-size btn-primary btn-secondary-hover rounded" id="mc-submit">Gửi Mail</button>
 									</div>

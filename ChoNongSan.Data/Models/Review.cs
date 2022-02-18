@@ -12,6 +12,7 @@ namespace ChoNongSan.Data.Models
         public int AccountId { get; set; }
         public string Contents { get; set; }
         public int? NumberOfReviews { get; set; }
+        public DateTime? Time { get; set; }
 
         public virtual Account Account { get; set; }
         public virtual Post Post { get; set; }

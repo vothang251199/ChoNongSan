@@ -4,6 +4,7 @@ using ChoNongSan.Application.Common.Files;
 using ChoNongSan.ViewModels.Common;
 using ChoNongSan.ViewModels.Requests;
 using ChoNongSan.ViewModels.Requests.Common;
+using ChoNongSan.ViewModels.Requests.DanhGia;
 using ChoNongSan.ViewModels.Requests.LichHen;
 using ChoNongSan.ViewModels.Requests.TinDang;
 using ChoNongSan.ViewModels.Responses;
@@ -33,7 +34,6 @@ namespace ChoNongSan.Controllers
 		private readonly IWeightApi _weightApi;
 		private readonly IUserApi _userApi;
 		private readonly IMeetApi _meetApi;
-		private const List<IFormFile> lsImg = null;
 
 		public QuanLyTinDang(IConfiguration config, IPostApi postApi, IStorageService storageService,
 			ICategoryApi categoryApi, IWeightApi weightApi, IUserApi userApi, IMeetApi meetApi)
@@ -232,6 +232,26 @@ namespace ChoNongSan.Controllers
 				ViewBag.AccountId = a;
 
 			ViewBag.HiddenLayOut = 1;
+
+			var check = await _meetApi.CheckMeet(postId, Convert.ToInt32(a));
+			var obj = (JObject)JsonConvert.DeserializeObject(check);
+			var status = Convert.ToString(obj["status"]);
+			if (model.AccountId != Convert.ToInt32(a))
+			{
+				if (status.Contains("Yes"))
+				{
+					ViewBag.Check = 1;
+				}
+				else
+				{
+					ViewBag.Check = 0;
+				}
+			}
+			else
+			{
+				ViewBag.Check = 2;
+			}
+
 			return View(model);
 		}
 
@@ -240,6 +260,13 @@ namespace ChoNongSan.Controllers
 		{
 			var data = await _meetApi.Create(request);
 
+			return Json(data);
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> HiddenPost([FromBody] int postId)
+		{
+			var data = await _postApi.HiddenPost(postId);
 			return Json(data);
 		}
 	}

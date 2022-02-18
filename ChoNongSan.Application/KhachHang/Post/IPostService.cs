@@ -56,9 +56,9 @@ namespace ChoNongSan.Application.KhachHang.Posts
 
 		Task<PageResult<PostVmTongQuat>> GetAllLoveByAccountId(GetPagingCommonRequest request);
 
-		List<PostVmTongQuat> GetAllManyViews(int number);
+		Task<List<PostVmTongQuat>> GetAllManyViews(int number);
 
-		List<PostVmTongQuat> PostNew(int number);
+		Task<List<PostVmTongQuat>> PostNew(int number);
 
 		Task<List<PostVmTongQuat>> GetAllPostByAccountId(int accountId);
 	}
@@ -158,16 +158,20 @@ namespace ChoNongSan.Application.KhachHang.Posts
 
 		public async Task<PageResult<PostVmTongQuat>> GetAllPostsViewHome(FilterPostRequest request)
 		{
-			List<Post> lsPost = null;
+			List<Post> lsPost;
 			var pageResult = new PageResult<PostVmTongQuat>();
 			if (request.Roles == 3) //Phân biệt trang KH với trang CTV (3: KH, còn lại là ctv)
 			{
-				lsPost = await _context.Posts.Where(x => x.IsHidden == false && x.StatusPost == 2).ToListAsync();
+				lsPost = await (from p in _context.Posts.AsNoTracking()
+								where p.IsHidden == false && p.StatusPost == 2
+								select p
+						  ).ToListAsync();
+				//lsPost = await _context.Posts.AsNoTracking().Where(x => x.IsHidden == false && x.StatusPost == 2).ToListAsync();
 				pageResult.MaxPrice = (decimal)lsPost.Max(p => p.Price);
 			}
 			else
 			{
-				lsPost = await _context.Posts.Where(x => x.IsHidden == false && x.StatusPost == 0).ToListAsync();
+				lsPost = await _context.Posts.AsNoTracking().Where(x => x.IsHidden == false && x.StatusPost == 0).ToListAsync();
 			}
 
 			if (!String.IsNullOrEmpty(request.Keyword))
@@ -243,27 +247,24 @@ namespace ChoNongSan.Application.KhachHang.Posts
 			}
 
 			var totalRow = lsPost.Count;
-
 			var data = lsPost.Skip((request.PageIndex - 1) * request.PageSize)
 				.Take(request.PageSize)
 				.Select(x => new PostVmTongQuat()
 				{
 					PostID = x.PostId,
-					CategoryName = _context.Categories.AsNoTracking().FirstOrDefault(p => p.CategoryId == x.CategoryId).CateName,
+					//CategoryName = _context.Categories.AsNoTracking().SingleOrDefault(p => p.CategoryId == x.CategoryId).CateName,
 					Title = x.Title,
 					Address = x.Address,
-					NumImg = _context.ImagePosts.AsNoTracking().Where(y => y.PostId == x.PostId).ToList().Count,
-					NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(p => p.AccountId == x.AccountId).FullName,
+					NumImg = _context.ImagePosts.AsNoTracking().Where(y => y.PostId == x.PostId).Count(),
+					//NameAccount = _context.Accounts.AsNoTracking().SingleOrDefault(p => p.AccountId == x.AccountId).FullName,
 					Price = x.Price,
-					WeightName = _context.WeightTypes.AsNoTracking().FirstOrDefault(p => p.WeightId == x.WeightId).WeightName,
+					//WeightName = _context.WeightTypes.AsNoTracking().SingleOrDefault(p => p.WeightId == x.WeightId).WeightName,
 					WeightNumber = x.WeightNumber,
 					ViewCount = x.ViewCount,
 					Description = x.Description,
 					StatusPost = x.StatusPost,
 					TimePost = x.PostTime,
-					ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(p => p.PostId == x.PostId && p.IsDefault == true).ImagePath,
-					Lat = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lat,
-					Lng = _context.Locations.AsNoTracking().FirstOrDefault(p => p.LocationId == x.LocationId).Lng,
+					ImageDefault = _context.ImagePosts.AsNoTracking().SingleOrDefault(p => p.PostId == x.PostId && p.IsDefault == true).ImagePath,
 				}).ToList();
 
 			pageResult.TotalRecords = totalRow;
@@ -490,6 +491,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
 			{
 				var post = await _context.Posts.FindAsync(PostID);
 				post.IsHidden = true;
+				post.StatusPost = 3;
 				_context.Posts.Update(post);
 				await _context.SaveChangesAsync();
 				return true;
@@ -617,26 +619,26 @@ namespace ChoNongSan.Application.KhachHang.Posts
 			return pageResult;
 		}
 
-		public List<PostVmTongQuat> GetAllManyViews(int number)
+		public async Task<List<PostVmTongQuat>> GetAllManyViews(int number)
 		{
-			var kq = (from p in _context.Posts.AsNoTracking()
-					  where p.StatusPost == 2
-					  orderby p.ViewCount descending
-					  select p).Take(number).ToList();
+			var kq = await (from p in _context.Posts.AsNoTracking()
+							where p.StatusPost == 2
+							orderby p.ViewCount descending
+							select p).Take(number).ToListAsync();
 			var data = kq.Select(x => new PostVmTongQuat()
 			{
 				Description = x.Description,
 				Address = x.Address,
 				ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(y => y.PostId == x.PostId && y.IsDefault == true).ImagePath,
-				Lat = _context.Locations.AsNoTracking().FirstOrDefault(y => y.LocationId == x.LocationId).Lat,
-				Lng = _context.Locations.AsNoTracking().FirstOrDefault(y => y.LocationId == x.LocationId).Lng,
-				NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(y => y.AccountId == x.AccountId).FullName,
+				//Lat = _context.Locations.AsNoTracking().FirstOrDefault(y => y.LocationId == x.LocationId).Lat,
+				//Lng = _context.Locations.AsNoTracking().FirstOrDefault(y => y.LocationId == x.LocationId).Lng,
+				//NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(y => y.AccountId == x.AccountId).FullName,
 				PostID = x.PostId,
 				Price = x.Price,
 				Reason = x.Reason,
 				StatusPost = x.StatusPost,
 				TimePost = x.PostTime,
-				NumImg = _context.ImagePosts.AsNoTracking().Where(y => y.PostId == x.PostId).ToList().Count,
+				NumImg = _context.ImagePosts.AsNoTracking().Where(y => y.PostId == x.PostId).Count(),
 				Title = x.Title,
 				ViewCount = x.ViewCount,
 				WeightNumber = x.WeightNumber,
@@ -645,21 +647,21 @@ namespace ChoNongSan.Application.KhachHang.Posts
 			return data;
 		}
 
-		public List<PostVmTongQuat> PostNew(int number)
+		public async Task<List<PostVmTongQuat>> PostNew(int number)
 		{
-			var kq = (from p in _context.Posts.AsNoTracking()
-					  where p.StatusPost == 2
-					  orderby p.PostId descending
-					  select p).Take(number).ToList();
+			var kq = await (from p in _context.Posts.AsNoTracking()
+							where p.StatusPost == 2
+							orderby p.PostId descending
+							select p).Take(number).ToListAsync();
 
 			var data = kq.Select(x => new PostVmTongQuat()
 			{
 				Description = x.Description,
 				ImageDefault = _context.ImagePosts.AsNoTracking().FirstOrDefault(y => y.PostId == x.PostId && y.IsDefault == true).ImagePath,
-				Lat = _context.Locations.AsNoTracking().FirstOrDefault(y => y.LocationId == x.LocationId).Lat,
-				Lng = _context.Locations.AsNoTracking().FirstOrDefault(y => y.LocationId == x.LocationId).Lng,
-				NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(y => y.AccountId == x.AccountId).FullName,
-				NumImg = _context.ImagePosts.AsNoTracking().Where(y => y.PostId == x.PostId).ToList().Count,
+				//Lat = _context.Locations.AsNoTracking().FirstOrDefault(y => y.LocationId == x.LocationId).Lat,
+				//Lng = _context.Locations.AsNoTracking().FirstOrDefault(y => y.LocationId == x.LocationId).Lng,
+				//NameAccount = _context.Accounts.AsNoTracking().FirstOrDefault(y => y.AccountId == x.AccountId).FullName,
+				NumImg = _context.ImagePosts.AsNoTracking().Where(y => y.PostId == x.PostId).Count(),
 				PostID = x.PostId,
 				Price = x.Price,
 				Reason = x.Reason,
@@ -669,7 +671,7 @@ namespace ChoNongSan.Application.KhachHang.Posts
 				Address = x.Address,
 				ViewCount = x.ViewCount,
 				WeightNumber = x.WeightNumber,
-				WeightName = _context.WeightTypes.AsNoTracking().FirstOrDefault(y => y.WeightId == x.WeightId).WeightName,
+				//WeightName = _context.WeightTypes.AsNoTracking().FirstOrDefault(y => y.WeightId == x.WeightId).WeightName,
 			}).ToList();
 			return data;
 		}

@@ -7,6 +7,7 @@ using ChoNongSan.Application.Common.Banners;
 using ChoNongSan.Application.Common.DonVi;
 using ChoNongSan.Application.Common.Files;
 using ChoNongSan.Application.CTV;
+using ChoNongSan.Application.DanhGia;
 using ChoNongSan.Application.KhachHang.Posts;
 using ChoNongSan.Application.LichHen;
 using ChoNongSan.Data.Models;
@@ -51,6 +52,7 @@ namespace ChoNongSan.Api
 			services.AddTransient<IWeightService, WeightService>();
 			services.AddTransient<IAddressService, AddressService>();
 			services.AddTransient<IMeetService, MeetService>();
+			services.AddTransient<IReviewService, ReviewService>();
 			//services.AddTransient<UserManager<Account>, UserManager<Account>>();
 
 			//services.AddTransient<SignInManager<Account>, SignInManager<Account>>();

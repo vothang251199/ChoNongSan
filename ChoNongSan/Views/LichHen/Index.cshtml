@@ -1,0 +1,117 @@
+﻿@using ChoNongSan.ViewModels.Common
+@model PageResult<ChoNongSan.ViewModels.Responses.MeetVm>
+
+@{
+	ViewData["Title"] = "Lịch hẹn";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<main class="main-content">
+	<div class="wishlist-area section-space-y-axis-100">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<h2>Danh sách lịch hẹn</h2>
+					<hr />
+				</div>
+				<div class="col-12">
+					<div class="tab-content text-charcoal pt-3">
+						<div class="tab-pane fade show active" id="grid-view" role="tabpanel" aria-labelledby="grid-view-tab">
+							<div class="product-grid-view row">
+								@foreach (var item in Model.Items)
+								{
+									<div class="col-lg-3 col-sm-6 pb-6 mb-sm-0">
+										<div class="product-item">
+
+											<div class="product-content" style="border: 1px solid #f1f1f1 ">
+												<div class="price-box pb-1 d-flex align-items-center justify-content-center">
+													<a class=" font-weight-bold overflow-hidden" href="javascript:void(0)">
+														<p><i class="bi bi-pencil-square"></i>: @item.Title</p>
+													</a>
+												</div>
+												<div class="price-box pb-1">
+													<p class="new-price"><i class="bi bi-person-fill"></i>: <strong>@(item.TenNguoiTaoLich)</strong></p>
+												</div>
+												<div class="price-box pb-1">
+													<span class="new-price"><i class="bi bi-clock-fill"></i>: @(item.ThoiGian.ToString("HH:mm dd/MM/yyyy"))</span>
+												</div>
+												<div class="price-box pb-1">
+													<span class="new-price"><i class="bi bi-telephone-inbound-fill"></i>: @(item.PhoneNumber)</span>
+												</div>
+												<div class="price-box pb-1">
+													@if (item.StatusMeet == 1)
+													{
+														<span class="product-name my-2" style="color:#ff0000">Đã từ chối</span>
+													}
+													else if (item.StatusMeet == 2)
+													{
+														<span class="product-name my-2" style="color: #40aa54">Đã đồng ý</span>
+													}
+												</div>
+												@if (item.StatusMeet == 0)
+												{
+													<div class="price-box pb-1">
+														<a id="@item.MeetId" class="btn btn-danger tuchoi" style="color:white" href="javascript:void(0)">Từ chối</a>
+														<a id="@item.MeetId" class="btn btn-success dongy" style="color:white" href="javascript:void(0)">Đồng ý</a>
+													</div>
+												}
+											</div>
+										</div>
+									</div>
+								}
+							</div>
+							<div class="d-flex pt-10">
+								<div class="m-auto">
+									@await Component.InvokeAsync("Pager", Model)
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+
+@section Scripts{
+	<script type="text/javascript">
+		$('.dongy').click(function () {
+			var meetId = this.id;
+			var stt = 2;
+			$.ajax({
+				type: 'GET',
+				url: '@Url.Action("DuyetLich", "LichHen")',
+				contentType: 'application/json',
+				data: { 'meetId': meetId, 'stt': stt },
+				dataType: 'json',
+				success: function (result) {
+					output = JSON.parse(result);
+					if (output.status == "OK") {
+						window.location = "/LichHen/Index";
+					} else {
+						alert(output.message);
+					}
+				}
+			});
+		});
+
+		$('.tuchoi').click(function () {
+			var meetId = this.id;
+			var stt = 1;
+			$.ajax({
+				type: 'GET',
+				url: '@Url.Action("DuyetLich", "LichHen")',
+				contentType: 'application/json',
+				data: { 'meetId': meetId, 'stt': stt },
+				dataType: 'json',
+				success: function (result) {
+					output = JSON.parse(result);
+					if (output.status == "OK") {
+						window.location = "/LichHen/Index";
+					} else {
+						alert(output.message);
+					}
+				}
+			});
+		});
+	</script>
+}

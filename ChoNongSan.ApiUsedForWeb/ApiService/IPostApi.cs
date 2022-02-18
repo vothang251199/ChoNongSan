@@ -39,6 +39,7 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 		Task<List<AddressVm>> GetListDistrict(int codePorvince);
 
 		Task<List<AddressVm>> GetListSubDistrict(int codePor, int codeDis);
+		Task<string> HiddenPost(int postId);
 	}
 
 	public class PostApi : IPostApi
@@ -206,6 +207,16 @@ namespace ChoNongSan.ApiUsedForWeb.ApiService
 			requestContent.Add(new StringContent(request.StatustPost.ToString()), "statustPost");
 
 			var response = await client.PutAsync("/api/tin-dang/duyet-tin-dang", requestContent);
+			var result = await response.Content.ReadAsStringAsync();
+			return result;
+		}
+
+		public async Task<string> HiddenPost(int postId)
+		{
+			var client = _httpClientFactory.CreateClient();
+			client.BaseAddress = new Uri(_config["ApiUrl"]);
+
+			var response = await client.DeleteAsync($"/api/tin-dang/an-tin/{postId}");
 			var result = await response.Content.ReadAsStringAsync();
 			return result;
 		}
